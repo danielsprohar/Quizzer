@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "quizzer-510fd": {
+      "hosting": {
+        "Quizzer": [
+          "quizzer-510fd"
+        ]
+      }
+    }
+  }
+}
