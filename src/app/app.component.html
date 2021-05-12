@@ -1,7 +1,144 @@
-<mat-toolbar> 
-  <a mat-button routerLink="/quizzes">Quizzes</a>
-</mat-toolbar>
+<!-- 'mat-app-background' is needed to apply the dark theme to the background  -->
+<div class="mat-app-background" [ngClass]="{ 'dark-theme': isDarkTheme }">
+  <mat-sidenav-container class="sidenav-container">
+    <!-- =================================================================== -->
+    <!-- Side navigation -->
+    <!-- =================================================================== -->
+    <mat-sidenav
+      #drawer
+      class="sidenav"
+      fixedInViewport
+      [attr.role]="isHandset ? 'dialog' : 'navigation'"
+      mode="over"
+    >
+      <mat-toolbar
+        class="toggle-btn-container"
+        [ngClass]="{ 'content-dark': isDarkTheme }"
+      >
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+        >
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+      </mat-toolbar>
 
-<main class="content">
-  <router-outlet></router-outlet>
-</main>
+      <div>
+        <app-sidenav></app-sidenav>
+      </div>
+
+      <!-- <mat-nav-list>
+        <mat-list-item>
+          <mat-icon mat-list-icon class="icon">home</mat-icon>
+          <a mat-line routerLinke="/">Home</a>
+        </mat-list-item>
+        <mat-list-item>
+          <mat-icon mat-list-icon class="icon">class</mat-icon>
+          <a mat-line routerLinke="/quizzes">Quizzes</a>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-icon mat-list-icon class="icon">person</mat-icon>
+          <a mat-line href="#">Profile</a>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-icon mat-list-icon class="icon">settings</mat-icon>
+          <a mat-line href="#">Settings</a>
+          <ng-container *ngIf="!isDarkTheme$.value; else lightTheme">
+            <button
+              mat-icon-button
+              matTooltip="Switch to dark theme"
+              (click)="toggleAppTheme()"
+            >
+              <mat-icon>dark_mode</mat-icon>
+            </button>
+          </ng-container>
+          <ng-template #lightTheme>
+            <button
+              mat-icon-button
+              matTooltip="Switch to light theme"
+              (click)="toggleAppTheme()"
+            >
+              <mat-icon class="light-theme-icon">brightness_5</mat-icon>
+            </button>
+          </ng-template>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-icon mat-list-icon class="icon">logout</mat-icon>
+          <a mat-line href="#">Log out</a>
+        </mat-list-item>
+      </mat-nav-list> -->
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <!-- ================================================================= -->
+      <!-- Top navigation -->
+      <!-- ================================================================= -->
+      <mat-toolbar class="topnav mat-elevation-z1" role="navigation">
+        <div>
+          <button
+            type="button"
+            aria-label="Toggle sidenav"
+            mat-icon-button
+            (click)="drawer.toggle()"
+          >
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          </button>
+        </div>
+
+        <div class="app-name">
+          <span class="app-name-letter">Q</span>
+          <ng-container *ngIf="!isHandset">
+            <span class="app-name-letter">U</span>
+            <span class="app-name-letter">I</span>
+            <span class="app-name-letter">Z</span>
+            <span class="app-name-letter">Z</span>
+            <span class="app-name-letter">E</span>
+            <span class="app-name-letter">R</span>
+          </ng-container>
+        </div>
+        <!-- <div class="auth-links">
+          <ng-container *ngIf="authService.user$ | async as user; else guest">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="signOut()">Sign Out</button>
+            </mat-menu>
+          </ng-container>
+          <ng-template #guest>
+            <div fxLayout="row" fxLayoutGap="8px">
+              <button mat-raised-button routerLink="/sign-in">Log in</button>
+              <button mat-flat-button color="primary" routerLink="/sign-up">
+                Sign up
+              </button>
+            </div>
+          </ng-template>
+        </div> -->
+      </mat-toolbar>
+
+      <mat-progress-bar
+        class="progress-bar"
+        mode="indeterminate"
+        [class.loading]="appState.isLoading() | async"
+      >
+      </mat-progress-bar>
+
+      <!-- =============================================================== -->
+      <!-- Main content -->
+      <!-- =============================================================== -->
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

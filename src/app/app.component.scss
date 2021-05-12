@@ -1,0 +1,97 @@
+.progress-bar {
+  display: none;
+}
+
+.loading {
+  display: block;
+}
+
+.app-name {
+  display: flex;
+  gap: 2px;
+  margin-left: 16px;
+}
+
+.app-name-letter {
+  width: 26px;
+  height: auto;
+  background-color: #ff6d00;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+}
+
+// ===========================================================================
+// Sidenav
+// ===========================================================================
+
+.mat-sidenav {
+  overflow-x: hidden !important;
+}
+
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 80%;
+}
+
+.sidenav mat-icon {
+  opacity: 0.54;
+}
+
+// ===========================================================================
+// Topnav
+// ===========================================================================
+
+.toggle-btn-container {
+  display: flex;
+  box-sizing: border-box;
+  padding: 0 16px;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  background-color: #fff;
+}
+
+.content-dark {
+  background-color: #424242 !important;
+}
+
+// ===========================================================================
+// Main content
+// ===========================================================================
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 82px auto 32px;
+  padding: 0 16px;
+  max-width: 960px;
+  height: 100%;
+  font-size: 16px;
+  background-color: #fff;
+  color: #212a30;
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .sidenav {
+    width: 240px;
+  }
+
+  .top-nav-links {
+    display: flex;
+  }
+
+  .auth-links {
+    display: flex;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+}

@@ -1,0 +1,21 @@
+.yellow-icon {
+  color: #ffea00;
+  opacity: 1 !important;
+}
+
+.sidenav-list {
+  width: 80%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.sidenav-list mat-icon {
+  opacity: 0.54;
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .sidenav-list {
+    width: 240px;
+  }
+}

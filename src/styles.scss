@@ -27,7 +27,9 @@ $Quizzer-dark-theme: mat-dark-theme(
 );
 
 .dark-theme {
-  @include angular-material-theme($Quizzer-dark-theme);
+  // Reference: https://material.angular.io/guide/duplicate-theming-styles
+  // This mixin only generates the color styles now.
+  @include angular-material-color($Quizzer-dark-theme);
 }
 
 // ===========================================================================
@@ -53,18 +55,6 @@ p {
 
 .spacer {
   flex: 1;
-}
-
-// <main></main>
-.content {
-  display: flex;
-  margin: 82px auto 32px;
-  padding: 0 16px;
-  max-width: 960px;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  font-size: 16px;
 }
 
 a,
