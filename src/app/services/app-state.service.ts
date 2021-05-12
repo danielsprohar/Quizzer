@@ -9,7 +9,7 @@ export class AppStateService {
 
   constructor() {}
 
-  setIsLoading(value: boolean): void {
+  isLoading(value: boolean): void {
     this.isLoadingSubject.next(value);
   }
 
@@ -17,7 +17,7 @@ export class AppStateService {
     return this.isLoadingSubject.value;
   }
 
-  isLoading(): Observable<boolean> {
+  isLoadingAsObservable(): Observable<boolean> {
     return this.isLoadingSubject.asObservable();
   }
 }

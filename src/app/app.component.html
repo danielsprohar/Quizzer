@@ -129,14 +129,14 @@
       <mat-progress-bar
         class="progress-bar"
         mode="indeterminate"
-        [class.loading]="appState.isLoading() | async"
+        [class.loading]="appState.isLoadingAsObservable() | async"
       >
       </mat-progress-bar>
 
       <!-- =============================================================== -->
       <!-- Main content -->
       <!-- =============================================================== -->
-      <main>
+      <main class="content">
         <router-outlet></router-outlet>
       </main>
     </mat-sidenav-content>

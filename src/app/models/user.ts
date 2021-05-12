@@ -1,19 +1,7 @@
-export class User {
-  uid: string;
-  displayName: string;
-  email: string;
-  photoURL: string;
-  lastSignInTime: string;
-
-  constructor(fields?: {
-    uid?: string;
-    displayName?: string;
-    email?: string;
-    photoURL?: string;
-    lastSignInTime?: string;
-  }) {
-    if (fields) {
-      Object.assign(this, fields);
-    }
-  }
+export interface User {
+  uid: string | null;
+  email: string | null;
+  photoURL: string | null;
+  displayName: string | null;
+  lastSignInTime?: string | null;
 }
