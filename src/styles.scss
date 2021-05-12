@@ -1,39 +1,79 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
+@import "~@angular/material/theming";
 @include mat-core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$Quizzer-primary: mat-palette($mat-indigo);
+$Quizzer-primary: mat-palette($mat-deep-orange, A400);
 $Quizzer-accent: mat-palette($mat-pink, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
 $Quizzer-warn: mat-palette($mat-red);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$Quizzer-theme: mat-light-theme((
-  color: (
-    primary: $Quizzer-primary,
-    accent: $Quizzer-accent,
-    warn: $Quizzer-warn,
+$Quizzer-light-theme: mat-light-theme(
+  (
+    color: (
+      primary: $Quizzer-primary,
+      accent: $Quizzer-accent,
+      warn: $Quizzer-warn,
+    ),
   )
-));
+);
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($Quizzer-theme);
+@include angular-material-theme($Quizzer-light-theme);
 
-/* You can add global styles to this file, and also import other style files */
+// Define an alternate dark theme.
+$Quizzer-dark-primary: mat-palette($mat-deep-orange, A400);
+$Quizzer-dark-accent: mat-palette($mat-light-blue, A200, A100, A400);
+$Quizzer-dark-warn: mat-palette($mat-red);
+$Quizzer-dark-theme: mat-dark-theme(
+  $Quizzer-dark-primary,
+  $Quizzer-dark-accent,
+  $Quizzer-dark-warn
+);
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.dark-theme {
+  @include angular-material-theme($Quizzer-dark-theme);
+}
+
+// ===========================================================================
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+p {
+  margin: 0;
+}
+
+.spacer {
+  flex: 1;
+}
+
+// <main></main>
+.content {
+  display: flex;
+  margin: 82px auto 32px;
+  padding: 0 16px;
+  max-width: 960px;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  font-size: 16px;
+}
+
+a,
+a:visited,
+a:hover {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #125699;
+}
