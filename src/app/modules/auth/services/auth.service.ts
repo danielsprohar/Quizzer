@@ -11,10 +11,13 @@ import { User } from 'src/app/models/user';
   providedIn: 'root',
 })
 export class AuthService {
-  public user$: Observable<User | null | undefined>;
-  public redirectUrl: string = '';
+  user$: Observable<User | null | undefined>;
+  redirectUrl: string = '';
 
-  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
+  constructor(
+    private readonly afAuth: AngularFireAuth,
+    private readonly afs: AngularFirestore
+  ) {
     this.user$ = this.afAuth.authState.pipe(
       switchMap((user) => {
         if (user) {
@@ -42,7 +45,7 @@ export class AuthService {
    * Creates a new user document in the `Users` collection.
    * @param user The user information
    */
-  public addUser(user: User): Promise<void> {
+  addUser(user: User): Promise<void> {
     return this.afs
       .doc<User>(`${Collections.USERS}/${user.uid}`)
       .set({ ...user });
@@ -54,7 +57,7 @@ export class AuthService {
    * @param userID The user id
    * @param lastSignInTime The last time this user signed in
    */
-  public updateUser(userID: string, lastSignInTime: string): Promise<void> {
+  updateUser(userID: string, lastSignInTime: string): Promise<void> {
     return this.afs.doc<User>(`${Collections.USERS}/${userID}`).update({
       lastSignInTime,
     });
@@ -64,7 +67,7 @@ export class AuthService {
    * Builds a new application user.
    * @param firebaseUser The user information provided by the Firebase Authentication service.
    */
-  public builderUser(firebaseUser: firebase.User): User {
+  buildUser(firebaseUser: firebase.User): User {
     return {
       uid: firebaseUser.uid,
       email: firebaseUser.email,
@@ -78,7 +81,7 @@ export class AuthService {
    * Open a popup to let the user sign in with their Google account.
    * @returns User credentials
    */
-  public signInWithGoogle(): Promise<firebase.auth.UserCredential> {
+  signInWithGoogle(): Promise<firebase.auth.UserCredential> {
     return this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
 
@@ -88,7 +91,7 @@ export class AuthService {
    * @param password The user's password.
    * @returns Returns an object with the user model and the auth credential.
    */
-  public signInWithEmailAndPassword(
+  signInWithEmailAndPassword(
     email: string,
     password: string
   ): Promise<firebase.auth.UserCredential> {
@@ -101,7 +104,7 @@ export class AuthService {
    * @param password The user's password
    * @returns Returns an object with the user model and the auth credential.
    */
-  public signUpWithEmailAndPassword(
+  signUpWithEmailAndPassword(
     email: string,
     password: string
   ): Promise<firebase.auth.UserCredential> {
@@ -111,7 +114,7 @@ export class AuthService {
   /**
    * Sign the current user out of the application.
    */
-  public signOut(): void {
+  signOut(): void {
     this.afAuth.signOut();
   }
 }

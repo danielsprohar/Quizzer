@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
@@ -20,6 +21,7 @@ export class TopnavComponent implements OnInit, OnDestroy {
   constructor(
     private readonly afAuth: AngularFireAuth,
     private readonly breakpointObserver: BreakpointObserver,
+    private readonly router: Router,
     public readonly authService: AuthService
   ) {}
 
@@ -41,5 +43,6 @@ export class TopnavComponent implements OnInit, OnDestroy {
 
   signOut(): void {
     this.afAuth.signOut();
+    this.router.navigate(['/']);
   }
 }
