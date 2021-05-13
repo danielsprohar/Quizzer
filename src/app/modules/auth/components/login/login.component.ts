@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { User } from 'src/app/models/user';
@@ -12,7 +17,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  form?: FormGroup;
+  form: FormGroup;
   user?: User;
   hide = true;
   invalidLoginAttempt = false;
@@ -42,12 +47,12 @@ export class LoginComponent implements OnInit {
   // Getters
   // =========================================================================
 
-  get email() {
-    return this.form?.get('email');
+  get email(): AbstractControl {
+    return this.form.get('email')!;
   }
 
-  get password() {
-    return this.form?.get('password');
+  get password(): AbstractControl {
+    return this.form.get('password')!;
   }
 
   getEmailError() {

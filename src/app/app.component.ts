@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isHandsetSubscription = this.breakpointObserver
-      .observe(Breakpoints.Handset)
+      .observe([Breakpoints.Handset])
       .pipe(
         map((result) => result.matches),
         shareReplay()

@@ -6,14 +6,14 @@
   display: block;
 }
 
-.app-name {
+.app-logo-container {
   display: flex;
   gap: 2px;
   margin-left: 16px;
 }
 
-.app-name-letter {
-  width: 26px;
+.app-logo-letter {
+  width: 32px;
   height: auto;
   background-color: #ff6d00;
   color: #fff;
@@ -64,15 +64,21 @@
 // Main content
 // ===========================================================================
 
+mat-sidenav-content {
+  position: inherit;
+  height: 100vh;
+  display: inherit;
+  transform: inherit;
+}
+
 .content {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   margin: 16px auto;
   padding: 0 16px;
   max-width: 960px;
   height: 100%;
-  font-size: 16px;
 }
 
 /* Medium devices (landscape tablets, 768px and up) */

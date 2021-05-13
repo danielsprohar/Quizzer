@@ -42,10 +42,10 @@ $Quizzer-dark-theme: mat-dark-theme(
 html,
 body {
   height: 100%;
+  margin: 0;
 }
 
 body {
-  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
@@ -57,9 +57,32 @@ p {
   flex: 1;
 }
 
+.full-height {
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.container-centered {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
 a,
 a:visited,
 a:hover {
+  cursor: pointer;
   color: #1976d2;
   text-decoration: none;
 }
