@@ -58,24 +58,44 @@
             <span class="app-logo-letter">R</span>
           </ng-container>
         </div>
-        <!-- <div class="auth-links">
-          <ng-container *ngIf="authService.user$ | async as user; else guest">
-            <button mat-icon-button [matMenuTriggerFor]="menu">
-              <mat-icon>account_circle</mat-icon>
-            </button>
+        <span class="spacer"></span>
+        <div class="auth-links">
+          <ng-container
+            *ngIf="authService.user$ | async as user; else notSignedIn"
+          >
+            <ng-container *ngIf="user.photoURL; else noProfilePhoto">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <img
+                  class="user-profile-img"
+                  [src]="user.photoURL"
+                  alt="User profile image"
+                />
+              </button>
+            </ng-container>
+            <ng-template #noProfilePhoto>
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>account_circle</mat-icon>
+              </button>
+            </ng-template>
             <mat-menu #menu="matMenu">
               <button mat-menu-item (click)="signOut()">Sign Out</button>
             </mat-menu>
           </ng-container>
-          <ng-template #guest>
-            <div fxLayout="row" fxLayoutGap="8px">
-              <button mat-raised-button routerLink="/sign-in">Log in</button>
-              <button mat-flat-button color="primary" routerLink="/sign-up">
-                Sign up
+
+          <!-- User is not signed in -->
+          <ng-template #notSignedIn>
+            <!-- User is on mobile -->
+            <ng-container *ngIf="isHandset; else notHandset">
+              <button mat-icon-button>
+                <mat-icon>account_circle</mat-icon>
               </button>
-            </div>
+            </ng-container>
+            <!-- User in on laptop/desktop -->
+            <ng-template #notHandset>
+              <button mat-stroked-button routerLink="/login">Sign in</button>
+            </ng-template>
           </ng-template>
-        </div> -->
+        </div>
       </mat-toolbar>
 
       <mat-progress-bar

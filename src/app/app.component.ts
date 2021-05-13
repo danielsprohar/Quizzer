@@ -5,6 +5,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { AuthService } from './modules/auth/services/auth.service';
 import { AppStateService } from './services/app-state.service';
 import { AppThemeService } from './services/app-theme.service';
 
@@ -21,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public isHandset: boolean = false;
 
   constructor(
-    // public authService: AuthService,
+    public authService: AuthService,
     private readonly afAuth: AngularFireAuth,
     private readonly overlayContainer: OverlayContainer,
     private readonly breakpointObserver: BreakpointObserver,
