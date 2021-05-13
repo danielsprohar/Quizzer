@@ -1,9 +1,12 @@
 <mat-nav-list role="navigation" class="sidenav-list">
-  <mat-list-item>
-    <mat-icon mat-list-icon class="icon">account_circle</mat-icon>
-    <a mat-line routerLink="/login">Sign in</a>
-  </mat-list-item>
-  <mat-divider></mat-divider>
+  <ng-container *ngIf="!isUserSignedIn">
+    <mat-list-item>
+      <mat-icon mat-list-icon class="icon">account_circle</mat-icon>
+      <a mat-line routerLink="/login">Sign in</a>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </ng-container>
+
   <mat-list-item>
     <mat-icon mat-list-icon class="icon">home</mat-icon>
     <a mat-line routerLink="/">Home</a>
@@ -40,8 +43,17 @@
 
   <mat-divider></mat-divider>
 
-  <mat-list-item>
-    <mat-icon mat-list-icon class="icon">logout</mat-icon>
-    <a mat-line href="#">Log out</a>
-  </mat-list-item>
+  <ng-container *ngIf="isUserSignedIn">
+    <mat-list-item>
+      <mat-icon mat-list-icon class="icon">account_circle</mat-icon>
+      <a mat-line routerLink="/account">Account</a>
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+    
+    <mat-list-item>
+      <mat-icon mat-list-icon class="icon">logout</mat-icon>
+      <a mat-line (click)="signOut()">Log out</a>
+    </mat-list-item>
+  </ng-container>
 </mat-nav-list>

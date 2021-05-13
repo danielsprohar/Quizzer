@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { AppThemeService } from 'src/app/services/app-theme.service';
 
 @Component({
@@ -6,19 +9,39 @@ import { AppThemeService } from 'src/app/services/app-theme.service';
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss'],
 })
-export class SidenavComponent implements OnInit {
-  constructor(public readonly appTheme: AppThemeService) {}
+export class SidenavComponent implements OnInit, OnDestroy {
+  private subscription: Subscription;
 
-  ngOnInit(): void {}
+  isUserSignedIn: boolean = false;
+
+  constructor(
+    private readonly afAuth: AngularFireAuth,
+    public readonly authService: AuthService,
+    public readonly appTheme: AppThemeService
+  ) {}
+
+  ngOnInit(): void {
+    this.subscription = this.authService.user$.subscribe((user) => {
+      this.isUserSignedIn = user ? true : false;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
   // =========================================================================
   // Event handlers
   // =========================================================================
 
-  /**
-   * Toggles the application's color theme.
-   */
-  public toggleAppTheme(): void {
+  toggleAppTheme(): void {
     this.appTheme.setIsDarkTheme(!this.appTheme.getIsDarkTheme());
   }
+
+  signOut(): void {
+    this.afAuth.signOut();
+  }
+
 }

@@ -10,6 +10,10 @@
 // Sidenav
 // ===========================================================================
 
+.toggle-btn-container {
+  background-color: #fff;
+}
+
 .mat-sidenav {
   overflow-x: hidden !important;
 }
@@ -45,6 +49,10 @@ mat-sidenav-content {
   padding: 0 16px;
   max-width: 960px;
   height: 100%;
+}
+
+.content-dark {
+  background-color: #424242 !important;
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
