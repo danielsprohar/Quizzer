@@ -1,7 +1,56 @@
-<mat-toolbar> 
-  <a mat-button routerLink="/quizzes">Quizzes</a>
-</mat-toolbar>
+<div class="mat-app-background" [ngClass]="{ 'dark-theme': isDarkTheme }">
+  <mat-sidenav-container class="sidenav-container">
+    <!-- ================================================================= -->
+    <!-- Side navigation -->
+    <!-- ================================================================= -->
+    <mat-sidenav
+      #drawer
+      class="sidenav"
+      fixedInViewport
+      [attr.role]="isHandset ? 'dialog' : 'navigation'"
+      mode="over"
+    >
+      <mat-toolbar
+        class="toggle-btn-container"
+        [ngClass]="{ 'content-dark': isDarkTheme }"
+      >
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+        >
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+      </mat-toolbar>
 
-<main class="content">
-  <router-outlet></router-outlet>
-</main>
+      <div>
+        <app-sidenav></app-sidenav>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <!-- =============================================================== -->
+      <!-- Top navigation -->
+      <!-- =============================================================== -->
+      <app-topnav [drawer]="drawer"></app-topnav>
+
+      <!-- =============================================================== -->
+      <!-- Top navigation -->
+      <!-- =============================================================== -->
+      <mat-progress-bar
+        class="progress-bar"
+        mode="indeterminate"
+        [class.loading]="appState.isLoadingAsObservable() | async"
+      >
+      </mat-progress-bar>
+
+      <!-- ============================================================= -->
+      <!-- Main content -->
+      <!-- ============================================================= -->
+      <main class="content">
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

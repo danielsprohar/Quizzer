@@ -1,0 +1,75 @@
+.progress-bar {
+  display: none;
+}
+
+.loading {
+  display: block;
+}
+
+// ===========================================================================
+// Sidenav
+// ===========================================================================
+
+.toggle-btn-container {
+  background-color: #fff;
+}
+
+.mat-sidenav {
+  overflow-x: hidden !important;
+}
+
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 80%;
+}
+
+.sidenav mat-icon {
+  opacity: 0.54;
+}
+
+// ===========================================================================
+// Main content
+// ===========================================================================
+
+mat-sidenav-content {
+  position: inherit;
+  height: 100vh;
+  display: inherit;
+  transform: inherit;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 16px auto;
+  padding: 0 16px;
+  max-width: 960px;
+  height: 100%;
+}
+
+.content-dark {
+  background-color: #424242 !important;
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .sidenav {
+    width: 240px;
+  }
+
+  // .top-nav-links {
+  //   display: flex;
+  // }
+
+  // .auth-links {
+  //   display: flex;
+  // }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+}

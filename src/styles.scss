@@ -27,7 +27,9 @@ $Quizzer-dark-theme: mat-dark-theme(
 );
 
 .dark-theme {
-  @include angular-material-theme($Quizzer-dark-theme);
+  // Reference: https://material.angular.io/guide/duplicate-theming-styles
+  // This mixin only generates the color styles now.
+  @include angular-material-color($Quizzer-dark-theme);
 }
 
 // ===========================================================================
@@ -40,10 +42,10 @@ $Quizzer-dark-theme: mat-dark-theme(
 html,
 body {
   height: 100%;
+  margin: 0;
 }
 
 body {
-  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
@@ -55,21 +57,32 @@ p {
   flex: 1;
 }
 
-// <main></main>
-.content {
-  display: flex;
-  margin: 82px auto 32px;
-  padding: 0 16px;
-  max-width: 960px;
-  flex-direction: column;
-  align-items: center;
+.full-height {
   height: 100%;
-  font-size: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.container-centered {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 }
 
 a,
 a:visited,
 a:hover {
+  cursor: pointer;
   color: #1976d2;
   text-decoration: none;
 }
