@@ -15,9 +15,10 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { AuthModule } from './modules/auth/auth.module';
 import { MaterialDesignModule } from './theme/material-design/material-design.module';
+import { TopnavComponent } from './components/topnav/topnav.component';
 
 @NgModule({
-  declarations: [AppComponent, NotFoundComponent, SidenavComponent],
+  declarations: [AppComponent, NotFoundComponent, SidenavComponent, TopnavComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -1,0 +1,46 @@
+// ===========================================================================
+// Topnav
+// ===========================================================================
+
+.app-logo-container {
+  display: flex;
+  gap: 2px;
+  margin-left: 16px;
+}
+
+.app-logo-letter {
+  width: 32px;
+  height: auto;
+  background-color: #ff6d00;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+}
+
+.toggle-btn-container {
+  display: flex;
+  box-sizing: border-box;
+  padding: 0 16px;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  background-color: #fff;
+}
+
+.user-profile-img {
+  border-radius: 20px;
+  height: 36px;
+  width: auto;
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .top-nav-links {
+    display: flex;
+  }
+
+  .auth-links {
+    display: flex;
+  }
+}

@@ -18,8 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private isDarkThemeSubscription?: Subscription;
   private isHandsetSubscription?: Subscription;
 
-  public isDarkTheme: boolean = false;
-  public isHandset: boolean = false;
+  isDarkTheme: boolean = false;
+  isHandset: boolean = false;
 
   constructor(
     public authService: AuthService,
@@ -79,6 +79,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public signOut(): void {
     this.afAuth.signOut();
-    this.router.navigate(['/sign-in']);
+    this.router.navigate(['/login']);
   }
 }

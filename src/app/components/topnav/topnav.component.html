@@ -1,0 +1,67 @@
+<mat-toolbar class="topnav mat-elevation-z1" role="navigation">
+  <div>
+    <button
+      type="button"
+      aria-label="Toggle sidenav"
+      mat-icon-button
+      (click)="drawer.toggle()"
+    >
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+  </div>
+
+  <div class="app-logo-container">
+    <span class="app-logo-letter">Q</span>
+    <!-- TODO: Fix responsiveness issue -->
+    <ng-container *ngIf="!isHandset">
+      <span class="app-logo-letter">U</span>
+      <span class="app-logo-letter">I</span>
+      <span class="app-logo-letter">Z</span>
+      <span class="app-logo-letter">Z</span>
+      <span class="app-logo-letter">E</span>
+      <span class="app-logo-letter">R</span>
+    </ng-container>
+  </div>
+  <span class="spacer"></span>
+  <div class="auth-links">
+    <ng-container *ngIf="authService.user$ | async as user; else notSignedIn">
+      <ng-container *ngIf="user.photoURL; else noProfilePhoto">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <img
+            class="user-profile-img"
+            [src]="user.photoURL"
+            alt="User profile image"
+          />
+        </button>
+      </ng-container>
+      <ng-template #noProfilePhoto>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+      </ng-template>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="signOut()">Sign Out</button>
+      </mat-menu>
+    </ng-container>
+
+    <!-- User is not signed in -->
+    <ng-template #notSignedIn>
+      <!-- User is on mobile -->
+      <ng-container *ngIf="isHandset; else notHandset">
+        <button mat-icon-button routerLink="/login" aria-label="User sign in">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+      </ng-container>
+      <!-- User in on laptop/desktop -->
+      <ng-template #notHandset>
+        <button
+          mat-stroked-button
+          aria-label="User sign in"
+          routerLink="/login"
+        >
+          Sign in
+        </button>
+      </ng-template>
+    </ng-template>
+  </div>
+</mat-toolbar>
