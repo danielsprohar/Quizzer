@@ -18,6 +18,10 @@ export class AuthService {
     private readonly afs: AngularFirestore
   ) {}
 
+  /**
+   *
+   * @returns `true` if a user is currently logged in, otherwise `false`.
+   */
   isUserSignedIn(): Observable<boolean> {
     return this.afAuth.user.pipe(map((user) => (user ? true : false)));
   }
@@ -41,6 +45,10 @@ export class AuthService {
       .set({ ...user });
   }
 
+  /**
+   * Returns the `User` that is currently logged in.
+   * @returns The user that is currently logged in (or `null`);
+   */
   getCurrentUser(): Observable<firebase.User | null> {
     return this.afAuth.user;
   }
@@ -51,7 +59,7 @@ export class AuthService {
    * @param userID The user id
    * @param lastSignInTime The last time this user signed in
    */
-  updateUser(userID: string, lastSignInTime: string): Promise<void> {
+  setUserLastSignInTime(userID: string, lastSignInTime: string): Promise<void> {
     return this.afs.doc<User>(`${Collections.USERS}/${userID}`).update({
       lastSignInTime,
     });

@@ -7,7 +7,7 @@ import { ConfirmationDialogComponent } from '../components/confirmation-dialog/c
   providedIn: 'root',
 })
 export class ConfirmationDialogService {
-  constructor(private dialog: MatDialog) {}
+  constructor(private readonly dialog: MatDialog) {}
 
   public confirm(message?: string): Observable<boolean> {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
