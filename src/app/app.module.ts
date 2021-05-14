@@ -16,9 +16,10 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { AuthModule } from './modules/auth/auth.module';
 import { MaterialDesignModule } from './theme/material-design/material-design.module';
 import { TopnavComponent } from './components/topnav/topnav.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
-  declarations: [AppComponent, NotFoundComponent, SidenavComponent, TopnavComponent],
+  declarations: [AppComponent, NotFoundComponent, SidenavComponent, TopnavComponent, HomeComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
