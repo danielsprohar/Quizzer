@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private readonly overlayContainer: OverlayContainer,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly router: Router,
-    public readonly appTheme: AppThemeService,
+    public readonly theme: AppThemeService,
     public readonly appState: AppStateService
   ) {}
 
@@ -44,8 +44,8 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .subscribe((isHandset) => (this.isHandset = isHandset));
 
-    this.isDarkThemeSubscription = this.appTheme
-      .isDarkTheme()
+    this.isDarkThemeSubscription = this.theme
+      .isDarkThemeAsObservable()
       .subscribe((isDarkTheme) => {
         if (isDarkTheme) {
           // reference: https://material.angular.io/guide/theming#multiple-themes
@@ -79,6 +79,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public signOut(): void {
     this.afAuth.signOut();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

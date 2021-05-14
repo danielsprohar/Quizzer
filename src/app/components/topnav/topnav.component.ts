@@ -3,9 +3,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import firebase from 'firebase/app';
 
 @Component({
   selector: 'app-topnav',
@@ -17,6 +18,7 @@ export class TopnavComponent implements OnInit, OnDestroy {
 
   @Input() drawer: MatSidenav;
   isHandset: boolean = false;
+  user$: Observable<firebase.User | null>;
 
   constructor(
     private readonly afAuth: AngularFireAuth,
@@ -26,6 +28,7 @@ export class TopnavComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.user$ = this.authService.getCurrentUser();
     this.isHandsetSubscription = this.breakpointObserver
       .observe(Breakpoints.HandsetLandscape)
       .pipe(

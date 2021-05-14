@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { Observable, of } from 'rxjs';
-import { first, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Collections } from 'src/app/constants/collections';
 import { User } from 'src/app/models/user';
 
@@ -11,24 +11,15 @@ import { User } from 'src/app/models/user';
   providedIn: 'root',
 })
 export class AuthService {
-  user$: Observable<User | null | undefined>;
   redirectUrl: string = '';
 
   constructor(
     private readonly afAuth: AngularFireAuth,
     private readonly afs: AngularFirestore
-  ) {
-    this.user$ = this.afAuth.authState.pipe(
-      switchMap((user) => {
-        if (user) {
-          return this.afs
-            .doc<User>(`${Collections.USERS}/${user.uid}`)
-            .valueChanges();
-        } else {
-          return of(null);
-        }
-      })
-    );
+  ) {}
+
+  isUserSignedIn(): Observable<boolean> {
+    return this.afAuth.user.pipe(map((user) => (user ? true : false)));
   }
 
   /**
@@ -36,8 +27,7 @@ export class AuthService {
    * @returns The currently signed-in user id (or null).
    */
   async getUserIDAsync(): Promise<string | null> {
-    // https://github.com/angular/angularfire/issues/2378
-    const user = await this.afAuth.authState.pipe(first()).toPromise();
+    const user = await this.afAuth.currentUser;
     return user?.uid ?? null;
   }
 
@@ -49,6 +39,10 @@ export class AuthService {
     return this.afs
       .doc<User>(`${Collections.USERS}/${user.uid}`)
       .set({ ...user });
+  }
+
+  getCurrentUser(): Observable<firebase.User | null> {
+    return this.afAuth.user;
   }
 
   /**

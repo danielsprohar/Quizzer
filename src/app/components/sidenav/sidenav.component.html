@@ -21,7 +21,7 @@
   <mat-list-item>
     <mat-icon mat-list-icon class="icon">settings</mat-icon>
     <a mat-line href="#">Settings</a>
-    <ng-container *ngIf="appTheme.getIsDarkTheme(); else lightTheme">
+    <ng-container *ngIf="theme.getIsDarkTheme(); else lightTheme">
       <button
         mat-icon-button
         matTooltip="Switch to light theme"

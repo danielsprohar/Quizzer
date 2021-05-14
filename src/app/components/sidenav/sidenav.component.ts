@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { AppThemeService } from 'src/app/services/app-theme.service';
@@ -16,13 +17,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly afAuth: AngularFireAuth,
+    private readonly router: Router,
     public readonly authService: AuthService,
-    public readonly appTheme: AppThemeService
+    public readonly theme: AppThemeService
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.authService.user$.subscribe((user) => {
-      this.isUserSignedIn = user ? true : false;
+    this.subscription = this.authService.isUserSignedIn().subscribe((value) => {
+      this.isUserSignedIn = value;
     });
   }
 
@@ -37,11 +39,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
   // =========================================================================
 
   toggleAppTheme(): void {
-    this.appTheme.setIsDarkTheme(!this.appTheme.getIsDarkTheme());
+    this.theme.isDarkTheme(!this.theme.getIsDarkTheme());
   }
 
   signOut(): void {
     this.afAuth.signOut();
+    this.router.navigate(['/']);
   }
-
 }
