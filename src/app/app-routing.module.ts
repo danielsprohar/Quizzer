@@ -6,12 +6,12 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
   },
   {
-    path: '',
-    redirectTo: '',
-    pathMatch: 'full',
+    path: 'quizzes',
+    loadChildren: () =>
+      import('./modules/quizzes/quizzes.module').then((m) => m.QuizzesModule),
   },
   {
     path: '**',

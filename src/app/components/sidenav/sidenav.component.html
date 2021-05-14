@@ -22,21 +22,23 @@
   </ng-template>
 
   <!-- Features -->
-  <mat-list-item>
+  <a mat-list-item routerLink="/">
     <mat-icon mat-list-icon class="icon">home</mat-icon>
-    <a mat-line routerLink="/">Home</a>
-  </mat-list-item>
-  <mat-list-item>
+    <p mat-line>Home</p>
+  </a>
+
+  <a mat-list-item routerLink="/quizzes">
     <mat-icon mat-list-icon class="icon">class</mat-icon>
-    <a mat-line routerLink="/quizzes">Quizzes</a>
-  </mat-list-item>
+    <p mat-line>Quizzes</p>
+  </a>
 
   <mat-divider></mat-divider>
 
   <!-- Settings -->
   <mat-list-item>
     <mat-icon mat-list-icon class="icon">settings</mat-icon>
-    <a mat-line href="#">Settings</a>
+    <a mat-line routerLink="/settings">Settings</a>
+
     <ng-container *ngIf="theme.getIsDarkTheme(); else lightTheme">
       <button
         mat-icon-button
