@@ -14,7 +14,7 @@ export class Collections {
    *
    * e.g. `quizId`, `name`, `numberOfQuestions`, etc.
    */
-  public static readonly USER_QUIZ_SNIPPETS = 'quiz_snippets';
+  public static readonly QUIZ_SNIPPETS = 'quiz_snippets';
   /**
    * A top-level (root) collection of `Quiz`zes
    */
@@ -23,12 +23,4 @@ export class Collections {
    * A subcollection of the root `Quizzes` collection
    */
   public static readonly QUIZ_QUESTIONS = 'questions';
-  /**
-   * A subcollection of the root `Quizzes` collection
-   */
-  public static readonly QUIZ_PRIVATE_DATA = 'private_data';
-  /**
-   * The key to the sole document in the private_data subcollection
-   */
-  public static readonly QUIZ_PRIVATE_DATA_KEY = 'data';
 }
