@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MaterialDesignModule } from 'src/app/theme/material-design/material-design.module';
-import { authServiceSpy } from '../../mocks/auth-mock.service';
+import { authServiceSpy } from '../../mocks/auth-service-mock';
 import { AuthService } from '../../services/auth.service';
 import { LoginComponent } from './login.component';
 
@@ -26,7 +26,7 @@ describe('LoginComponent', () => {
         FormBuilder,
         {
           provide: AuthService,
-          useClass: authServiceSpy,
+          useValue: authServiceSpy,
         },
       ],
     }).compileComponents();

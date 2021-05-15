@@ -22,11 +22,11 @@ export class AppComponent implements OnInit, OnDestroy {
   isHandset: boolean = false;
 
   constructor(
-    public authService: AuthService,
     private readonly afAuth: AngularFireAuth,
     private readonly overlayContainer: OverlayContainer,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly router: Router,
+    public readonly authService: AuthService,
     public readonly theme: AppThemeService,
     public readonly appState: AppStateService
   ) {}

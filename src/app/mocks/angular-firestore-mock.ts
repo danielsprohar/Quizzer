@@ -1,3 +1,4 @@
-import { AngularFirestore } from '@angular/fire/firestore';
-
-export class AngularFirestoreMock extends AngularFirestore {}
+export const angularFirestoreSpy = jasmine.createSpyObj('AngularFirestore', [
+  'collection',
+  'doc',
+]);
