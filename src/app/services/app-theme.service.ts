@@ -9,7 +9,7 @@ export class AppThemeService {
 
   constructor() {}
 
-  setIsDarkTheme(value: boolean): void {
+  isDarkTheme(value: boolean): void {
     this.isDarkTheme$.next(value);
   }
 
@@ -17,7 +17,7 @@ export class AppThemeService {
     return this.isDarkTheme$.value;
   }
 
-  isDarkTheme(): Observable<boolean> {
+  isDarkThemeAsObservable(): Observable<boolean> {
     return this.isDarkTheme$.asObservable();
   }
 }

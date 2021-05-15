@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import firebase from 'firebase/app';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { AppThemeService } from 'src/app/services/app-theme.service';
 
@@ -9,27 +10,17 @@ import { AppThemeService } from 'src/app/services/app-theme.service';
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss'],
 })
-export class SidenavComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
-
-  isUserSignedIn: boolean = false;
+export class SidenavComponent implements OnInit {
+  user$: Observable<firebase.User | null>;
 
   constructor(
-    private readonly afAuth: AngularFireAuth,
-    public readonly authService: AuthService,
-    public readonly appTheme: AppThemeService
+    private readonly router: Router,
+    public readonly auth: AuthService,
+    public readonly theme: AppThemeService
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.authService.user$.subscribe((user) => {
-      this.isUserSignedIn = user ? true : false;
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.user$ = this.auth.getCurrentUser();
   }
 
   // =========================================================================
@@ -37,11 +28,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
   // =========================================================================
 
   toggleAppTheme(): void {
-    this.appTheme.setIsDarkTheme(!this.appTheme.getIsDarkTheme());
+    this.theme.isDarkTheme(!this.theme.getIsDarkTheme());
   }
 
   signOut(): void {
-    this.afAuth.signOut();
+    this.auth.signOut();
+    this.router.navigate(['/']);
   }
-
 }

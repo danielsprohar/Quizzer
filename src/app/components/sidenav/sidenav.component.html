@@ -1,27 +1,45 @@
 <mat-nav-list role="navigation" class="sidenav-list">
-  <ng-container *ngIf="!isUserSignedIn">
+  <ng-container *ngIf="user$ | async as user; else guest">
+    <mat-list-item>
+      <mat-icon mat-list-icon class="icon">account_circle</mat-icon>
+      <a mat-line routerLink="/account">
+        {{ user.displayName }}
+      </a>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon class="icon">logout</mat-icon>
+      <a mat-line (click)="signOut()">Log out</a>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </ng-container>
+
+  <ng-template #guest>
     <mat-list-item>
       <mat-icon mat-list-icon class="icon">account_circle</mat-icon>
       <a mat-line routerLink="/login">Sign in</a>
     </mat-list-item>
     <mat-divider></mat-divider>
-  </ng-container>
+  </ng-template>
 
-  <mat-list-item>
+  <!-- Features -->
+  <a mat-list-item routerLink="/">
     <mat-icon mat-list-icon class="icon">home</mat-icon>
-    <a mat-line routerLink="/">Home</a>
-  </mat-list-item>
-  <mat-list-item>
+    <p mat-line>Home</p>
+  </a>
+
+  <a mat-list-item routerLink="/quizzes">
     <mat-icon mat-list-icon class="icon">class</mat-icon>
-    <a mat-line routerLink="/quizzes">Quizzes</a>
-  </mat-list-item>
+    <p mat-line>Quizzes</p>
+  </a>
 
   <mat-divider></mat-divider>
 
+  <!-- Settings -->
   <mat-list-item>
     <mat-icon mat-list-icon class="icon">settings</mat-icon>
-    <a mat-line href="#">Settings</a>
-    <ng-container *ngIf="appTheme.getIsDarkTheme(); else lightTheme">
+    <a mat-line routerLink="/settings">Settings</a>
+
+    <ng-container *ngIf="theme.getIsDarkTheme(); else lightTheme">
       <button
         mat-icon-button
         matTooltip="Switch to light theme"
@@ -42,18 +60,4 @@
   </mat-list-item>
 
   <mat-divider></mat-divider>
-
-  <ng-container *ngIf="isUserSignedIn">
-    <mat-list-item>
-      <mat-icon mat-list-icon class="icon">account_circle</mat-icon>
-      <a mat-line routerLink="/account">Account</a>
-    </mat-list-item>
-
-    <mat-divider></mat-divider>
-    
-    <mat-list-item>
-      <mat-icon mat-list-icon class="icon">logout</mat-icon>
-      <a mat-line (click)="signOut()">Log out</a>
-    </mat-list-item>
-  </ng-container>
 </mat-nav-list>

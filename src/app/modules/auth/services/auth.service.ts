@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { Observable, of } from 'rxjs';
-import { first, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Collections } from 'src/app/constants/collections';
 import { User } from 'src/app/models/user';
 
@@ -11,60 +11,28 @@ import { User } from 'src/app/models/user';
   providedIn: 'root',
 })
 export class AuthService {
-  public user$: Observable<User | null | undefined>;
-  public redirectUrl: string = '';
+  redirectUrl: string = '';
 
-  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
-    this.user$ = this.afAuth.authState.pipe(
-      switchMap((user) => {
-        if (user) {
-          return this.afs
-            .doc<User>(`${Collections.USERS}/${user.uid}`)
-            .valueChanges();
-        } else {
-          return of(null);
-        }
-      })
-    );
-  }
-
-  /**
-   * Gets the user id of the currently logged in user.
-   * @returns The currently signed-in user id (or null).
-   */
-  async getUserIDAsync(): Promise<string | null> {
-    // https://github.com/angular/angularfire/issues/2378
-    const user = await this.afAuth.authState.pipe(first()).toPromise();
-    return user?.uid ?? null;
-  }
+  constructor(
+    private readonly afAuth: AngularFireAuth,
+    private readonly afs: AngularFirestore
+  ) {}
 
   /**
    * Creates a new user document in the `Users` collection.
    * @param user The user information
    */
-  public addUser(user: User): Promise<void> {
+  addUser(user: User): Promise<void> {
     return this.afs
       .doc<User>(`${Collections.USERS}/${user.uid}`)
       .set({ ...user });
   }
 
   /**
-   * Updates the `lastSignInTime` attribute in the User document
-   * that is associated with the given `userId`.
-   * @param userID The user id
-   * @param lastSignInTime The last time this user signed in
-   */
-  public updateUser(userID: string, lastSignInTime: string): Promise<void> {
-    return this.afs.doc<User>(`${Collections.USERS}/${userID}`).update({
-      lastSignInTime,
-    });
-  }
-
-  /**
    * Builds a new application user.
    * @param firebaseUser The user information provided by the Firebase Authentication service.
    */
-  public builderUser(firebaseUser: firebase.User): User {
+  buildApplicationUser(firebaseUser: firebase.User): User {
     return {
       uid: firebaseUser.uid,
       email: firebaseUser.email,
@@ -75,10 +43,47 @@ export class AuthService {
   }
 
   /**
+   * Gets the user id of the currently logged in user.
+   * @returns The currently signed-in user id (or null).
+   */
+  async getUserIdAsync(): Promise<string | null> {
+    const user = await this.afAuth.currentUser;
+    return user?.uid ?? null;
+  }
+
+  /**
+   * Returns the `User` that is currently logged in.
+   * @returns The user that is currently logged in (or `null`);
+   */
+  getCurrentUser(): Observable<firebase.User | null> {
+    return this.afAuth.user;
+  }
+
+  /**
+   *
+   * @returns `true` if a user is currently logged in, otherwise `false`.
+   */
+  isUserSignedIn(): Observable<boolean> {
+    return this.afAuth.user.pipe(map((user) => (user ? true : false)));
+  }
+
+  /**
+   * Updates the `lastSignInTime` attribute in the User document
+   * that is associated with the given `userId`.
+   * @param userID The user id
+   * @param lastSignInTime The last time this user signed in
+   */
+  setUserLastSignInTime(userID: string, lastSignInTime: string): Promise<void> {
+    return this.afs.doc<User>(`${Collections.USERS}/${userID}`).update({
+      lastSignInTime,
+    });
+  }
+
+  /**
    * Open a popup to let the user sign in with their Google account.
    * @returns User credentials
    */
-  public signInWithGoogle(): Promise<firebase.auth.UserCredential> {
+  signInWithGoogle(): Promise<firebase.auth.UserCredential> {
     return this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
 
@@ -88,7 +93,7 @@ export class AuthService {
    * @param password The user's password.
    * @returns Returns an object with the user model and the auth credential.
    */
-  public signInWithEmailAndPassword(
+  signInWithEmailAndPassword(
     email: string,
     password: string
   ): Promise<firebase.auth.UserCredential> {
@@ -101,7 +106,7 @@ export class AuthService {
    * @param password The user's password
    * @returns Returns an object with the user model and the auth credential.
    */
-  public signUpWithEmailAndPassword(
+  signUpWithEmailAndPassword(
     email: string,
     password: string
   ): Promise<firebase.auth.UserCredential> {
@@ -111,7 +116,7 @@ export class AuthService {
   /**
    * Sign the current user out of the application.
    */
-  public signOut(): void {
+  signOut(): void {
     this.afAuth.signOut();
   }
 }

@@ -23,10 +23,10 @@ export class LoginComponent implements OnInit {
   invalidLoginAttempt = false;
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private appState: AppStateService
+    private readonly fb: FormBuilder,
+    private readonly router: Router,
+    private readonly authService: AuthService,
+    private readonly appState: AppStateService
   ) {}
 
   // =========================================================================
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
         }
 
         this.authService
-          .updateUser(res.user.uid, res.user.metadata.lastSignInTime)
+          .setUserLastSignInTime(res.user.uid, res.user.metadata.lastSignInTime)
           .then(() => console.log('Logged in'))
           .catch((error) => console.error(error));
       })
@@ -117,7 +117,7 @@ export class LoginComponent implements OnInit {
           throw new Error('Response body is empty');
         }
 
-        this.authService.updateUser(
+        this.authService.setUserLastSignInTime(
           res.user.uid,
           res.user.metadata.lastSignInTime
         );
