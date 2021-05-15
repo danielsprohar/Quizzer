@@ -19,23 +19,6 @@ export class AuthService {
   ) {}
 
   /**
-   *
-   * @returns `true` if a user is currently logged in, otherwise `false`.
-   */
-  isUserSignedIn(): Observable<boolean> {
-    return this.afAuth.user.pipe(map((user) => (user ? true : false)));
-  }
-
-  /**
-   * Gets the user id of the currently logged in user.
-   * @returns The currently signed-in user id (or null).
-   */
-  async getUserIDAsync(): Promise<string | null> {
-    const user = await this.afAuth.currentUser;
-    return user?.uid ?? null;
-  }
-
-  /**
    * Creates a new user document in the `Users` collection.
    * @param user The user information
    */
@@ -46,11 +29,42 @@ export class AuthService {
   }
 
   /**
+   * Builds a new application user.
+   * @param firebaseUser The user information provided by the Firebase Authentication service.
+   */
+  buildApplicationUser(firebaseUser: firebase.User): User {
+    return {
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      displayName: firebaseUser.displayName,
+      photoURL: firebaseUser.photoURL,
+      lastSignInTime: firebaseUser.metadata.lastSignInTime,
+    };
+  }
+
+  /**
+   * Gets the user id of the currently logged in user.
+   * @returns The currently signed-in user id (or null).
+   */
+  async getUserIdAsync(): Promise<string | null> {
+    const user = await this.afAuth.currentUser;
+    return user?.uid ?? null;
+  }
+
+  /**
    * Returns the `User` that is currently logged in.
    * @returns The user that is currently logged in (or `null`);
    */
   getCurrentUser(): Observable<firebase.User | null> {
     return this.afAuth.user;
+  }
+
+  /**
+   *
+   * @returns `true` if a user is currently logged in, otherwise `false`.
+   */
+  isUserSignedIn(): Observable<boolean> {
+    return this.afAuth.user.pipe(map((user) => (user ? true : false)));
   }
 
   /**
@@ -63,20 +77,6 @@ export class AuthService {
     return this.afs.doc<User>(`${Collections.USERS}/${userID}`).update({
       lastSignInTime,
     });
-  }
-
-  /**
-   * Builds a new application user.
-   * @param firebaseUser The user information provided by the Firebase Authentication service.
-   */
-  buildUser(firebaseUser: firebase.User): User {
-    return {
-      uid: firebaseUser.uid,
-      email: firebaseUser.email,
-      displayName: firebaseUser.displayName,
-      photoURL: firebaseUser.photoURL,
-      lastSignInTime: firebaseUser.metadata.lastSignInTime,
-    };
   }
 
   /**

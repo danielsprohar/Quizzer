@@ -93,7 +93,7 @@ export class RegisterComponent implements OnInit {
   ): void {
     userCredential
       .then((response) => {
-        const appUser = this.authService.buildUser(response.user!);
+        const appUser = this.authService.buildApplicationUser(response.user!);
 
         this.authService
           .addUser(appUser)
