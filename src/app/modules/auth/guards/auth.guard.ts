@@ -12,7 +12,10 @@ import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -22,14 +25,16 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    this.authService.redirectUrl = state.url;
-
-    return this.authService.user$.pipe(
+    return this.authService.getCurrentUser().pipe(
       take(1),
       map((user) => (user ? true : false)),
       tap((isSignedIn) => {
         if (!isSignedIn) {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/login'], {
+            queryParams: {
+              returnUrl: state.url,
+            },
+          });
         }
       })
     );

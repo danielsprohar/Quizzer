@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Quiz } from 'src/app/models/quiz';
-import { UserService } from 'src/app/services/user.service';
+import { Component, OnInit } from '@angular/core'
+import { AngularFireAuth } from '@angular/fire/auth'
+import { Observable } from 'rxjs'
+import { QuizSnippet } from 'src/app/models/quiz-snippet'
+import { UserService } from 'src/app/services/user.service'
 
 @Component({
   selector: 'app-quizzes',
@@ -9,9 +10,15 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./quizzes.component.scss'],
 })
 export class QuizzesComponent implements OnInit {
-  quizzes$: Observable<Quiz[]>;
+  quizSnippets$: Observable<QuizSnippet[]>
 
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly afAuth: AngularFireAuth,
+    private readonly userService: UserService
+  ) {}
 
-  ngOnInit(): void {}
+  async ngOnInit(): Promise<void> {
+    const user = await this.afAuth.currentUser
+    this.quizSnippets$ = this.userService.getQuizSnippets(user?.uid!)
+  }
 }

@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { User } from 'src/app/models/user';
 import { AppStateService } from 'src/app/services/app-state.service';
@@ -21,9 +21,11 @@ export class LoginComponent implements OnInit {
   user?: User;
   hide = true;
   invalidLoginAttempt = false;
+  returnUrl: string;
 
   constructor(
     private readonly fb: FormBuilder,
+    private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly appState: AppStateService
@@ -34,6 +36,8 @@ export class LoginComponent implements OnInit {
   // =========================================================================
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
     this.form = this.fb.group({
       email: [
         '',
@@ -83,9 +87,7 @@ export class LoginComponent implements OnInit {
       })
       // TODO: handle error
       .catch((error) => console.error(error))
-      .finally(() =>
-        this.router.navigate([this.authService.redirectUrl || '/'])
-      );
+      .finally(() => this.router.navigate([this.returnUrl]));
   }
 
   /**
@@ -128,7 +130,7 @@ export class LoginComponent implements OnInit {
       })
       .finally(() => {
         this.appState.isLoading(false);
-        this.router.navigate([this.authService.redirectUrl || '/']);
+        this.router.navigate([this.returnUrl]);
       });
   }
 }

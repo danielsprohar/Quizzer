@@ -1,2 +1,36 @@
-<h1>Quizzes Module</h1>
-<button color="primary" mat-raised-button>Hi</button>
+<div class="quizzes-shell">
+  <h1>Quizzes</h1>
+  <mat-divider></mat-divider>
+  <ng-container *ngIf="quizSnippets$ | async as quizSnippets">
+    <div class="card-container">
+      <ng-container *ngFor="let quizSnippet of quizSnippets">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              {{ quizSnippet.name }}
+            </mat-card-title>
+            <mat-card-subtitle>
+              {{ quizSnippet.subject }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-card-content>
+              <p>
+                Created on:
+                {{ quizSnippet.createdOn?.toDate() | date: "mediumDate" }}
+              </p>
+              <p>
+                Modified on:
+                {{ quizSnippet.modifiedOn?.toDate() | date: "mediumDate" }}
+              </p>
+            </mat-card-content>
+            <mat-card-actions>
+              <a mat-button>Edit</a>
+              <a color="primary" mat-raised-button>Take</a>
+            </mat-card-actions>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

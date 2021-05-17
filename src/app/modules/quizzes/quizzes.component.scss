@@ -1,0 +1,24 @@
+.quizzes-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .card-container {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 24px;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+// @media only screen and (min-width: 1200px) {
+// }
