@@ -4,6 +4,17 @@
   height: 100%;
 }
 
+.action-bar {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-bar > .btn-bar {
+  margin-bottom: 16px;
+}
+
 .card-container {
   display: grid;
   grid-template-columns: repeat(1, 1fr);

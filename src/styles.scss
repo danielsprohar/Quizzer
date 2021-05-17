@@ -1,4 +1,4 @@
-@import "~@angular/material/theming";
+@import '~@angular/material/theming';
 @include mat-core();
 
 $Quizzer-primary: mat-palette($mat-deep-orange, A400);
@@ -46,7 +46,17 @@ body {
 }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 400;
 }
 
 p {
@@ -89,4 +99,18 @@ a:hover {
 
 a:hover {
   color: #125699;
+}
+
+a mat-icon {
+  color: #000;
+}
+
+.btn-bar {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 8px;
+}
+
+.btn-bar mat-icon {
+  opacity: 0.54;
 }

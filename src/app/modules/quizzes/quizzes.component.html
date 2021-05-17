@@ -1,6 +1,18 @@
 <div class="quizzes-shell">
-  <div>
+  <div class="action-bar">
     <h1>Quizzes</h1>
+    <div class="btn-bar">
+      <a
+        mat-icon-button
+        aria-label="Create quiz"
+        matTooltip="Create quiz"
+        routerLink="create"
+      >
+        <mat-icon>add_circle</mat-icon>
+      </a>
+    </div>
+  </div>
+
   <mat-divider></mat-divider>
 
   <ng-container *ngIf="quizSnippets$ | async as quizSnippets">
