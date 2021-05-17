@@ -6,6 +6,7 @@ import { QuizzesComponent } from './quizzes.component';
 import { MaterialDesignModule } from 'src/app/theme/material-design/material-design.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateQuizComponent } from './components/create-quiz/create-quiz.component';
+import { QuestionsModule } from '../questions/questions.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { CreateQuizComponent } from './components/create-quiz/create-quiz.compon
     CommonModule,
     QuizzesRoutingModule,
     MaterialDesignModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    QuestionsModule
   ]
 })
 export class QuizzesModule { }
