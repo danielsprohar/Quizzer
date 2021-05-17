@@ -1,6 +1,8 @@
 <div class="quizzes-shell">
-  <h1>Quizzes</h1>
+  <div>
+    <h1>Quizzes</h1>
   <mat-divider></mat-divider>
+
   <ng-container *ngIf="quizSnippets$ | async as quizSnippets">
     <div class="card-container">
       <ng-container *ngFor="let quizSnippet of quizSnippets">
@@ -17,11 +19,11 @@
             <mat-card-content>
               <p>
                 Created on:
-                {{ quizSnippet.createdOn?.toDate() | date: "mediumDate" }}
+                {{ quizSnippet.createdOn?.toDate() | date: 'mediumDate' }}
               </p>
               <p>
                 Modified on:
-                {{ quizSnippet.modifiedOn?.toDate() | date: "mediumDate" }}
+                {{ quizSnippet.modifiedOn?.toDate() | date: 'mediumDate' }}
               </p>
             </mat-card-content>
             <mat-card-actions>
