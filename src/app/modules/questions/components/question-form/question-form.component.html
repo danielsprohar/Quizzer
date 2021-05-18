@@ -1,0 +1,65 @@
+<mat-card class="question-card">
+  <mat-card-content >
+    <div class="question-header">
+      <mat-form-field
+        appearance="fill"
+        class="question-textbox"
+        floatLabel="never"
+      >
+        <mat-label>Question text</mat-label>
+        <input type="text" matInput placeholder="Question" />
+      </mat-form-field>
+
+      <button
+        mat-icon-button
+        aria-label="Add image"
+        matTooltip="Add image"
+        class="add-question-icon"
+        (click)="addImage()"
+      >
+        <mat-icon>insert_photo</mat-icon>
+      </button>
+
+      <!-- Question Type dropdown -->
+      <mat-form-field
+        appearance="outline"
+        floatLabel="never"
+        class="question-type-selection"
+      >
+        <mat-label>Question type</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let type of questionTypes; let i = index">
+            <div class="question-type-container">
+              <mat-icon>{{ questionTypeIcons[i] }}</mat-icon>
+              <span>{{ type }}</span>
+            </div>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="question-options-container">
+      <!-- TODO: Add question type component -->
+    </div>
+
+    <div class="question-actions-containter">
+      <button
+        mat-icon-button
+        aria-label="Duplicate question"
+        matTooltip="Duplicate question"
+        (click)="duplicateQuestion()"
+      >
+        <mat-icon>content_copy</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        aria-label="Delete question"
+        matTooltip="Delete question"
+        (click)="deleteQuestion()"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div></div>
+  </mat-card-content>
+</mat-card>
