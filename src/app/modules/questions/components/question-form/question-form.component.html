@@ -6,11 +6,12 @@
         <mat-form-field appearance="outline" floatLabel="never">
           <mat-label>Question type</mat-label>
           <mat-select formControlName="type">
-            <mat-option *ngFor="let type of questionTypes; let i = index">
-              <div class="question-type-option">
-                <mat-icon>{{ questionTypeIcons[i] }}</mat-icon>
-                <span>{{ type | titlecase }}</span>
-              </div>
+            <mat-option
+              *ngFor="let type of questionTypes; let i = index"
+              [value]="type"
+            >
+              <mat-icon>{{ questionTypeIcons[i] }}</mat-icon>
+              {{ type | titlecase }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -47,9 +48,14 @@
         </mat-form-field>
       </div>
 
-      <div class="question-options-container">
-        <!-- TODO: Add question type component -->
-        <p>Option 1</p>
+      <div *ngIf="options" formArrayName="options">
+        <div
+          *ngFor="let opt of options?.controls; let i = index"
+          class="question-options-container"
+        >
+          <!-- TODO: Add question type component -->
+          <p>Option {{ i + 1 }}</p>
+        </div>
       </div>
 
       <div class="question-actions-containter">

@@ -22,10 +22,13 @@ export class CreateQuizComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      name: this.fb.control(''),
-      description: this.fb.control(''),
-      subject: this.fb.control(''),
-      visibility: this.fb.control(''),
+      name: this.fb.control('', [
+        Validators.required,
+        Validators.maxLength(2048),
+      ]),
+      description: this.fb.control('', [Validators.maxLength(4096)]),
+      subject: this.fb.control('', [Validators.required]),
+      visibility: this.fb.control('public', [Validators.required]),
       questions: this.fb.array([]),
     })
   }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms'
 import { questionTypes as QuestionTypes } from 'src/app/models/question'
 
 @Component({
@@ -60,6 +60,10 @@ export class QuestionFormComponent implements OnInit {
 
   get imagePath() {
     return this.form.get('imagePath')!
+  }
+
+  get options() {
+    return this.form.get('options') as FormArray
   }
 
   // =========================================================================
