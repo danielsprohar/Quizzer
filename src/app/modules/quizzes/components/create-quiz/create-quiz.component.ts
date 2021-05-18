@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
+import { QuestionControlService } from 'src/app/modules/questions/services/question-control.service'
 
 @Component({
   selector: 'app-create-quiz',
@@ -15,7 +16,8 @@ export class CreateQuizComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly router: Router,
-    private readonly auth: AuthService
+    private readonly auth: AuthService,
+    private readonly qcs: QuestionControlService
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,9 @@ export class CreateQuizComponent implements OnInit {
   // =========================================================================
 
   addQuestion() {
-    this.questions.push(this.fb.group({}))
+    this.questions.push(
+      this.qcs.newQuestionFormGroup({ type: 'multiple choice' })
+    )
   }
 
   deleteQuestion(index: number) {

@@ -9,7 +9,7 @@ export const questionTypes = [
   'dropdown',
 ]
 
-type QuestionType =
+export type QuestionType =
   | 'short answer'
   | 'paragraph'
   | 'multiple choice'
