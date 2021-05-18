@@ -1,6 +1,12 @@
-.create-quiz-shell {
+.quiz-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
   height: 100%;
+}
+
+.questions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

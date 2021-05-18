@@ -14,31 +14,26 @@ mat-card-content {
 .question-header {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  gap: 16px;
 }
 
-.question-textbox {
-  flex: 60;
-}
-
-.add-question-icon {
-  flex: 10;
-}
-
-.question-type-selection {
-  flex: 30;
-}
-
-.question-type-container {
+.question-type-option {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
 }
 
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
 .question-options-container {
   display: flex;
   flex-direction: column;
+  margin-bottom: 16px;
 }
 
 .question-actions-containter {
@@ -47,11 +42,11 @@ mat-card-content {
   justify-content: flex-end;
   align-items: center;
   border-top: 1px solid #dadce0;
+  padding-top: 16px;
 }
 
 .question-actions {
   margin: auto;
 }
-
 
 // Display > 956px -> show floating action bar

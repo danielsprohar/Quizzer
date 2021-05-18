@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { questionTypes as QuestionTypes } from 'src/app/models/question'
 
@@ -17,6 +17,8 @@ export class QuestionFormComponent implements OnInit {
     'arrow_drop_down',
   ]
 
+  @Input() index: number
+  @Output() questionDeleted = new EventEmitter<number>();
   form: FormGroup
 
   constructor(private readonly fb: FormBuilder) {}
@@ -68,5 +70,7 @@ export class QuestionFormComponent implements OnInit {
 
   duplicateQuestion(): void {}
 
-  deleteQuestion(): void {}
+  deleteQuestion(): void {
+    this.questionDeleted.emit(this.index);
+  }
 }
