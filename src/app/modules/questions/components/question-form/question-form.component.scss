@@ -1,0 +1,61 @@
+mat-card-content {
+  gap: 16px;
+}
+
+.question-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.question-header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin: 16px auto;
+}
+
+.question-options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.question-option {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.question-option-text {
+  flex: 1;
+  margin-left: 16px;
+}
+
+.question-actions-containter {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  border-top: 1px solid #dadce0;
+  padding-top: 16px;
+}
+
+.question-actions {
+  margin: auto;
+}
+
+// Display > 956px -> show floating action bar

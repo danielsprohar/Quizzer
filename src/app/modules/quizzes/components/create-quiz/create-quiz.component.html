@@ -1,0 +1,34 @@
+<form [formGroup]="form" class="quiz-form">
+  <mat-card>
+    <mat-form-field class="full-width">
+      <mat-label floatLabel="never">Title</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Untitled quiz"
+        formControlName="name"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Description</mat-label>
+      <input matInput type="text" formControlName="description" />
+    </mat-form-field>
+  </mat-card>
+
+  <div formArrayName="questions" class="questions-container">
+    <ng-container *ngFor="let qc of questions?.controls; let i = index">
+      <app-question-form
+        [form]="toFormGroup(qc)"
+        [index]="i"
+        (questionDeleted)="deleteQuestion($event)"
+      ></app-question-form>
+    </ng-container>
+  </div>
+
+  <div class="btn-bar">
+    <button mat-raised-button color="primary" (click)="addQuestion()">
+      Add question
+    </button>
+  </div>
+</form>

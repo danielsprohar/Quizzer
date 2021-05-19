@@ -1,0 +1,131 @@
+<!-- [class.mat-elevation-z2]="!isActive" [class.mat-elevation-z8]="isActive" -->
+<mat-card class="question-card">
+  <form [formGroup]="form">
+    <mat-card-content>
+      <div class="question-header">
+        <mat-form-field appearance="outline" floatLabel="never">
+          <mat-label>Question type</mat-label>
+          <mat-select
+            formControlName="type"
+            (valueChange)="changeQuestionType($event)"
+          >
+            <mat-option
+              *ngFor="let type of questionTypes; let i = index"
+              [value]="type"
+            >
+              <!-- <mat-icon>{{ questionTypeIcons[i] }}</mat-icon> -->
+              {{ type | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          mat-icon-button
+          aria-label="Add image"
+          matTooltip="Add image"
+          (click)="addImage()"
+        >
+          <mat-icon>insert_photo</mat-icon>
+        </button>
+      </div>
+
+      <div class="form-fields">
+        <mat-form-field appearance="fill" floatLabel="never">
+          <mat-label>Question</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Question"
+            formControlName="text"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field floatLabel="never" appearance="fill">
+          <mat-label>Hint</mat-label>
+          <input matInput type="text" formControlName="hint" />
+        </mat-form-field>
+
+        <mat-form-field floatLabel="never" appearance="fill">
+          <mat-label>Explanation</mat-label>
+          <input matInput type="text" formControlName="explanation" />
+        </mat-form-field>
+      </div>
+
+      <!-- ============================= -->
+      <!-- Image -->
+      <!-- ============================= -->
+      <ng-container *ngIf="imageURL.value">
+        <div class="image-container">
+          <img [src]="imageURL.value" />
+        </div>
+      </ng-container>
+
+      <!-- ============================= -->
+      <!-- Mutliple choice options -->
+      <!-- ============================= -->
+      <ng-container *ngIf="multipleChoiceTypes.includes(type.value)">
+        <div formArrayName="options" class="question-options-container">
+          <ng-container *ngFor="let opt of options?.controls; let i = index">
+            <div class="question-option">
+              <ng-container
+                *ngIf="
+                  type.value === 'multiple choice' || type.value === 'dropdown'
+                "
+              >
+                <mat-radio-button></mat-radio-button>
+              </ng-container>
+              <ng-container *ngIf="type.value === 'checkboxes'">
+                <mat-checkbox></mat-checkbox>
+              </ng-container>
+
+              <mat-form-field class="question-option-text" floatLabel="never">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Option {{ i + 1 }}"
+                  [formControlName]="i"
+                />
+              </mat-form-field>
+              <button
+                mat-icon-button
+                tabindex="-1"
+                aria-label="Delete option"
+                matTooltip="Delete option"
+                (click)="deleteOption(i)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+          <div>
+            <button mat-stroked-button (click)="addOption()">Add option</button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ============================= -->
+      <!-- Actions -->
+      <!-- ============================= -->
+      <div class="question-actions-containter">
+        <button
+          mat-icon-button
+          aria-label="Duplicate question"
+          matTooltip="Duplicate question"
+          (click)="duplicateQuestion()"
+        >
+          <mat-icon>content_copy</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          tabindex=""
+          aria-label="Delete question"
+          matTooltip="Delete question"
+          (click)="deleteQuestion()"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </form>
+</mat-card>

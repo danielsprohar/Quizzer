@@ -5,6 +5,7 @@ import { MaterialDesignModule } from 'src/app/theme/material-design/material-des
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [LoginComponent, RegisterComponent],
@@ -14,5 +15,6 @@ import { RegisterComponent } from './components/register/register.component';
     ReactiveFormsModule,
     MaterialDesignModule,
   ],
+  providers: [AuthGuard]
 })
 export class AuthModule {}

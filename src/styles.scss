@@ -1,8 +1,8 @@
-@import "~@angular/material/theming";
+@import '~@angular/material/theming';
 @include mat-core();
 
-$Quizzer-primary: mat-palette($mat-deep-orange, A400);
-$Quizzer-accent: mat-palette($mat-pink, A200, A100, A400);
+$Quizzer-primary: mat-palette($mat-deep-orange);
+$Quizzer-accent: mat-palette($mat-light-blue, A200, A100, A400);
 $Quizzer-warn: mat-palette($mat-red);
 $Quizzer-light-theme: mat-light-theme(
   (
@@ -17,7 +17,7 @@ $Quizzer-light-theme: mat-light-theme(
 @include angular-material-theme($Quizzer-light-theme);
 
 // Define an alternate dark theme.
-$Quizzer-dark-primary: mat-palette($mat-deep-orange, A400);
+$Quizzer-dark-primary: mat-palette($mat-deep-orange);
 $Quizzer-dark-accent: mat-palette($mat-light-blue, A200, A100, A400);
 $Quizzer-dark-warn: mat-palette($mat-red);
 $Quizzer-dark-theme: mat-dark-theme(
@@ -46,7 +46,17 @@ body {
 }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 400;
 }
 
 p {
@@ -89,4 +99,18 @@ a:hover {
 
 a:hover {
   color: #125699;
+}
+
+a mat-icon {
+  color: #000;
+}
+
+.btn-bar {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 8px;
+}
+
+.btn-bar mat-icon {
+  opacity: 0.54;
 }

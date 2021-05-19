@@ -4,7 +4,7 @@ import firebase from 'firebase/app';
  * Models the `quiz_snippets` subcollection of a `user` document.
  */
 export class QuizSnippet {
-  snippetId: string;
+  id: string;
   quizId: string;
   name: string;
   subject: string;
@@ -14,7 +14,7 @@ export class QuizSnippet {
   modifiedOn: firebase.firestore.Timestamp;
 
   constructor(fields?: {
-    snippetId?: string;
+    id?: string;
     quizId?: string;
     name?: string;
     subject?: string;

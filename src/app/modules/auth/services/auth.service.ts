@@ -11,8 +11,6 @@ import { User } from 'src/app/models/user';
   providedIn: 'root',
 })
 export class AuthService {
-  redirectUrl: string = '';
-
   constructor(
     private readonly afAuth: AngularFireAuth,
     private readonly afs: AngularFirestore
