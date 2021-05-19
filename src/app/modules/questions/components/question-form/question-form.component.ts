@@ -8,7 +8,6 @@ import {
 } from '@angular/core'
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
-import { finalize } from 'rxjs/operators'
 import { questionTypes as QuestionTypes } from 'src/app/models/question'
 import { AppStateService } from 'src/app/services/app-state.service'
 import { ImageService } from 'src/app/services/image.service'
@@ -57,6 +56,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
         explanation: this.fb.control('', [Validators.maxLength(4096)]),
         imageURL: this.fb.control(''),
         imageCaption: this.fb.control(''),
+        options: this.fb.array([])
       })
     }
     // TODO: else, we are  editing a Question: thus, set form fields
