@@ -1,8 +1,8 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
-$Quizzer-primary: mat-palette($mat-deep-orange, A400);
-$Quizzer-accent: mat-palette($mat-pink, A200, A100, A400);
+$Quizzer-primary: mat-palette($mat-deep-orange);
+$Quizzer-accent: mat-palette($mat-light-blue, A200, A100, A400);
 $Quizzer-warn: mat-palette($mat-red);
 $Quizzer-light-theme: mat-light-theme(
   (
@@ -17,7 +17,7 @@ $Quizzer-light-theme: mat-light-theme(
 @include angular-material-theme($Quizzer-light-theme);
 
 // Define an alternate dark theme.
-$Quizzer-dark-primary: mat-palette($mat-deep-orange, A400);
+$Quizzer-dark-primary: mat-palette($mat-deep-orange);
 $Quizzer-dark-accent: mat-palette($mat-light-blue, A200, A100, A400);
 $Quizzer-dark-warn: mat-palette($mat-red);
 $Quizzer-dark-theme: mat-dark-theme(

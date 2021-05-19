@@ -9,6 +9,6 @@ import { QuestionControlService } from './services/question-control.service'
   declarations: [QuestionFormComponent],
   imports: [CommonModule, ReactiveFormsModule, MaterialDesignModule],
   exports: [QuestionFormComponent],
-  providers: [QuestionControlService]
+  providers: [QuestionControlService],
 })
 export class QuestionsModule {}

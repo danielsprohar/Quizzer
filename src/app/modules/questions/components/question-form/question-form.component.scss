@@ -20,25 +20,26 @@ mat-card-content {
   margin-bottom: 16px;
 }
 
+.multiple-choice-container {
+  margin-bottom: 16px;
+}
+
 .question-options-container {
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
+  gap: 16px;
 }
 
 .question-option {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
-.question-option mat-checkbox {
-  margin-right: 16px;
-}
-
-.question-option mat-form-field {
-  flex: 10;
+.question-option-text {
+  flex: 1;
+  margin-left: 16px;
 }
 
 .question-actions-containter {

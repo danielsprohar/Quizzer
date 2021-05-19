@@ -10,7 +10,7 @@
               *ngFor="let type of questionTypes; let i = index"
               [value]="type"
             >
-              <mat-icon>{{ questionTypeIcons[i] }}</mat-icon>
+              <!-- <mat-icon>{{ questionTypeIcons[i] }}</mat-icon> -->
               {{ type | titlecase }}
             </mat-option>
           </mat-select>
@@ -48,29 +48,50 @@
         </mat-form-field>
       </div>
 
-      <div *ngIf="options" formArrayName="options">
-        <div
-          *ngFor="let opt of options?.controls; let i = index"
-          class="question-options-container"
-        >
-          <!-- TODO: Add question type component -->
-          <div class="question-option">
-            <mat-checkbox></mat-checkbox>
-            <mat-form-field>
-              <input matInput type="text" />
-            </mat-form-field>
-            <button
-              mat-icon-button
-              aria-label="Delete option"
-              matTooltip="Delete option"
-              (click)="deleteOption(i)"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
-        </div>
-      </div>
+      <!-- ============================= -->
+      <!-- Mutliple choice options -->
+      <!-- ============================= -->
+      <ng-container *ngIf="options; else noOptions">
+        <div formArrayName="options" class="multiple-choice-container">
+          <div
+            *ngFor="let opt of options?.controls; let i = index"
+            class="question-options-container"
+          >
+            <div class="question-option">
+              <ng-container
+                *ngIf="type.value === 'multiple choice'; else checkboxes"
+              >
+                <mat-radio-button></mat-radio-button>
+              </ng-container>
+              <ng-template #checkboxes>
+                <mat-checkbox></mat-checkbox>
+              </ng-template>
 
+              <mat-form-field class="question-option-text">
+                <input matInput type="text" [formControlName]="i" required />
+              </mat-form-field>
+              <button
+                mat-icon-button
+                tabindex="-1"
+                aria-label="Delete option"
+                matTooltip="Delete option"
+                (click)="deleteOption(i)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+          <button mat-stroked-button (click)="addOption()">Add option</button>
+          <button mat-button (click)="print()">Print</button>
+        </div>
+      </ng-container>
+      <ng-template #noOptions>
+        <p>No options</p>
+      </ng-template>
+
+      <!-- ============================= -->
+      <!-- Actions -->
+      <!-- ============================= -->
       <div class="question-actions-containter">
         <button
           mat-icon-button
@@ -82,6 +103,7 @@
         </button>
         <button
           mat-icon-button
+          tabindex="-1"
           aria-label="Delete question"
           matTooltip="Delete question"
           (click)="deleteQuestion()"
@@ -89,7 +111,6 @@
           <mat-icon>delete</mat-icon>
         </button>
       </div>
-      <div></div>
     </mat-card-content>
   </form>
 </mat-card>

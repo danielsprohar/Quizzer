@@ -17,8 +17,13 @@ export class QuestionControlService {
    */
   newQuestionFormGroup(options?: { type: QuestionType }) {
     const form = this.fb.group({
-      text: this.fb.control('', [Validators.required, Validators.maxLength(4096)]),
-      type: this.fb.control('', [Validators.required]),
+      text: this.fb.control('', [
+        Validators.required,
+        Validators.maxLength(4096),
+      ]),
+      type: this.fb.control(options ? options?.type : '', [
+        Validators.required,
+      ]),
       hint: this.fb.control('', [Validators.maxLength(4096)]),
       explanation: this.fb.control('', [Validators.maxLength(4096)]),
       imageURL: this.fb.control(''),
