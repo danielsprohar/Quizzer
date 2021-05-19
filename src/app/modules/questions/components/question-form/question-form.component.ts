@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { questionTypes as QuestionTypes } from 'src/app/models/question'
-import { QuestionControlService } from '../../services/question-control.service'
+import { ImageService } from 'src/app/services/image.service'
 
 @Component({
   selector: 'app-question-form',
@@ -20,18 +20,19 @@ export class QuestionFormComponent implements OnInit {
   ]
 
   @Input() index: number
-  @Input() form: FormGroup
+  @Input() questionForm: FormGroup
   @Output() questionDeleted = new EventEmitter<number>()
+  @Output() questionDuplicated = new EventEmitter<FormGroup>()
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly qcs: QuestionControlService
+    private readonly is: ImageService
   ) {}
 
   ngOnInit(): void {
-    if (!this.form) {
+    if (!this.questionForm) {
       // Create a new question for an existing Quiz
-      this.form = this.fb.group({
+      this.questionForm = this.fb.group({
         text: this.fb.control('', [
           Validators.required,
           Validators.maxLength(4096),
@@ -51,50 +52,44 @@ export class QuestionFormComponent implements OnInit {
   // =========================================================================
 
   get text() {
-    return this.form.get('text')!
+    return this.questionForm.get('text')!
   }
 
   get type() {
-    return this.form.get('type')!
+    return this.questionForm.get('type')!
   }
 
   get hint() {
-    return this.form.get('hint')!
+    return this.questionForm.get('hint')!
   }
 
   get explanation() {
-    return this.form.get('explanation')!
+    return this.questionForm.get('explanation')!
   }
 
   get imageURL() {
-    return this.form.get('imageURL')!
+    return this.questionForm.get('imageURL')!
   }
 
   get imagePath() {
-    return this.form.get('imagePath')!
+    return this.questionForm.get('imagePath')!
   }
 
   get options() {
-    return this.form.get('options') as FormArray
+    return this.questionForm.get('options') as FormArray
   }
 
   // =========================================================================
   // Event handlers
   // =========================================================================
 
-  changeQuestionType(newType: string) {
-    if (!this.multipleChoiceTypes.includes(newType)) {
+  changeQuestionType(newQuestionType: string) {
+    if (!this.multipleChoiceTypes.includes(newQuestionType)) {
       this.options.clear()
     }
   }
 
-  addImage(): void {}
-
-  duplicateQuestion(): void {}
-
-  deleteQuestion(): void {
-    this.questionDeleted.emit(this.index)
-  }
+  addImage() {}
 
   addOption() {
     this.options.push(
@@ -102,7 +97,39 @@ export class QuestionFormComponent implements OnInit {
     )
   }
 
+  deleteImage() {}
+
+  deleteQuestion() {
+    this.questionDeleted.emit(this.index)
+  }
+
   deleteOption(index: number) {
     this.options.removeAt(index)
+  }
+
+  duplicateQuestion() { 
+    const form = this.fb.group({
+      text: this.fb.control(this.text.value, [
+        Validators.required,
+        Validators.maxLength(4096),
+      ]),
+      type: this.fb.control(this.type.value, [Validators.required]),
+      hint: this.fb.control(this.hint.value, [Validators.maxLength(4096)]),
+      explanation: this.fb.control(this.explanation.value, [
+        Validators.maxLength(4096),
+      ]),
+      imageURL: this.fb.control(this.imageURL.value),
+      imagePath: this.fb.control(this.imagePath.value),
+    })
+
+    if (this.options.length > 0) {
+      const questionOptions = this.fb.array([])
+      for (let ctrl of this.options.controls) {
+        questionOptions.push(ctrl)
+      }
+      form.addControl('options', questionOptions)
+    }
+
+    this.questionDuplicated.emit(form)
   }
 }

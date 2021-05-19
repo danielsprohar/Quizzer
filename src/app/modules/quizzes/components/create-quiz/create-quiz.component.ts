@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core'
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { QuestionControlService } from 'src/app/modules/questions/services/question-control.service'
@@ -10,7 +16,6 @@ import { QuestionControlService } from 'src/app/modules/questions/services/quest
   styleUrls: ['./create-quiz.component.scss'],
 })
 export class CreateQuizComponent implements OnInit {
-  readonly userId: string
   form: FormGroup
 
   constructor(
@@ -69,10 +74,14 @@ export class CreateQuizComponent implements OnInit {
   // Event Handlers
   // =========================================================================
 
-  addQuestion() {
-    this.questions.push(
-      this.qcs.newQuestionFormGroup({ type: 'multiple choice' })
-    )
+  addQuestion(form?: FormGroup) {
+    if (form) {
+      this.questions.push(form)
+    } else {
+      this.questions.push(
+        this.qcs.newQuestionFormGroup({ type: 'multiple choice' })
+      )
+    }
   }
 
   deleteQuestion(index: number) {

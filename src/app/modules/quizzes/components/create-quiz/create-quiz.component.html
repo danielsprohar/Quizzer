@@ -1,4 +1,7 @@
 <form [formGroup]="form" class="quiz-form">
+  <!-- ====================================== -->
+  <!-- Quiz title and description -->
+  <!-- ====================================== -->
   <mat-card>
     <mat-form-field class="full-width">
       <mat-label floatLabel="never">Title</mat-label>
@@ -16,12 +19,16 @@
     </mat-form-field>
   </mat-card>
 
+  <!-- ====================================== -->
+  <!-- Questions -->
+  <!-- ====================================== -->
   <div formArrayName="questions" class="questions-container">
     <ng-container *ngFor="let qc of questions?.controls; let i = index">
       <app-question-form
-        [form]="toFormGroup(qc)"
+        [questionForm]="toFormGroup(qc)"
         [index]="i"
         (questionDeleted)="deleteQuestion($event)"
+        (questionDuplicated)="addQuestion($event)"
       ></app-question-form>
     </ng-container>
   </div>
