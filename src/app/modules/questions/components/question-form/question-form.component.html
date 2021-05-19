@@ -64,7 +64,7 @@
       <!-- ============================= -->
       <!-- Image -->
       <!-- ============================= -->
-      <ng-container *ngIf="imageURL">
+      <ng-container *ngIf="imageURL.value">
         <div class="image-container">
           <!-- Image actions menu -->
           <div class="image-actions-container">
@@ -76,13 +76,13 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="deleteImage()">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
               <button mat-menu-item>
                 <mat-icon>image</mat-icon>
                 <span>Replace</span>
-              </button>
-              <button mat-menu-item>
-                <mat-icon>delete</mat-icon>
-                <span>Remove</span>
               </button>
               <mat-divider></mat-divider>
               <button mat-menu-item (click)="toggleImageCaption()">
@@ -91,8 +91,7 @@
             </mat-menu>
           </div>
           <!-- Image -->
-          <!-- <img [src]="imageURL.value" /> -->
-          <img src="assets\dogecoin.jpg" />
+          <img [src]="imageURL.value" />
         </div>
         <!-- Image caption -->
         <ng-container *ngIf="hasCaption">
