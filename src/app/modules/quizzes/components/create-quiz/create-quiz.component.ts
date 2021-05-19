@@ -8,7 +8,6 @@ import {
   Validators,
 } from '@angular/forms'
 import { Router } from '@angular/router'
-import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { QuestionControlService } from 'src/app/modules/questions/services/question-control.service'
 
 @Component({
@@ -23,13 +22,12 @@ export class CreateQuizComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly router: Router,
-    private readonly auth: AuthService,
     private readonly qcs: QuestionControlService,
     private readonly afs: AngularFirestore
   ) {}
 
   ngOnInit() {
-    this.quizId = this.afs.createId()    
+    this.quizId = this.afs.createId()
     this.form = this.fb.group({
       name: this.fb.control('', [
         Validators.required,
