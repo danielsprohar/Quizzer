@@ -19,6 +19,7 @@
   <div formArrayName="questions" class="questions-container">
     <ng-container *ngFor="let qc of questions?.controls; let i = index">
       <app-question-form
+        [form]="toFormGroup(qc)"
         [index]="i"
         (questionDeleted)="deleteQuestion($event)"
       ></app-question-form>

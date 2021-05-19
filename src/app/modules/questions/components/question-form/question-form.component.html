@@ -54,7 +54,20 @@
           class="question-options-container"
         >
           <!-- TODO: Add question type component -->
-          <p>Option {{ i + 1 }}</p>
+          <div class="question-option">
+            <mat-checkbox></mat-checkbox>
+            <mat-form-field>
+              <input matInput type="text" />
+            </mat-form-field>
+            <button
+              mat-icon-button
+              aria-label="Delete option"
+              matTooltip="Delete option"
+              (click)="deleteOption(i)"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
 

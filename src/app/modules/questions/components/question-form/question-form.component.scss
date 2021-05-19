@@ -26,6 +26,21 @@ mat-card-content {
   margin-bottom: 16px;
 }
 
+.question-option {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.question-option mat-checkbox {
+  margin-right: 16px;
+}
+
+.question-option mat-form-field {
+  flex: 10;
+}
+
 .question-actions-containter {
   display: flex;
   flex-flow: row nowrap;

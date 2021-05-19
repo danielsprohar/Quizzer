@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { QuestionControlService } from 'src/app/modules/questions/services/question-control.service'
@@ -55,6 +55,14 @@ export class CreateQuizComponent implements OnInit {
 
   get questions() {
     return this.form.get('questions')! as FormArray
+  }
+
+  // =========================================================================
+  // Facilitators
+  // =========================================================================
+
+  toFormGroup(control: AbstractControl) {
+    return control as FormGroup
   }
 
   // =========================================================================

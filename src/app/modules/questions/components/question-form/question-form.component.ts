@@ -17,21 +17,24 @@ export class QuestionFormComponent implements OnInit {
     'arrow_drop_down',
   ]
 
+  @Input() form: FormGroup
   @Input() index: number
-  @Output() questionDeleted = new EventEmitter<number>();
-  form: FormGroup
+  @Output() questionDeleted = new EventEmitter<number>()
 
   constructor(private readonly fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      text: this.fb.control(''),
-      type: this.fb.control(''),
-      hint: this.fb.control(''),
-      explanation: this.fb.control(''),
-      imageURL: this.fb.control(''),
-      imagePath: this.fb.control(''),
-    })
+    if (!this.form) {
+      this.form = this.fb.group({
+        text: this.fb.control(''),
+        type: this.fb.control(''),
+        hint: this.fb.control(''),
+        explanation: this.fb.control(''),
+        imageURL: this.fb.control(''),
+        imagePath: this.fb.control(''),
+      })
+    }
+    // else: set form fields
   }
 
   // =========================================================================
@@ -75,6 +78,10 @@ export class QuestionFormComponent implements OnInit {
   duplicateQuestion(): void {}
 
   deleteQuestion(): void {
-    this.questionDeleted.emit(this.index);
+    this.questionDeleted.emit(this.index)
+  }
+
+  deleteOption(index: number): void {
+    this.options.removeAt(index)
   }
 }
