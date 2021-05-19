@@ -22,8 +22,25 @@ mat-card-content {
 
 .image-container {
   display: flex;
+  flex: auto;
   justify-content: center;
   margin: 16px auto;
+  position: relative;
+}
+
+.image-container img {
+  width: 97%;
+  height: auto;
+}
+
+.image-caption-container {
+  padding: 0 40px 0 44px;
+}
+
+.image-actions-container {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .question-options-container {
@@ -58,4 +75,9 @@ mat-card-content {
   margin: auto;
 }
 
-// Display > 956px -> show floating action bar
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .image-container img {
+    width: auto;
+  }
+}

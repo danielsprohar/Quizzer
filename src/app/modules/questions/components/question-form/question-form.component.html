@@ -19,14 +19,23 @@
           </mat-select>
         </mat-form-field>
 
-        <button
-          mat-icon-button
-          aria-label="Add image"
-          matTooltip="Add image"
-          (click)="addImage()"
-        >
-          <mat-icon>insert_photo</mat-icon>
-        </button>
+        <div>
+          <button
+            mat-icon-button
+            aria-label="Add image"
+            matTooltip="Add image"
+            (click)="fileInput.click()"
+          >
+            <mat-icon>insert_photo</mat-icon>
+          </button>
+          <input
+            #fileInput
+            type="file"
+            accept="image/*"
+            (change)="addImage(fileInput.files!)"
+            hidden
+          />
+        </div>
       </div>
 
       <div class="form-fields">
@@ -55,10 +64,50 @@
       <!-- ============================= -->
       <!-- Image -->
       <!-- ============================= -->
-      <ng-container *ngIf="imageURL.value">
+      <ng-container *ngIf="imageURL">
         <div class="image-container">
-          <img [src]="imageURL.value" />
+          <!-- Image actions menu -->
+          <div class="image-actions-container">
+            <button
+              mat-icon-button
+              aria-label="Image actions menu"
+              [matMenuTriggerFor]="menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>
+                <mat-icon>image</mat-icon>
+                <span>Replace</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Remove</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="toggleImageCaption()">
+                {{ hasCaption ? 'Remove caption' : 'Add a caption' }}
+              </button>
+            </mat-menu>
+          </div>
+          <!-- Image -->
+          <!-- <img [src]="imageURL.value" /> -->
+          <img src="assets\dogecoin.jpg" />
         </div>
+        <!-- Image caption -->
+        <ng-container *ngIf="hasCaption">
+          <div class="image-caption-container">
+            <mat-form-field class="full-width">
+              <mat-label>Image caption</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="The image description"
+                formControlName="imageCaption"
+              />
+            </mat-form-field>
+          </div>
+        </ng-container>
       </ng-container>
 
       <!-- ============================= -->

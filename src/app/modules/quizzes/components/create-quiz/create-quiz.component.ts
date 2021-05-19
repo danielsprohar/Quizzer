@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { AngularFirestore } from '@angular/fire/firestore'
 import {
   AbstractControl,
   FormArray,
@@ -17,15 +18,18 @@ import { QuestionControlService } from 'src/app/modules/questions/services/quest
 })
 export class CreateQuizComponent implements OnInit {
   form: FormGroup
+  quizId: string
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly router: Router,
     private readonly auth: AuthService,
-    private readonly qcs: QuestionControlService
+    private readonly qcs: QuestionControlService,
+    private readonly afs: AngularFirestore
   ) {}
 
   ngOnInit() {
+    this.quizId = this.afs.createId()    
     this.form = this.fb.group({
       name: this.fb.control('', [
         Validators.required,
