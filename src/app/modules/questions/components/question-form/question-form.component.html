@@ -5,7 +5,10 @@
       <div class="question-header">
         <mat-form-field appearance="outline" floatLabel="never">
           <mat-label>Question type</mat-label>
-          <mat-select formControlName="type">
+          <mat-select
+            formControlName="type"
+            (valueChange)="changeQuestionType($event)"
+          >
             <mat-option
               *ngFor="let type of questionTypes; let i = index"
               [value]="type"
@@ -51,21 +54,20 @@
       <!-- ============================= -->
       <!-- Mutliple choice options -->
       <!-- ============================= -->
-      <ng-container *ngIf="options; else noOptions">
-        <div formArrayName="options" class="multiple-choice-container">
-          <div
-            *ngFor="let opt of options?.controls; let i = index"
-            class="question-options-container"
-          >
+      <ng-container *ngIf="multipleChoiceTypes.includes(type.value)">
+        <div formArrayName="options" class="question-options-container">
+          <ng-container *ngFor="let opt of options?.controls; let i = index">
             <div class="question-option">
               <ng-container
-                *ngIf="type.value === 'multiple choice'; else checkboxes"
+                *ngIf="
+                  type.value === 'multiple choice' || type.value === 'dropdown'
+                "
               >
                 <mat-radio-button></mat-radio-button>
               </ng-container>
-              <ng-template #checkboxes>
+              <ng-container *ngIf="type.value === 'checkboxes'">
                 <mat-checkbox></mat-checkbox>
-              </ng-template>
+              </ng-container>
 
               <mat-form-field class="question-option-text">
                 <input matInput type="text" [formControlName]="i" required />
@@ -80,14 +82,12 @@
                 <mat-icon>close</mat-icon>
               </button>
             </div>
+          </ng-container>
+          <div>
+            <button mat-stroked-button (click)="addOption()">Add option</button>
           </div>
-          <button mat-stroked-button (click)="addOption()">Add option</button>
-          <button mat-button (click)="print()">Print</button>
         </div>
       </ng-container>
-      <ng-template #noOptions>
-        <p>No options</p>
-      </ng-template>
 
       <!-- ============================= -->
       <!-- Actions -->
@@ -103,7 +103,7 @@
         </button>
         <button
           mat-icon-button
-          tabindex="-1"
+          tabindex=""
           aria-label="Delete question"
           matTooltip="Delete question"
           (click)="deleteQuestion()"

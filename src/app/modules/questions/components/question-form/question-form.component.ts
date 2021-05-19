@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { questionTypes as QuestionTypes } from 'src/app/models/question'
+import { QuestionControlService } from '../../services/question-control.service'
 
 @Component({
   selector: 'app-question-form',
@@ -8,6 +9,7 @@ import { questionTypes as QuestionTypes } from 'src/app/models/question'
   styleUrls: ['./question-form.component.scss'],
 })
 export class QuestionFormComponent implements OnInit {
+  readonly multipleChoiceTypes = ['multiple choice', 'checkboxes', 'dropdown']
   readonly questionTypes = QuestionTypes
   readonly questionTypeIcons = [
     'short_text',
@@ -21,7 +23,10 @@ export class QuestionFormComponent implements OnInit {
   @Input() form: FormGroup
   @Output() questionDeleted = new EventEmitter<number>()
 
-  constructor(private readonly fb: FormBuilder) {}
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly qcs: QuestionControlService
+  ) {}
 
   ngOnInit(): void {
     if (!this.form) {
@@ -77,6 +82,12 @@ export class QuestionFormComponent implements OnInit {
   // Event handlers
   // =========================================================================
 
+  changeQuestionType(newType: string) {
+    if (!this.multipleChoiceTypes.includes(newType)) {
+      this.options.clear()
+    }
+  }
+
   addImage(): void {}
 
   duplicateQuestion(): void {}
@@ -93,13 +104,5 @@ export class QuestionFormComponent implements OnInit {
 
   deleteOption(index: number) {
     this.options.removeAt(index)
-  }
-
-  print() {
-    for (let ctrl of this.options.controls) {
-      console.log(ctrl.value)
-    }
-
-    console.log(this.type.value)
   }
 }
