@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core'
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { AngularFirestore } from '@angular/fire/firestore'
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms'
 import { Router } from '@angular/router'
-import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { QuestionControlService } from 'src/app/modules/questions/services/question-control.service'
 
 @Component({
@@ -10,17 +16,18 @@ import { QuestionControlService } from 'src/app/modules/questions/services/quest
   styleUrls: ['./create-quiz.component.scss'],
 })
 export class CreateQuizComponent implements OnInit {
-  readonly userId: string
   form: FormGroup
+  quizId: string
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly router: Router,
-    private readonly auth: AuthService,
-    private readonly qcs: QuestionControlService
+    private readonly qcs: QuestionControlService,
+    private readonly afs: AngularFirestore
   ) {}
 
   ngOnInit() {
+    this.quizId = this.afs.createId()
     this.form = this.fb.group({
       name: this.fb.control('', [
         Validators.required,
@@ -69,10 +76,14 @@ export class CreateQuizComponent implements OnInit {
   // Event Handlers
   // =========================================================================
 
-  addQuestion() {
-    this.questions.push(
-      this.qcs.newQuestionFormGroup({ type: 'multiple choice' })
-    )
+  addQuestion(form?: FormGroup) {
+    if (form) {
+      this.questions.push(form)
+    } else {
+      this.questions.push(
+        this.qcs.newQuestionFormGroup({ type: 'multiple choice' })
+      )
+    }
   }
 
   deleteQuestion(index: number) {

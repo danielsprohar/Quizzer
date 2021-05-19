@@ -1,13 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { ReactiveFormsModule } from '@angular/forms'
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import { ImageService } from 'src/app/services/image.service'
+import { MaterialDesignModule } from 'src/app/theme/material-design/material-design.module'
 import { QuestionFormComponent } from './question-form.component'
 
-describe('CreateQuestionComponent', () => {
+describe('QuestionFormComponent', () => {
   let component: QuestionFormComponent
   let fixture: ComponentFixture<QuestionFormComponent>
+  let mockImageService = jasmine.createSpyObj('ImageService', [
+    'addImage',
+    'deleteImage',
+  ])
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [QuestionFormComponent],
+      imports: [
+        ReactiveFormsModule,
+        MaterialDesignModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        {
+          provide: ImageService,
+          useValue: mockImageService,
+        },
+      ],
     }).compileComponents()
   })
 

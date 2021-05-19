@@ -1,6 +1,6 @@
 <!-- [class.mat-elevation-z2]="!isActive" [class.mat-elevation-z8]="isActive" -->
 <mat-card class="question-card">
-  <form [formGroup]="form">
+  <form [formGroup]="questionForm">
     <mat-card-content>
       <div class="question-header">
         <mat-form-field appearance="outline" floatLabel="never">
@@ -19,14 +19,23 @@
           </mat-select>
         </mat-form-field>
 
-        <button
-          mat-icon-button
-          aria-label="Add image"
-          matTooltip="Add image"
-          (click)="addImage()"
-        >
-          <mat-icon>insert_photo</mat-icon>
-        </button>
+        <div>
+          <button
+            mat-icon-button
+            aria-label="Add image"
+            matTooltip="Add image"
+            (click)="fileInput.click()"
+          >
+            <mat-icon>insert_photo</mat-icon>
+          </button>
+          <input
+            #fileInput
+            type="file"
+            accept="image/*"
+            (change)="addImage(fileInput.files!)"
+            hidden
+          />
+        </div>
       </div>
 
       <div class="form-fields">
@@ -57,8 +66,47 @@
       <!-- ============================= -->
       <ng-container *ngIf="imageURL.value">
         <div class="image-container">
+          <!-- Image actions menu -->
+          <div class="image-actions-container">
+            <button
+              mat-icon-button
+              aria-label="Image actions menu"
+              [matMenuTriggerFor]="menu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="deleteImage()">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>image</mat-icon>
+                <span>Replace</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="toggleImageCaption()">
+                {{ hasCaption ? 'Remove caption' : 'Add a caption' }}
+              </button>
+            </mat-menu>
+          </div>
+          <!-- Image -->
           <img [src]="imageURL.value" />
         </div>
+        <!-- Image caption -->
+        <ng-container *ngIf="hasCaption">
+          <div class="image-caption-container">
+            <mat-form-field class="full-width">
+              <mat-label>Image caption</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="The image description"
+                formControlName="imageCaption"
+              />
+            </mat-form-field>
+          </div>
+        </ng-container>
       </ng-container>
 
       <!-- ============================= -->
