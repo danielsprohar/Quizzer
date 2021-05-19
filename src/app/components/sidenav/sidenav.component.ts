@@ -12,15 +12,17 @@ import { AppThemeService } from 'src/app/services/app-theme.service';
 })
 export class SidenavComponent implements OnInit {
   user$: Observable<firebase.User | null>;
+  isDarkTheme$: Observable<boolean>
 
   constructor(
     private readonly router: Router,
+    private readonly theme: AppThemeService,
     public readonly auth: AuthService,
-    public readonly theme: AppThemeService
   ) {}
 
   ngOnInit(): void {
     this.user$ = this.auth.getCurrentUser();
+    this.isDarkTheme$ = this.theme.isDarkThemeAsObservable()
   }
 
   // =========================================================================
