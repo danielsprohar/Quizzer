@@ -37,6 +37,7 @@
             matInput
             placeholder="Question"
             formControlName="text"
+            required
           />
         </mat-form-field>
 
@@ -50,6 +51,15 @@
           <input matInput type="text" formControlName="explanation" />
         </mat-form-field>
       </div>
+
+      <!-- ============================= -->
+      <!-- Image -->
+      <!-- ============================= -->
+      <ng-container *ngIf="imageURL.value">
+        <div class="image-container">
+          <img [src]="imageURL.value" />
+        </div>
+      </ng-container>
 
       <!-- ============================= -->
       <!-- Mutliple choice options -->
@@ -69,8 +79,13 @@
                 <mat-checkbox></mat-checkbox>
               </ng-container>
 
-              <mat-form-field class="question-option-text">
-                <input matInput type="text" [formControlName]="i" required />
+              <mat-form-field class="question-option-text" floatLabel="never">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Option {{ i + 1 }}"
+                  [formControlName]="i"
+                />
               </mat-form-field>
               <button
                 mat-icon-button

@@ -20,6 +20,12 @@ mat-card-content {
   margin-bottom: 16px;
 }
 
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin: 16px auto;
+}
+
 .question-options-container {
   display: flex;
   flex-direction: column;
