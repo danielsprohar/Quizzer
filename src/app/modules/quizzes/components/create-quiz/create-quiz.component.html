@@ -47,6 +47,13 @@
 
   <div class="btn-bar">
     <button mat-button (click)="addQuestion()">Add question</button>
-    <button mat-raised-button color="primary" (click)="save()">Save</button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="form.invalid"
+      (click)="save()"
+    >
+      Save
+    </button>
   </div>
 </form>

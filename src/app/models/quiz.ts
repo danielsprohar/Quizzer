@@ -9,32 +9,32 @@ export enum QuizVisibility {
 export type Visibility = 'private' | 'public'
 
 export class Quiz {
-  id: string
   name: string
-  description: string
   subject: string
   numberOfQuestions: number
-  grade: number
-  visibility: Visibility = 'private'
-  dateSubmitted: firebase.firestore.Timestamp
-  questions: Question[]
+  visibility: Visibility
   editors: string[]
   ownerId: string
-  createdOn: firebase.firestore.Timestamp
-  modifiedOn: firebase.firestore.Timestamp
+  id?: string
+  questions?: Question[]
+  description?: string
+  grade?: number
+  dateSubmitted?: firebase.firestore.Timestamp
+  createdOn?: firebase.firestore.Timestamp
+  modifiedOn?: firebase.firestore.Timestamp
 
   constructor(fields?: {
+    name: string
+    subject: string
+    numberOfQuestions: number
+    visibility: Visibility
+    editors: string[]
+    ownerId: string
     id?: string
-    name?: string
-    description: string
-    subject?: string
-    numberOfQuestions?: number
-    grade?: number
-    visibility?: Visibility
-    dateSubmitted?: firebase.firestore.Timestamp
     questions?: Question[]
-    editors?: string[]
-    ownerId?: string
+    description?: string
+    grade?: number
+    dateSubmitted?: firebase.firestore.Timestamp
     createdOn?: firebase.firestore.Timestamp
     modifiedOn?: firebase.firestore.Timestamp
   }) {
