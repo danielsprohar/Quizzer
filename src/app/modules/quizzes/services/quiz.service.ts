@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore, QueryFn } from '@angular/fire/firestore'
 import { map } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
 import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
+import firebase from 'firebase/app'
 
 @Injectable({
   providedIn: 'root',
@@ -62,6 +63,21 @@ export class QuizService {
       .doc<Quiz>(quizId)
       .get()
       .pipe(map((doc) => doc.data() as Quiz))
+  }
+
+  getAll(queryFn: QueryFn<firebase.firestore.DocumentData> | undefined) {
+    return this.afs
+      .collection<Quiz>(Collections.QUIZZES, queryFn)
+      .get()
+      .pipe(
+        map((values) =>
+          values.docs.map((doc) => {
+            const quiz = doc.data() as Quiz
+            quiz.id = doc.id
+            return quiz
+          })
+        )
+      )
   }
 
   /**

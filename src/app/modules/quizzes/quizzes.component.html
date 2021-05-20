@@ -15,27 +15,28 @@
 
   <mat-divider></mat-divider>
 
-  <ng-container *ngIf="quizSnippets$ | async as quizSnippets">
+  <ng-container *ngIf="quizzes$ | async as quizzes">
     <div class="card-container">
-      <ng-container *ngFor="let quizSnippet of quizSnippets">
+      <ng-container *ngFor="let quiz of quizzes">
         <mat-card>
           <mat-card-header>
             <mat-card-title>
-              {{ quizSnippet.name }}
+              {{ quiz.name }}
             </mat-card-title>
             <mat-card-subtitle>
-              {{ quizSnippet.subject }}
+              {{ quiz.subject }}
             </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <mat-card-content>
+              <p>Number of Questions: {{ quiz.numberOfQuestions }}</p>
               <p>
                 Created on:
-                {{ quizSnippet.createdOn?.toDate() | date: 'mediumDate' }}
+                {{ quiz.createdOn?.toDate() | date: 'mediumDate' }}
               </p>
               <p>
                 Modified on:
-                {{ quizSnippet.modifiedOn?.toDate() | date: 'mediumDate' }}
+                {{ quiz.modifiedOn?.toDate() | date: 'mediumDate' }}
               </p>
             </mat-card-content>
             <mat-card-actions>
