@@ -5,7 +5,11 @@ export const questionTypes = [
   'short answer',
   'paragraph',
   'multiple choice',
-  'checkboxes',
+  'dropdown',
+]
+
+export const multipleOptionsType = [
+  'multiple choice',
   'dropdown',
 ]
 
@@ -13,7 +17,6 @@ export type QuestionType =
   | 'short answer'
   | 'paragraph'
   | 'multiple choice'
-  | 'checkboxes'
   | 'dropdown'
 
 export class Question {
@@ -24,17 +27,8 @@ export class Question {
   explanation: string
   isAttempted: boolean
   isCorrect: any
-  /**
-   * The `downloadUrl` returned by Firebase Storage.
-   *
-   * @usageNotes
-   * Use with a `img` element or css `background-image` rule
-   */
   imageURL: string
-  /**
-   * The path where this image is located within Firebase Storage
-   */
-  imagePath: string
+  imageCaption: string
   dateSubmitted: Date
   options: QuestionOption[]
   createdOn: firebase.firestore.Timestamp
@@ -49,7 +43,7 @@ export class Question {
     isAttempted?: boolean
     isCorrect?: any
     imageURL?: string
-    imagePath?: string
+    imageCaption?: string
     dateSubmitted?: Date
     options?: QuestionOption[]
     createdOn?: firebase.firestore.Timestamp

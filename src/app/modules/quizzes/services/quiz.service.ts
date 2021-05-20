@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
-import { DocumentReference } from '@angular/fire/firestore';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Collections } from 'src/app/constants/collections';
-import { Question } from 'src/app/models/question';
-import { Quiz } from 'src/app/models/quiz';
+import { Injectable } from '@angular/core'
+import { AngularFirestore, QueryFn } from '@angular/fire/firestore'
+import { map } from 'rxjs/operators'
+import { Collections } from 'src/app/constants/collections'
+import { Question } from 'src/app/models/question'
+import { Quiz } from 'src/app/models/quiz'
+import firebase from 'firebase/app'
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +13,34 @@ export class QuizService {
   constructor(private readonly afs: AngularFirestore) {}
 
   /**
-   * Adds a new quiz to the database.
+   * Adds a new quiz to the database via transaction
    * @param quiz The quiz to add.
    * @returns A `DocumentReference` of the newly added `Quiz`.
    */
-  add(quiz: Quiz): Promise<DocumentReference<Quiz>> {
-    return this.afs.collection<Quiz>(Collections.QUIZZES).add({ ...quiz });
+  add(quiz: Quiz) {
+    const quizRef = this.afs
+      .collection(Collections.QUIZZES)
+      .doc<Quiz>(quiz.id).ref
+
+    const batch = this.afs.firestore.batch()
+    batch.set(quizRef, {
+      name: quiz.name,
+      subject: quiz.subject,
+      description: quiz.description,
+      numberOfQuestions: quiz.numberOfQuestions,
+      ownerId: quiz.ownerId,
+      editors: quiz.editors,
+      visibility: quiz.visibility,
+    })
+
+    // Add each question as a document to the subcollection
+    const questionsRef = quizRef.collection(Collections.QUIZ_QUESTIONS)
+    quiz.questions?.forEach((question) => {
+      const questionRef = questionsRef.doc()
+      batch.set(questionRef, JSON.parse(JSON.stringify(question)))
+    })
+
+    return batch.commit()
   }
 
   /**
@@ -27,8 +48,8 @@ export class QuizService {
    * @param quizId The quiz id in the database.
    * @returns A `Promise` after the database operation is complete.
    */
-  delete(quizId: string): Promise<void> {
-    return this.afs.collection(Collections.QUIZZES).doc<Quiz>(quizId).delete();
+  delete(quizId: string) {
+    return this.afs.collection(Collections.QUIZZES).doc<Quiz>(quizId).delete()
   }
 
   /**
@@ -36,12 +57,27 @@ export class QuizService {
    * @param quizId The quiz id in the database.
    * @returns The quiz.
    */
-  get(quizId: string): Observable<Quiz> {
+  get(quizId: string) {
     return this.afs
       .collection(Collections.QUIZZES)
       .doc<Quiz>(quizId)
       .get()
-      .pipe(map((doc) => doc.data() as Quiz));
+      .pipe(map((doc) => doc.data() as Quiz))
+  }
+
+  getAll(queryFn: QueryFn<firebase.firestore.DocumentData> | undefined) {
+    return this.afs
+      .collection<Quiz>(Collections.QUIZZES, queryFn)
+      .get()
+      .pipe(
+        map((values) =>
+          values.docs.map((doc) => {
+            const quiz = doc.data() as Quiz
+            quiz.id = doc.id
+            return quiz
+          })
+        )
+      )
   }
 
   /**
@@ -49,7 +85,7 @@ export class QuizService {
    * @param quizId The quiz id in the database.
    * @returns The quiz's questions.
    */
-  getQuestions(quizId: string): Observable<Question[]> {
+  getQuestions(quizId: string) {
     return this.afs
       .collection(Collections.QUIZZES)
       .doc(quizId)
@@ -58,12 +94,12 @@ export class QuizService {
       .pipe(
         map((actions) =>
           actions.map((action) => {
-            const question = action.payload.doc.data() as Question;
-            question.id = action.payload.doc.id;
-            return question;
+            const question = action.payload.doc.data() as Question
+            question.id = action.payload.doc.id
+            return question
           })
         )
-      );
+      )
   }
 
   /**
@@ -71,9 +107,10 @@ export class QuizService {
    * @param quiz The quiz.
    * @returns A `Promise` after the database operation completes.
    */
-  update(quiz: Quiz): Promise<void> {
-    return this.afs.collection(Collections.QUIZZES)
+  update(quiz: Quiz) {
+    return this.afs
+      .collection(Collections.QUIZZES)
       .doc<Quiz>(quiz.id)
-      .update({ ... quiz});
+      .update({ ...quiz })
   }
 }

@@ -1,3 +1,4 @@
+import { trigger, state, style, transition, animate } from '@angular/animations'
 import {
   Component,
   EventEmitter,
@@ -6,29 +7,52 @@ import {
   OnInit,
   Output,
 } from '@angular/core'
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms'
 import { Subscription } from 'rxjs'
-import { questionTypes as QuestionTypes } from 'src/app/models/question'
+import {
+  multipleOptionsType as MultipleOptionsType,
+  questionTypes as QuestionTypes,
+} from 'src/app/models/question'
 import { AppStateService } from 'src/app/services/app-state.service'
 import { ImageService } from 'src/app/services/image.service'
+import { QuestionControlService } from '../../services/question-control.service'
 
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
   styleUrls: ['./question-form.component.scss'],
+  animations: [
+    trigger('removeCard', [
+      state('exists', style({})),
+      state(
+        'removed',
+        style({
+          marginLeft: '-110%',
+          marginRight: '110%'
+        })
+      ),
+      transition('exists => removed', [animate('0.5s')]),
+    ]),
+  ],
 })
 export class QuestionFormComponent implements OnInit, OnDestroy {
   private addImageSubscription: Subscription
 
-  readonly multipleChoiceTypes = ['multiple choice', 'checkboxes', 'dropdown']
+  readonly multipleOptionsType = MultipleOptionsType
   readonly questionTypes = QuestionTypes
-  readonly questionTypeIcons = [
-    'short_text',
-    'subject',
-    'adjust',
-    'checklist',
-    'arrow_drop_down',
-  ]
+  // readonly questionTypeIcons = [
+  //   'short_text',
+  //   'subject',
+  //   'adjust',
+  //   'checklist',
+  //   'arrow_drop_down',
+  // ]
 
   @Input() questionForm: FormGroup
   @Input() quizId: string
@@ -36,10 +60,12 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   @Output() questionDeleted = new EventEmitter<number>()
   @Output() questionDuplicated = new EventEmitter<FormGroup>()
   hasCaption: boolean = false
+  isRemoved: boolean = false
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly is: ImageService,
+    private readonly qcs: QuestionControlService,
     private readonly appState: AppStateService
   ) {}
 
@@ -56,10 +82,10 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
         explanation: this.fb.control('', [Validators.maxLength(4096)]),
         imageURL: this.fb.control(''),
         imageCaption: this.fb.control(''),
-        options: this.fb.array([])
+        options: this.fb.array([this.qcs.newOptionsFormGroup()]),
       })
     }
-    // TODO: else, we are  editing a Question: thus, set form fields
+    // TODO: else, a form was provided via Input(), set form fields
   }
 
   ngOnDestroy() {
@@ -100,12 +126,29 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
     return this.questionForm.get('options') as FormArray
   }
 
+  getOptionIsAnswerControl(index: number) {
+    return this.options.at(index).get('isAnswer') as FormControl
+  }
+
+  getOptionControl(index: number) {
+    return this.options.at(index).get('text') as FormControl
+  }
+
+  // =========================================================================
+  // Facilitators
+  // =========================================================================
+
+  toggleIsAnswer(index: number) {
+    const ctrl = this.getOptionIsAnswerControl(index)
+    ctrl.setValue(!(ctrl.value as boolean))
+  }
+
   // =========================================================================
   // Event handlers
   // =========================================================================
 
   changeQuestionType(newQuestionType: string) {
-    if (!this.multipleChoiceTypes.includes(newQuestionType)) {
+    if (!this.multipleOptionsType.includes(newQuestionType)) {
       this.options.clear()
     }
   }
@@ -135,9 +178,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   }
 
   addOption() {
-    this.options.push(
-      this.fb.control('', [Validators.required, Validators.maxLength(4096)])
-    )
+    this.options.push(this.qcs.newOptionsFormGroup())
   }
 
   deleteImage() {
@@ -151,7 +192,9 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
       .finally(() => this.appState.isLoading(false))
   }
 
-  deleteQuestion() {
+  async deleteQuestion() {
+    this.isRemoved = true
+    await new Promise((resolve) => setTimeout(resolve, 2000))
     this.questionDeleted.emit(this.index)
   }
 

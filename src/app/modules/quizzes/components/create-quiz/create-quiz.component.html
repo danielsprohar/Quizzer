@@ -1,8 +1,19 @@
 <form [formGroup]="form" class="quiz-form">
   <!-- ====================================== -->
-  <!-- Quiz title and description -->
+  <!-- Quiz subject, title, and description -->
   <!-- ====================================== -->
   <mat-card>
+    <mat-form-field class="full-width">
+      <mat-label>Subject</mat-label>
+      <mat-select formControlName="subject" required>
+        <mat-option
+          *ngFor="let subject of subjects$ | async"
+          [value]="subject.name"
+        >
+          {{ subject.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field class="full-width">
       <mat-label floatLabel="never">Title</mat-label>
       <input
@@ -35,8 +46,14 @@
   </div>
 
   <div class="btn-bar">
-    <button mat-raised-button color="primary" (click)="addQuestion()">
-      Add question
+    <button mat-button (click)="addQuestion()">Add question</button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="form.invalid"
+      (click)="save()"
+    >
+      Save
     </button>
   </div>
 </form>

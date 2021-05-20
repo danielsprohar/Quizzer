@@ -22,15 +22,15 @@
   </ng-template>
 
   <!-- Features -->
-  <a mat-list-item routerLink="/">
+  <mat-list-item>
     <mat-icon mat-list-icon class="icon">home</mat-icon>
-    <p mat-line>Home</p>
-  </a>
+    <a mat-line routerLink="/"> Home </a>
+  </mat-list-item>
 
-  <a mat-list-item routerLink="/quizzes">
+  <mat-list-item>
     <mat-icon mat-list-icon class="icon">class</mat-icon>
-    <p mat-line>Quizzes</p>
-  </a>
+    <a mat-line routerLink="/quizzes"> Quizzes </a>
+  </mat-list-item>
 
   <mat-divider></mat-divider>
 
@@ -38,25 +38,13 @@
   <mat-list-item>
     <mat-icon mat-list-icon class="icon">settings</mat-icon>
     <a mat-line routerLink="/settings">Settings</a>
-
-    <ng-container *ngIf="theme.getIsDarkTheme(); else lightTheme">
-      <button
-        mat-icon-button
-        matTooltip="Switch to light theme"
-        (click)="toggleAppTheme()"
-      >
-        <mat-icon class="yellow-icon">brightness_5</mat-icon>
-      </button>
-    </ng-container>
-    <ng-template #lightTheme>
-      <button
-        mat-icon-button
-        matTooltip="Switch to dark theme"
-        (click)="toggleAppTheme()"
-      >
-        <mat-icon>dark_mode</mat-icon>
-      </button>
-    </ng-template>
+    <button
+      mat-icon-button
+      matTooltip="Switch to dark theme"
+      (click)="toggleAppTheme()"
+    >
+      <mat-icon [class.yellow-icon]="isDarkTheme$ | async">dark_mode</mat-icon>
+    </button>
   </mat-list-item>
 
   <mat-divider></mat-divider>

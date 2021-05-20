@@ -1,38 +1,40 @@
 import { Question } from './question'
 import firebase from 'firebase/app'
 
-export enum Visibility {
+export enum QuizVisibility {
   PUBLIC = 'public',
   PRIVATE = 'private',
 }
 
+export type Visibility = 'private' | 'public'
+
 export class Quiz {
-  id: string
   name: string
-  description: string
   subject: string
   numberOfQuestions: number
-  grade: number
-  visibility: 'public' | 'private'
-  dateSubmitted: firebase.firestore.Timestamp
-  questions: Question[]
+  visibility: Visibility
   editors: string[]
   ownerId: string
-  createdOn: firebase.firestore.Timestamp
-  modifiedOn: firebase.firestore.Timestamp
+  id?: string
+  questions?: Question[]
+  description?: string
+  grade?: number
+  dateSubmitted?: firebase.firestore.Timestamp
+  createdOn?: firebase.firestore.Timestamp
+  modifiedOn?: firebase.firestore.Timestamp
 
   constructor(fields?: {
+    name: string
+    subject: string
+    numberOfQuestions: number
+    visibility: Visibility
+    editors: string[]
+    ownerId: string
     id?: string
-    name?: string
-    description: string
-    subject?: string
-    numberOfQuestions?: number
-    grade?: number
-    visibility?: 'public' | 'private'
-    dateSubmitted?: firebase.firestore.Timestamp
     questions?: Question[]
-    editors?: string[]
-    ownerId?: string
+    description?: string
+    grade?: number
+    dateSubmitted?: firebase.firestore.Timestamp
     createdOn?: firebase.firestore.Timestamp
     modifiedOn?: firebase.firestore.Timestamp
   }) {
