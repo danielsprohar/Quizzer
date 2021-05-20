@@ -1,5 +1,8 @@
 <!-- [class.mat-elevation-z2]="!isActive" [class.mat-elevation-z8]="isActive" -->
-<mat-card class="question-card">
+<mat-card
+  class="question-card"
+  [@removeCard]="!isRemoved ? 'exists' : 'removed'"
+>
   <form [formGroup]="questionForm">
     <mat-card-content>
       <div class="question-header">
@@ -116,7 +119,9 @@
         <div [formArrayName]="'options'" class="question-options-container">
           <ng-container *ngFor="let opt of options?.controls; let i = index">
             <div class="question-option" [formGroupName]="i">
-              <mat-checkbox [formControl]="getOptionIsAnswerControl(i)"></mat-checkbox>
+              <mat-checkbox
+                [formControl]="getOptionIsAnswerControl(i)"
+              ></mat-checkbox>
               <mat-form-field class="question-option-text" floatLabel="never">
                 <input
                   matInput

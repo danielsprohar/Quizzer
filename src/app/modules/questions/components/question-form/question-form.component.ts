@@ -1,3 +1,4 @@
+import { trigger, state, style, transition, animate } from '@angular/animations'
 import {
   Component,
   EventEmitter,
@@ -26,6 +27,19 @@ import { QuestionControlService } from '../../services/question-control.service'
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
   styleUrls: ['./question-form.component.scss'],
+  animations: [
+    trigger('removeCard', [
+      state('exists', style({})),
+      state(
+        'removed',
+        style({
+          marginLeft: '-110%',
+          marginRight: '110%'
+        })
+      ),
+      transition('exists => removed', [animate('0.5s')]),
+    ]),
+  ],
 })
 export class QuestionFormComponent implements OnInit, OnDestroy {
   private addImageSubscription: Subscription
@@ -46,6 +60,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   @Output() questionDeleted = new EventEmitter<number>()
   @Output() questionDuplicated = new EventEmitter<FormGroup>()
   hasCaption: boolean = false
+  isRemoved: boolean = false
 
   constructor(
     private readonly fb: FormBuilder,
@@ -177,7 +192,9 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
       .finally(() => this.appState.isLoading(false))
   }
 
-  deleteQuestion() {
+  async deleteQuestion() {
+    this.isRemoved = true
+    await new Promise((resolve) => setTimeout(resolve, 2000))
     this.questionDeleted.emit(this.index)
   }
 

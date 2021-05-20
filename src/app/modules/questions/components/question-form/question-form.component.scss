@@ -5,6 +5,11 @@ mat-card-content {
 .question-card {
   display: flex;
   flex-direction: column;
+  // transition: margin-left 3s ease-in-out;
+}
+
+.delete-card {
+  margin-left: -99%;
 }
 
 .question-header {
