@@ -20,11 +20,11 @@ import { QuizService } from '../../services/quiz.service'
 import { AppStateService } from 'src/app/services/app-state.service'
 
 @Component({
-  selector: 'app-create-quiz',
-  templateUrl: './create-quiz.component.html',
-  styleUrls: ['./create-quiz.component.scss'],
+  selector: 'app-quiz-form',
+  templateUrl: './quiz-form.component.html',
+  styleUrls: ['./quiz-form.component.scss'],
 })
-export class CreateQuizComponent implements OnInit {
+export class QuizFormComponent implements OnInit {
   subjects$: Observable<CourseSubject[]>
   form: FormGroup
   quizId: string

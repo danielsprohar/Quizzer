@@ -4,11 +4,11 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing'
 import { QuestionControlService } from 'src/app/modules/questions/services/question-control.service'
 
-import { CreateQuizComponent } from './create-quiz.component'
+import { QuizFormComponent } from './quiz-form.component'
 
 describe('CreateQuizComponent', () => {
-  let component: CreateQuizComponent
-  let fixture: ComponentFixture<CreateQuizComponent>
+  let component: QuizFormComponent
+  let fixture: ComponentFixture<QuizFormComponent>
   let mockAngularFirestore = jasmine.createSpyObj('AngularFirestore', [
     'createId',
   ])
@@ -17,7 +17,7 @@ describe('CreateQuizComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CreateQuizComponent],
+      declarations: [QuizFormComponent],
       imports: [RouterTestingModule, ReactiveFormsModule],
       providers: [
         QuestionControlService,
@@ -30,7 +30,7 @@ describe('CreateQuizComponent', () => {
   })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateQuizComponent)
+    fixture = TestBed.createComponent(QuizFormComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

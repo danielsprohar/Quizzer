@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateQuizComponent } from './components/create-quiz/create-quiz.component';
+import { QuizFormComponent } from './components/quiz-form/quiz-form.component';
 import { QuizzesComponent } from './quizzes.component';
 
 const routes: Routes = [
@@ -10,7 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'create',
-    component: CreateQuizComponent
+    component: QuizFormComponent
   }
 ];
 
