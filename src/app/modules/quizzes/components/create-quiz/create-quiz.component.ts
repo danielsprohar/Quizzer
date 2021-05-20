@@ -8,6 +8,10 @@ import {
   Validators,
 } from '@angular/forms'
 import { Router } from '@angular/router'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { Collections } from 'src/app/constants/collections'
+import { CourseSubject } from 'src/app/models/course-subject'
 import { QuestionControlService } from 'src/app/modules/questions/services/question-control.service'
 
 @Component({
@@ -16,6 +20,7 @@ import { QuestionControlService } from 'src/app/modules/questions/services/quest
   styleUrls: ['./create-quiz.component.scss'],
 })
 export class CreateQuizComponent implements OnInit {
+  subjects$: Observable<CourseSubject[]>
   form: FormGroup
   quizId: string
 
@@ -28,16 +33,8 @@ export class CreateQuizComponent implements OnInit {
 
   ngOnInit() {
     this.quizId = this.afs.createId()
-    this.form = this.fb.group({
-      name: this.fb.control('', [
-        Validators.required,
-        Validators.maxLength(2048),
-      ]),
-      description: this.fb.control('', [Validators.maxLength(4096)]),
-      subject: this.fb.control('', [Validators.required]),
-      visibility: this.fb.control('public', [Validators.required]),
-      questions: this.fb.array([]),
-    })
+    this.subjects$ = this.fetchCourseSubjects()
+    this.initForm()
   }
 
   // =========================================================================
@@ -67,6 +64,34 @@ export class CreateQuizComponent implements OnInit {
   // =========================================================================
   // Facilitators
   // =========================================================================
+
+  fetchCourseSubjects() {
+    return this.afs
+      .collection<CourseSubject>(Collections.SUBJECTS, ref => ref.orderBy('name'))
+      .get()
+      .pipe(
+        map((actions) =>
+          actions.docs.map((doc) => {
+            const subject = doc.data() as CourseSubject
+            subject.id = doc.id
+            return subject
+          })
+        )
+      )
+  }
+
+  initForm() {
+    this.form = this.fb.group({
+      name: this.fb.control('', [
+        Validators.required,
+        Validators.maxLength(2048),
+      ]),
+      description: this.fb.control('', [Validators.maxLength(4096)]),
+      subject: this.fb.control('', [Validators.required]),
+      visibility: this.fb.control('public', [Validators.required]),
+      questions: this.fb.array([]),
+    })
+  }
 
   toFormGroup(control: AbstractControl) {
     return control as FormGroup

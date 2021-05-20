@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 16px;
   height: 100%;
+  margin-bottom: 64px;
 }
 
 .questions-container {
@@ -10,3 +11,7 @@
   flex-direction: column;
   gap: 16px;
 }
+
+/* Large devices (laptops/desktops, 992px and up) */
+// @media only screen and (min-width: 992px) {
+// }

@@ -1,10 +1,12 @@
 import { Question } from './question'
 import firebase from 'firebase/app'
 
-export enum Visibility {
+export enum QuizVisibility {
   PUBLIC = 'public',
   PRIVATE = 'private',
 }
+
+export type Visibility = 'private' | 'public'
 
 export class Quiz {
   id: string
@@ -13,7 +15,7 @@ export class Quiz {
   subject: string
   numberOfQuestions: number
   grade: number
-  visibility: 'public' | 'private'
+  visibility: Visibility = 'private'
   dateSubmitted: firebase.firestore.Timestamp
   questions: Question[]
   editors: string[]
@@ -28,7 +30,7 @@ export class Quiz {
     subject?: string
     numberOfQuestions?: number
     grade?: number
-    visibility?: 'public' | 'private'
+    visibility?: Visibility
     dateSubmitted?: firebase.firestore.Timestamp
     questions?: Question[]
     editors?: string[]
