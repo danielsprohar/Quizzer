@@ -1,12 +1,12 @@
 export class QuestionOption {
   id: string;
-  htmlText: string;
+  text: string;
   isAnswer: boolean;
   isChecked = false;
 
   constructor(fields?: {
     id?: number;
-    htmlText?: string;
+    text?: string;
     isAnswer?: boolean;
     isChecked?: boolean;
   }) {

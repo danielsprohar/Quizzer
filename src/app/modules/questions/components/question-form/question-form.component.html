@@ -112,27 +112,17 @@
       <!-- ============================= -->
       <!-- Mutliple choice options -->
       <!-- ============================= -->
-      <ng-container *ngIf="multipleChoiceTypes.includes(type.value)">
-        <div formArrayName="options" class="question-options-container">
+      <ng-container *ngIf="multipleOptionsType.includes(type.value)">
+        <div [formArrayName]="'options'" class="question-options-container">
           <ng-container *ngFor="let opt of options?.controls; let i = index">
-            <div class="question-option">
-              <ng-container
-                *ngIf="
-                  type.value === 'multiple choice' || type.value === 'dropdown'
-                "
-              >
-                <mat-radio-button></mat-radio-button>
-              </ng-container>
-              <ng-container *ngIf="type.value === 'checkboxes'">
-                <mat-checkbox></mat-checkbox>
-              </ng-container>
-
+            <div class="question-option" [formGroupName]="i">
+              <mat-checkbox [formControl]="getOptionIsAnswerControl(i)"></mat-checkbox>
               <mat-form-field class="question-option-text" floatLabel="never">
                 <input
                   matInput
                   type="text"
                   placeholder="Option {{ i + 1 }}"
-                  [formControlName]="i"
+                  [formControl]="getOptionControl(i)"
                 />
               </mat-form-field>
               <button

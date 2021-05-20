@@ -89,4 +89,9 @@ export class CreateQuizComponent implements OnInit {
   deleteQuestion(index: number) {
     this.questions.removeAt(index)
   }
+
+  save() {
+    // TODO: Save quiz to database
+    console.log(this.qcs.toQuestions(this.questions))
+  }
 }
