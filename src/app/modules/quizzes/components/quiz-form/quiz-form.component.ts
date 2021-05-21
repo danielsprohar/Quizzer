@@ -7,7 +7,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
@@ -36,13 +36,19 @@ export class QuizFormComponent implements OnInit {
     private readonly afs: AngularFirestore,
     private readonly auth: AuthService,
     private readonly quizService: QuizService,
-    private readonly appState: AppStateService
+    private readonly appState: AppStateService,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.quizId = this.afs.createId()
     this.subjects$ = this.fetchCourseSubjects()
     this.initForm()
+    this.route.data.subscribe((data) => {
+      // TODO: Edit quiz
+      console.log(data.quiz)
+      console.log(data.questions)
+    })
   }
 
   // =========================================================================
