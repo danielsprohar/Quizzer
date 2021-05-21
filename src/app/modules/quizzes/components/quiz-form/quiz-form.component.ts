@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore'
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import firebase from 'firebase/app'
-import { Observable } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
 import { CourseSubject } from 'src/app/models/course-subject'
@@ -20,8 +20,8 @@ import { QuizService } from '../../services/quiz.service'
   styleUrls: ['./quiz-form.component.scss'],
 })
 export class QuizFormComponent implements OnInit {
+  private subscription: Subscription
   subjects$: Observable<CourseSubject[]>
-  questions$: Observable<Question[]>
   form: FormGroup
   quizId: string
 
@@ -38,12 +38,15 @@ export class QuizFormComponent implements OnInit {
   ngOnInit() {
     this.quizId = this.afs.createId()
     this.subjects$ = this.fetchCourseSubjects()
+    this.form = this.qfs.toQuizFormGroup()
 
-    this.route.data.subscribe((data) => {
-      this.form = this.qfs.toQuizFormGroup(data.quiz as Quiz)
-      this.questions$ = this.route.data.pipe(
-        map((data) => data.questions as Question[])
-      )
+    this.subscription = this.route.data.subscribe((data) => {
+      if (data.quiz && data.questions) {
+        const quiz = data.quiz as Quiz
+        this.quizId = quiz.id as string
+        quiz.questions = data.questions as Question[]
+        this.form = this.qfs.toQuizFormGroup(data.quiz as Quiz)
+      }
     })
   }
 
@@ -146,7 +149,6 @@ export class QuizFormComponent implements OnInit {
     this.quizService
       .add(quiz)
       .then(() => {
-        console.log('A new quiz was created')
         this.router.navigate(['/quizzes'])
       })
       .catch((err) => {

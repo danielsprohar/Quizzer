@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core'
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms'
 import { QuestionType, Question } from 'src/app/models/question'
 import { QuestionOption } from 'src/app/models/question-option'
 import { Quiz } from 'src/app/models/quiz'
@@ -54,13 +60,13 @@ export class QuizFormService {
       imageCaption: question.imageCaption,
     })
 
-    const options: FormGroup[] = []
-    question.options.forEach((opt) => {
-      options.push(this.toOptionFormGroup(opt))
-    })
+    const optionsFormGroups: FormGroup[] = []
+    for (let option of question.options) {
+      optionsFormGroups.push(this.toOptionFormGroup(option))
+    }
 
-    if (options.length > 0) {
-      form.addControl('options', this.fb.array(options))
+    if (optionsFormGroups.length > 0) {
+      form.addControl('options', this.fb.array(optionsFormGroups))
     }
 
     return form
@@ -84,19 +90,19 @@ export class QuizFormService {
     return question
   }
 
-  toQuestions(questions: FormArray): Question[] {
-    const arr: Question[] = []
-    for (let ctrl of questions.controls) {
-      arr.push(this.toQuestion(ctrl))
+  toQuestions(questionsFormArray: FormArray): Question[] {
+    const questions: Question[] = []
+    for (let ctrl of questionsFormArray.controls) {
+      questions.push(this.toQuestion(ctrl))
     }
 
-    return arr
+    return questions
   }
 
-  toQuestionOptions(options: FormArray): QuestionOption[] {
-    const opts: QuestionOption[] = []
-    for (let opt of options.controls) {
-      opts.push(
+  toQuestionOptions(optionsFormArray: FormArray): QuestionOption[] {
+    const options: QuestionOption[] = []
+    for (let opt of optionsFormArray.controls) {
+      options.push(
         new QuestionOption({
           text: opt.get('text')?.value,
           isAnswer: opt.get('isAnswer')?.value,
@@ -104,7 +110,7 @@ export class QuizFormService {
       )
     }
 
-    return opts
+    return options
   }
 
   /**
@@ -131,7 +137,7 @@ export class QuizFormService {
    * @returns A new instance of a `FormGroup`.
    */
   toQuizFormGroup(quiz?: Quiz): FormGroup {
-    return this.fb.group({
+    const form = this.fb.group({
       name: this.fb.control(quiz ? quiz.name : '', [
         Validators.required,
         Validators.maxLength(2048),
@@ -145,5 +151,17 @@ export class QuizFormService {
       ]),
       questions: this.fb.array([]),
     })
+
+    if (quiz && quiz.questions) {
+      const questionsFormGroups: FormGroup[] = []
+      for (let question of quiz.questions) {
+        questionsFormGroups.push(this.toQuestionFormGroup(question))
+      }
+      if (questionsFormGroups.length > 0) {
+        form.setControl('questions', this.fb.array(questionsFormGroups))
+      }
+    }
+
+    return form
   }
 }

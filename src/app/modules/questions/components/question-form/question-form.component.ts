@@ -1,4 +1,4 @@
-import { trigger, state, style, transition, animate } from '@angular/animations'
+import { animate, state, style, transition, trigger } from '@angular/animations'
 import {
   Component,
   EventEmitter,
@@ -14,10 +14,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
-import { Observable, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import {
   multipleOptionsType as MultipleOptionsType,
-  Question,
   questionTypes as QuestionTypes,
 } from 'src/app/models/question'
 import { QuizFormService } from 'src/app/modules/quizzes/services/quiz-form.service'
@@ -48,7 +47,6 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   readonly multipleOptionsType = MultipleOptionsType
   readonly questionTypes = QuestionTypes
 
-  @Input() question: Question
   @Input() questionForm: FormGroup
   @Input() quizId: string
   @Input() index: number
@@ -67,11 +65,9 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (!this.questionForm && !this.question) {
+    if (!this.questionForm) {
       // Create a new question for an existing Quiz
       this.questionForm = this.qfs.newQuestionFormGroup()
-    } else if (this.question) {
-      this.questionForm = this.qfs.toQuestionFormGroup(this.question)
     }
   }
 
