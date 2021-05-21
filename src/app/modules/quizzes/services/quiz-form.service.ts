@@ -61,12 +61,14 @@ export class QuizFormService {
     })
 
     const optionsFormGroups: FormGroup[] = []
-    for (let option of question.options) {
-      optionsFormGroups.push(this.toOptionFormGroup(option))
-    }
+    if (question.options) {
+      for (let option of question.options) {
+        optionsFormGroups.push(this.toOptionFormGroup(option))
+      }
 
-    if (optionsFormGroups.length > 0) {
-      form.addControl('options', this.fb.array(optionsFormGroups))
+      if (optionsFormGroups.length > 0) {
+        form.addControl('options', this.fb.array(optionsFormGroups))
+      }
     }
 
     return form

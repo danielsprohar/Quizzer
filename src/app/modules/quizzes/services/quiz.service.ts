@@ -52,11 +52,12 @@ export class QuizService {
 
   /**
    * Deletes a `Quiz` from the database.
-   * @param quizId The quiz id in the database.
+   * @param quiz The `Quiz` model.
    * @returns A `Promise` after the database operation is complete.
    */
-  delete(quizId: string) {
-    return this.afs.collection(Collections.QUIZZES).doc<Quiz>(quizId).delete()
+  delete(quiz: Quiz) {
+    // TODO: Delete quiz
+    throw new Error()
   }
 
   /**
