@@ -82,9 +82,6 @@ mat-card {
 }
 
 .sign-in-link-container a {
-  //   color: #2999f5;
-  //   cursor: pointer;
-  //   text-decoration: none;
   margin-left: 4px;
 }
 
@@ -102,6 +99,10 @@ mat-card {
   height: inherit;
 }
 
+// ===========================================================================
+// Colors for password strength meter
+// ===========================================================================
+
 .bad {
   background-color: #d50000;
 }
@@ -114,11 +115,23 @@ mat-card {
   background-color: #009624;
 }
 
+// ===========================================================================
+
+a,
+a:visited,
+a:hover {
+  cursor: pointer;
+  color: #1976d2;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #125699;
+}
+
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   mat-card {
     width: 60%;
   }
 }
-
-

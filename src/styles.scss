@@ -86,22 +86,6 @@ p {
   align-items: center;
 }
 
-a,
-a:visited,
-a:hover {
-  cursor: pointer;
-  color: #1976d2;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #125699;
-}
-
-// a mat-icon {
-//   color: #000;
-// }
-
 .btn-bar {
   display: flex;
   flex-flow: row nowrap;
@@ -111,3 +95,19 @@ a:hover {
 .btn-bar mat-icon {
   opacity: 0.54;
 }
+
+// ===========================================================================
+// Panel classes for MatSnackbar
+// ===========================================================================
+
+.warn {
+  background-color: #f44336;
+  color: #000;
+}
+
+.success {
+  background-color: #4caf50;
+  color: #000;
+}
+
+// ===========================================================================

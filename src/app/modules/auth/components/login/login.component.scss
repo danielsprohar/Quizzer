@@ -69,7 +69,19 @@
 
 .err-res-container {
   background-color: #b71c1c;
-  color: #fff;
+  color: #000;
+}
+
+a,
+a:visited,
+a:hover {
+  cursor: pointer;
+  color: #1976d2;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #125699;
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
