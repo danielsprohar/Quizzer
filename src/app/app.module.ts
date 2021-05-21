@@ -18,7 +18,8 @@ import { MaterialDesignModule } from './theme/material-design/material-design.mo
 import { TopnavComponent } from './components/topnav/topnav.component'
 import { HomeComponent } from './components/home/home.component'
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar'
-import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component'
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { NewSubjectDialogComponent } from './components/new-subject-dialog/new-subject-dialog.component'
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     SidenavComponent,
     TopnavComponent,
     HomeComponent,
+    NewSubjectDialogComponent,
   ],
   imports: [
     BrowserModule,
