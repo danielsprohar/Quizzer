@@ -2,10 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { RouterTestingModule } from '@angular/router/testing'
 import { angularFireAuthSpy } from 'src/app/mocks/angular-fire-auth-mock'
-import { userServiceSpy } from 'src/app/mocks/user-service-mock'
-import { UserService } from 'src/app/services/user.service'
 import { MaterialDesignModule } from 'src/app/theme/material-design/material-design.module'
+import { quizServiceSpy } from './mocks/quiz-service-mock'
 import { QuizzesComponent } from './quizzes.component'
+import { QuizService } from './services/quiz.service'
 
 describe('QuizzesComponent', () => {
   let component: QuizzesComponent
@@ -21,9 +21,9 @@ describe('QuizzesComponent', () => {
           useValue: angularFireAuthSpy,
         },
         {
-          provide: UserService,
-          useValue: userServiceSpy,
-        },
+          provide: QuizService,
+          useValue: quizServiceSpy
+        }
       ],
     }).compileComponents()
   })

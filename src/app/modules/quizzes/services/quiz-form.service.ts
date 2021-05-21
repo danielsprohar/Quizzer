@@ -6,7 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
-import { QuestionType, Question } from 'src/app/models/question'
+import { Question } from 'src/app/models/question'
 import { QuestionOption } from 'src/app/models/question-option'
 import { Quiz } from 'src/app/models/quiz'
 
@@ -20,27 +20,26 @@ export class QuizFormService {
    * @param options The options to apply to the `FormGroup`.
    * @returns A new instance of a `FormGroup`.
    */
-  newQuestionFormGroup(options?: { type: QuestionType }): FormGroup {
+  newQuestionFormGroup(): FormGroup {
     const form = this.fb.group({
       text: this.fb.control('', [
         Validators.required,
         Validators.maxLength(4096),
       ]),
-      type: this.fb.control(options ? options?.type : 'multiple choice', [
-        Validators.required,
-      ]),
+      type: this.fb.control('multiple choice', [Validators.required]),
       hint: this.fb.control('', [Validators.maxLength(4096)]),
       explanation: this.fb.control('', [Validators.maxLength(4096)]),
-      imageURL: this.fb.control(''),
+      imageURL: this.fb.control('', [Validators.maxLength(4096)]),
       imageCaption: this.fb.control('', [Validators.maxLength(1024)]),
+      options: this.fb.array([this.toOptionFormGroup(new QuestionOption())]),
     })
 
-    if (options?.type === 'multiple choice' || options?.type === 'dropdown') {
-      const options = this.fb.array([
-        this.toOptionFormGroup(new QuestionOption()),
-      ])
-      form.addControl('options', options)
-    }
+    // if (options?.type !== 'multiple choice' || options?.type !== 'dropdown') {
+    //   const options = this.fb.array([
+    //     this.toOptionFormGroup(new QuestionOption()),
+    //   ])
+    //   form.addControl('options', options)
+    // }
 
     return form
   }

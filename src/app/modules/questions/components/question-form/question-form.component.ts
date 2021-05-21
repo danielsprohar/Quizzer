@@ -106,7 +106,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   }
 
   get options() {
-    return this.questionForm.get('options') as FormArray
+    return this.questionForm?.get('options')! as FormArray
   }
 
   getOptionIsAnswerControl(index: number) {
@@ -136,6 +136,8 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  // =========================================================================
+  
   addImage(fileList: FileList) {
     if (!this.quizId || !fileList || fileList.length === 0) {
       return
@@ -160,9 +162,13 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
       })
   }
 
+  // =========================================================================
+
   addOption() {
     this.options.push(this.qfs.toOptionFormGroup())
   }
+
+  // =========================================================================
 
   deleteImage() {
     this.appState.isLoading(true)
@@ -175,15 +181,21 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
       .finally(() => this.appState.isLoading(false))
   }
 
+  // =========================================================================
+
   async deleteQuestion() {
     this.isRemoved = true
     await new Promise((resolve) => setTimeout(resolve, 2000))
     this.questionDeleted.emit(this.index)
   }
 
+  // =========================================================================
+
   deleteOption(index: number) {
     this.options.removeAt(index)
   }
+
+  // =========================================================================
 
   duplicateQuestion() {
     const form = this.fb.group({
@@ -209,6 +221,8 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
 
     this.questionDuplicated.emit(form)
   }
+
+  // =========================================================================
 
   toggleImageCaption() {
     this.hasCaption = !this.hasCaption

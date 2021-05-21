@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/firestore'
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -19,7 +19,7 @@ import { QuizService } from '../../services/quiz.service'
   templateUrl: './quiz-form.component.html',
   styleUrls: ['./quiz-form.component.scss'],
 })
-export class QuizFormComponent implements OnInit {
+export class QuizFormComponent implements OnInit, OnDestroy {
   private subscription: Subscription
   subjects$: Observable<CourseSubject[]>
   form: FormGroup
@@ -27,16 +27,16 @@ export class QuizFormComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly afs: AngularFirestore,
-    private readonly auth: AuthService,
-    private readonly quizService: QuizService,
-    private readonly appState: AppStateService,
     private readonly route: ActivatedRoute,
-    private readonly qfs: QuizFormService
+    private readonly firestore: AngularFirestore,
+    private readonly auth: AuthService,
+    private readonly appState: AppStateService,
+    private readonly qfs: QuizFormService,
+    private readonly quizService: QuizService
   ) {}
 
   ngOnInit() {
-    this.quizId = this.afs.createId()
+    this.quizId = this.firestore.createId()
     this.subjects$ = this.fetchCourseSubjects()
     this.form = this.qfs.toQuizFormGroup()
 
@@ -48,6 +48,12 @@ export class QuizFormComponent implements OnInit {
         this.form = this.qfs.toQuizFormGroup(data.quiz as Quiz)
       }
     })
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe()
+    }
   }
 
   // =========================================================================
@@ -79,14 +85,14 @@ export class QuizFormComponent implements OnInit {
   // =========================================================================
 
   fetchCourseSubjects() {
-    return this.afs
+    return this.firestore
       .collection<CourseSubject>(Collections.SUBJECTS, (ref) =>
         ref.orderBy('name')
       )
       .get()
       .pipe(
         map((actions) =>
-          actions.docs.map((doc) => {
+          actions.docs?.map((doc) => {
             const subject = doc.data() as CourseSubject
             subject.id = doc.id
             return subject
@@ -104,13 +110,7 @@ export class QuizFormComponent implements OnInit {
   // =========================================================================
 
   addQuestion(form?: FormGroup) {
-    if (form) {
-      this.questions.push(form)
-    } else {
-      this.questions.push(
-        this.qfs.newQuestionFormGroup({ type: 'multiple choice' })
-      )
-    }
+    this.questions.push(form ? form : this.qfs.newQuestionFormGroup())
   }
 
   deleteQuestion(index: number) {

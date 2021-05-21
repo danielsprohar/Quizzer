@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { QuizFormService } from './quiz-form.service';
 
@@ -6,7 +7,9 @@ describe('QuizFormService', () => {
   let service: QuizFormService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule]
+    });
     service = TestBed.inject(QuizFormService);
   });
 
