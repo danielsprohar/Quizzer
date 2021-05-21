@@ -7,7 +7,7 @@ import { Quiz } from 'src/app/models/quiz'
 @Injectable({
   providedIn: 'root',
 })
-export class QuizControlService {
+export class QuizFormService {
   constructor(private readonly fb: FormBuilder) {}
   /**
    * Creates a new `FormGroup` for a `Question` model.

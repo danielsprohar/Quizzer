@@ -11,7 +11,7 @@ import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { AppStateService } from 'src/app/services/app-state.service'
-import { QuizControlService } from '../../services/quiz-control.service'
+import { QuizFormService } from '../../services/quiz-form.service'
 import { QuizService } from '../../services/quiz.service'
 
 @Component({
@@ -32,7 +32,7 @@ export class QuizFormComponent implements OnInit {
     private readonly quizService: QuizService,
     private readonly appState: AppStateService,
     private readonly route: ActivatedRoute,
-    private readonly qfs: QuizControlService
+    private readonly qfs: QuizFormService
   ) {}
 
   ngOnInit() {

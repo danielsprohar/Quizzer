@@ -20,7 +20,7 @@ import {
   Question,
   questionTypes as QuestionTypes,
 } from 'src/app/models/question'
-import { QuizControlService } from 'src/app/modules/quizzes/services/quiz-control.service'
+import { QuizFormService } from 'src/app/modules/quizzes/services/quiz-form.service'
 import { AppStateService } from 'src/app/services/app-state.service'
 import { ImageService } from 'src/app/services/image.service'
 
@@ -62,7 +62,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly is: ImageService,
-    private readonly qfs: QuizControlService,
+    private readonly qfs: QuizFormService,
     private readonly appState: AppStateService
   ) {}
 
