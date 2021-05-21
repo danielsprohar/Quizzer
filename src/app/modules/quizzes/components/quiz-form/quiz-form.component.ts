@@ -18,6 +18,7 @@ import { QuestionControlService } from 'src/app/modules/questions/services/quest
 import firebase from 'firebase/app'
 import { QuizService } from '../../services/quiz.service'
 import { AppStateService } from 'src/app/services/app-state.service'
+import { Question } from 'src/app/models/question'
 
 @Component({
   selector: 'app-quiz-form',
@@ -26,6 +27,7 @@ import { AppStateService } from 'src/app/services/app-state.service'
 })
 export class QuizFormComponent implements OnInit {
   subjects$: Observable<CourseSubject[]>
+  questions$: Observable<Question[]>
   form: FormGroup
   quizId: string
 
@@ -49,6 +51,10 @@ export class QuizFormComponent implements OnInit {
       console.log(data.quiz)
       console.log(data.questions)
     })
+
+    this.questions$ = this.route.data.pipe(
+      map((data) => data.questions as Question[])
+    )
   }
 
   // =========================================================================
@@ -135,7 +141,7 @@ export class QuizFormComponent implements OnInit {
     if (this.form.invalid) {
       // this.snackbar.open('Please fill in all required fields');
       console.log('form is invalid')
-      return;
+      return
     }
 
     const userId = await this.auth.getUserIdAsync()
@@ -145,7 +151,7 @@ export class QuizFormComponent implements OnInit {
     }
 
     this.appState.isLoading(true)
-    
+
     const questions = this.qcs.toQuestions(this.questions)
     const quiz = new Quiz({
       id: this.quizId,

@@ -82,7 +82,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
         explanation: this.fb.control('', [Validators.maxLength(4096)]),
         imageURL: this.fb.control(''),
         imageCaption: this.fb.control(''),
-        options: this.fb.array([this.qcs.newOptionsFormGroup()]),
+        options: this.fb.array([this.qcs.toOptionFormGroup()]),
       })
     }
     // TODO: else, a form was provided via Input(), set form fields
@@ -178,7 +178,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   }
 
   addOption() {
-    this.options.push(this.qcs.newOptionsFormGroup())
+    this.options.push(this.qcs.toOptionFormGroup())
   }
 
   deleteImage() {

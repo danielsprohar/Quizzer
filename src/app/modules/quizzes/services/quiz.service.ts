@@ -23,6 +23,7 @@ export class QuizService {
       .doc<Quiz>(quiz.id).ref
 
     const batch = this.afs.firestore.batch()
+    const timestamp = firebase.firestore.Timestamp.fromDate(new Date())
     batch.set(quizRef, {
       name: quiz.name,
       subject: quiz.subject,
@@ -31,6 +32,8 @@ export class QuizService {
       ownerId: quiz.ownerId,
       editors: quiz.editors,
       visibility: quiz.visibility,
+      createdOn: timestamp,
+      modifiedOn: timestamp,
     })
 
     // Add each question as a document to the subcollection

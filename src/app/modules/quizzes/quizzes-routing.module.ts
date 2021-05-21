@@ -11,16 +11,16 @@ const routes: Routes = [
     component: QuizzesComponent,
   },
   {
-    path: ':id',
+    path: 'create',
+    component: QuizFormComponent,
+  },
+  {
+    path: ':id/edit',
     component: QuizFormComponent,
     resolve: {
       quiz: QuizResolver,
       questions: QuestionsResolver,
     },
-  },
-  {
-    path: 'create',
-    component: QuizFormComponent,
   },
 ]
 
