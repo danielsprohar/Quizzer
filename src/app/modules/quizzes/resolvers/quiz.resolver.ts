@@ -31,7 +31,7 @@ export class QuizResolver implements Resolve<Quiz> {
       .get()
       .pipe(
         mergeMap((doc) => {
-          if (doc) {
+          if (doc.data()) {
             const quiz = doc.data() as Quiz
             quiz.id = doc.id
             return of(quiz)

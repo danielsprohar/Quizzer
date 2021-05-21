@@ -4,13 +4,12 @@ import {
   QueryDocumentSnapshot,
 } from '@angular/fire/firestore'
 import {
-  Router,
+  ActivatedRouteSnapshot,
   Resolve,
   RouterStateSnapshot,
-  ActivatedRouteSnapshot,
 } from '@angular/router'
-import { EMPTY, Observable, of } from 'rxjs'
-import { mergeMap } from 'rxjs/operators'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
 import { Question } from 'src/app/models/question'
 
@@ -18,10 +17,7 @@ import { Question } from 'src/app/models/question'
   providedIn: 'root',
 })
 export class QuestionsResolver implements Resolve<Question[]> {
-  constructor(
-    private readonly router: Router,
-    private readonly afs: AngularFirestore
-  ) {}
+  constructor(private readonly afs: AngularFirestore) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
@@ -33,16 +29,7 @@ export class QuestionsResolver implements Resolve<Question[]> {
       .doc(quizId)
       .collection<Question>(Collections.QUIZ_QUESTIONS)
       .get()
-      .pipe(
-        mergeMap((snapshot) => {
-          if (snapshot) {
-            return of(this.toQuestions(snapshot.docs))
-          } else {
-            this.router.navigate(['/quizzes'])
-            return EMPTY
-          }
-        })
-      )
+      .pipe(map((snapshot) => this.toQuestions(snapshot.docs)))
   }
 
   private toQuestions(
