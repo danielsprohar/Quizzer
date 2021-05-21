@@ -14,14 +14,15 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
-import { Subscription } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 import {
   multipleOptionsType as MultipleOptionsType,
+  Question,
   questionTypes as QuestionTypes,
 } from 'src/app/models/question'
+import { QuizControlService } from 'src/app/modules/quizzes/services/quiz-control.service'
 import { AppStateService } from 'src/app/services/app-state.service'
 import { ImageService } from 'src/app/services/image.service'
-import { QuestionControlService } from '../../services/question-control.service'
 
 @Component({
   selector: 'app-question-form',
@@ -34,7 +35,7 @@ import { QuestionControlService } from '../../services/question-control.service'
         'removed',
         style({
           marginLeft: '-110%',
-          marginRight: '110%'
+          marginRight: '110%',
         })
       ),
       transition('exists => removed', [animate('0.5s')]),
@@ -46,46 +47,32 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
 
   readonly multipleOptionsType = MultipleOptionsType
   readonly questionTypes = QuestionTypes
-  // readonly questionTypeIcons = [
-  //   'short_text',
-  //   'subject',
-  //   'adjust',
-  //   'checklist',
-  //   'arrow_drop_down',
-  // ]
 
+  @Input() question: Question
   @Input() questionForm: FormGroup
   @Input() quizId: string
   @Input() index: number
+
   @Output() questionDeleted = new EventEmitter<number>()
   @Output() questionDuplicated = new EventEmitter<FormGroup>()
+
   hasCaption: boolean = false
   isRemoved: boolean = false
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly is: ImageService,
-    private readonly qcs: QuestionControlService,
+    private readonly qfs: QuizControlService,
     private readonly appState: AppStateService
   ) {}
 
   ngOnInit() {
-    if (!this.questionForm) {
+    if (!this.questionForm && !this.question) {
       // Create a new question for an existing Quiz
-      this.questionForm = this.fb.group({
-        text: this.fb.control('', [
-          Validators.required,
-          Validators.maxLength(4096),
-        ]),
-        type: this.fb.control('multiple choice', [Validators.required]),
-        hint: this.fb.control('', [Validators.maxLength(4096)]),
-        explanation: this.fb.control('', [Validators.maxLength(4096)]),
-        imageURL: this.fb.control(''),
-        imageCaption: this.fb.control(''),
-        options: this.fb.array([this.qcs.toOptionFormGroup()]),
-      })
+      this.questionForm = this.qfs.newQuestionFormGroup()
+    } else if (this.question) {
+      this.questionForm = this.qfs.toQuestionFormGroup(this.question)
     }
-    // TODO: else, a form was provided via Input(), set form fields
   }
 
   ngOnDestroy() {
@@ -178,7 +165,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   }
 
   addOption() {
-    this.options.push(this.qcs.toOptionFormGroup())
+    this.options.push(this.qfs.toOptionFormGroup())
   }
 
   deleteImage() {

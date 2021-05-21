@@ -1,24 +1,18 @@
 import { Component, OnInit } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/firestore'
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms'
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
+import firebase from 'firebase/app'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
 import { CourseSubject } from 'src/app/models/course-subject'
+import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
-import { QuestionControlService } from 'src/app/modules/questions/services/question-control.service'
-import firebase from 'firebase/app'
-import { QuizService } from '../../services/quiz.service'
 import { AppStateService } from 'src/app/services/app-state.service'
-import { Question } from 'src/app/models/question'
+import { QuizControlService } from '../../services/quiz-control.service'
+import { QuizService } from '../../services/quiz.service'
 
 @Component({
   selector: 'app-quiz-form',
@@ -32,29 +26,25 @@ export class QuizFormComponent implements OnInit {
   quizId: string
 
   constructor(
-    private readonly fb: FormBuilder,
     private readonly router: Router,
-    private readonly qcs: QuestionControlService,
     private readonly afs: AngularFirestore,
     private readonly auth: AuthService,
     private readonly quizService: QuizService,
     private readonly appState: AppStateService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly qfs: QuizControlService
   ) {}
 
   ngOnInit() {
     this.quizId = this.afs.createId()
     this.subjects$ = this.fetchCourseSubjects()
-    this.initForm()
-    this.route.data.subscribe((data) => {
-      // TODO: Edit quiz
-      console.log(data.quiz)
-      console.log(data.questions)
-    })
 
-    this.questions$ = this.route.data.pipe(
-      map((data) => data.questions as Question[])
-    )
+    this.route.data.subscribe((data) => {
+      this.form = this.qfs.toQuizFormGroup(data.quiz as Quiz)
+      this.questions$ = this.route.data.pipe(
+        map((data) => data.questions as Question[])
+      )
+    })
   }
 
   // =========================================================================
@@ -102,19 +92,6 @@ export class QuizFormComponent implements OnInit {
       )
   }
 
-  initForm() {
-    this.form = this.fb.group({
-      name: this.fb.control('', [
-        Validators.required,
-        Validators.maxLength(2048),
-      ]),
-      description: this.fb.control('', [Validators.maxLength(4096)]),
-      subject: this.fb.control('', [Validators.required]),
-      visibility: this.fb.control('public', [Validators.required]),
-      questions: this.fb.array([]),
-    })
-  }
-
   toFormGroup(control: AbstractControl) {
     return control as FormGroup
   }
@@ -128,7 +105,7 @@ export class QuizFormComponent implements OnInit {
       this.questions.push(form)
     } else {
       this.questions.push(
-        this.qcs.newQuestionFormGroup({ type: 'multiple choice' })
+        this.qfs.newQuestionFormGroup({ type: 'multiple choice' })
       )
     }
   }
@@ -152,7 +129,7 @@ export class QuizFormComponent implements OnInit {
 
     this.appState.isLoading(true)
 
-    const questions = this.qcs.toQuestions(this.questions)
+    const questions = this.qfs.toQuestions(this.questions)
     const quiz = new Quiz({
       id: this.quizId,
       name: this.name.value,

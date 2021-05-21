@@ -1,30 +1,26 @@
 import { Injectable } from '@angular/core'
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms'
-import { Question, QuestionType } from 'src/app/models/question'
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { QuestionType, Question } from 'src/app/models/question'
 import { QuestionOption } from 'src/app/models/question-option'
+import { Quiz } from 'src/app/models/quiz'
 
-@Injectable()
-export class QuestionControlService {
+@Injectable({
+  providedIn: 'root',
+})
+export class QuizControlService {
   constructor(private readonly fb: FormBuilder) {}
-
   /**
    * Creates a new `FormGroup` for a `Question` model.
    * @param options The options to apply to the `FormGroup`.
    * @returns A new instance of a `FormGroup`.
    */
-  newQuestionFormGroup(options?: { type: QuestionType }) {
+  newQuestionFormGroup(options?: { type: QuestionType }): FormGroup {
     const form = this.fb.group({
       text: this.fb.control('', [
         Validators.required,
         Validators.maxLength(4096),
       ]),
-      type: this.fb.control(options ? options?.type : '', [
+      type: this.fb.control(options ? options?.type : 'multiple choice', [
         Validators.required,
       ]),
       hint: this.fb.control('', [Validators.maxLength(4096)]),
@@ -43,7 +39,12 @@ export class QuestionControlService {
     return form
   }
 
-  toQuestionFormGroup(question: Question) {
+  /**
+   * Converts a question model to a `FormGroup`.
+   * @param question The question model.
+   * @returns A new instance of a `FormGroup`.
+   */
+  toQuestionFormGroup(question: Question): FormGroup {
     const form = this.fb.group({
       text: question.text,
       type: question.type,
@@ -121,6 +122,28 @@ export class QuestionControlService {
         Validators.required,
         Validators.maxLength(2048),
       ]),
+    })
+  }
+
+  /**
+   * Converts a `Quiz` model to a `FormGroup`.
+   * @param quiz The quiz model.
+   * @returns A new instance of a `FormGroup`.
+   */
+  toQuizFormGroup(quiz?: Quiz): FormGroup {
+    return this.fb.group({
+      name: this.fb.control(quiz ? quiz.name : '', [
+        Validators.required,
+        Validators.maxLength(2048),
+      ]),
+      description: this.fb.control(quiz ? quiz.description : '', [
+        Validators.maxLength(4096),
+      ]),
+      subject: this.fb.control(quiz ? quiz.subject : '', [Validators.required]),
+      visibility: this.fb.control(quiz ? quiz.description : 'public', [
+        Validators.required,
+      ]),
+      questions: this.fb.array([]),
     })
   }
 }

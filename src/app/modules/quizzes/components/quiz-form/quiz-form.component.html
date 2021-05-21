@@ -34,6 +34,9 @@
   <!-- Questions -->
   <!-- ====================================== -->
   <div formArrayName="questions" class="questions-container">
+    <ng-container *ngIf="questions$ | async as questionsModelArray">
+
+    </ng-container>
     <ng-container *ngFor="let qc of questions?.controls; let i = index">
       <app-question-form
         [quizId]="quizId"
