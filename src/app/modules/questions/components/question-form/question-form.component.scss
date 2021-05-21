@@ -7,6 +7,10 @@ mat-card-content {
   flex-direction: column;
 }
 
+.question-card mat-icon {
+  opacity: 0.54;
+}
+
 .question-header {
   display: flex;
   flex-flow: row nowrap;

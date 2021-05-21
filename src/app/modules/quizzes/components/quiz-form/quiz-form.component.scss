@@ -6,6 +6,16 @@
   margin-bottom: 64px;
 }
 
+.subject-field-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subject-field-container mat-icon {
+  opacity: 0.54;
+}
+
 .questions-container {
   display: flex;
   flex-direction: column;

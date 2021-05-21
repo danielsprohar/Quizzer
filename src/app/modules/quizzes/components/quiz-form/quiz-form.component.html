@@ -3,17 +3,28 @@
   <!-- Quiz subject, title, and description -->
   <!-- ====================================== -->
   <mat-card>
-    <mat-form-field class="full-width">
-      <mat-label>Subject</mat-label>
-      <mat-select formControlName="subject" required>
-        <mat-option
-          *ngFor="let subject of subjects$ | async"
-          [value]="subject.name"
-        >
-          {{ subject.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="subject-field-container">
+      <mat-form-field class="full-width">
+        <mat-label>Subject</mat-label>
+        <mat-select formControlName="subject" required>
+          <mat-option
+            *ngFor="let subject of subjects$ | async"
+            [value]="subject.name"
+          >
+            {{ subject.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+        mat-icon-button
+        aria-label="Create a new subject"
+        matTooltip="Create a new subject"
+        (click)="addSubject()"
+      >
+      <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
     <mat-form-field class="full-width">
       <mat-label floatLabel="never">Title</mat-label>
       <input

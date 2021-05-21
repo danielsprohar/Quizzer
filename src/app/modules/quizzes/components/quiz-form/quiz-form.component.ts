@@ -1,16 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/firestore'
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms'
+import { MatDialog } from '@angular/material/dialog'
 import { ActivatedRoute, Router } from '@angular/router'
 import firebase from 'firebase/app'
 import { Observable, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
+import { NewSubjectDialogComponent } from 'src/app/components/new-subject-dialog/new-subject-dialog.component'
 import { Collections } from 'src/app/constants/collections'
 import { CourseSubject } from 'src/app/models/course-subject'
 import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { AppStateService } from 'src/app/services/app-state.service'
+import { SnackbarService } from 'src/app/services/snackbar.service'
 import { QuizFormService } from '../../services/quiz-form.service'
 import { QuizService } from '../../services/quiz.service'
 
@@ -32,7 +35,9 @@ export class QuizFormComponent implements OnInit, OnDestroy {
     private readonly auth: AuthService,
     private readonly appState: AppStateService,
     private readonly qfs: QuizFormService,
-    private readonly quizService: QuizService
+    private readonly quizService: QuizService,
+    private readonly dialog: MatDialog,
+    private readonly snackbar: SnackbarService
   ) {}
 
   ngOnInit() {
@@ -102,6 +107,10 @@ export class QuizFormComponent implements OnInit, OnDestroy {
 
   addQuestion(form?: FormGroup) {
     this.questions.push(form ? form : this.qfs.newQuestionFormGroup())
+  }
+
+  addSubject() {
+    this.dialog.open(NewSubjectDialogComponent)
   }
 
   deleteQuestion(index: number) {
