@@ -1,48 +1,53 @@
 import { Component, OnInit } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/firestore'
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms'
-import { Router } from '@angular/router'
-import { Observable } from 'rxjs'
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms'
+import { ActivatedRoute, Router } from '@angular/router'
+import firebase from 'firebase/app'
+import { Observable, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
 import { CourseSubject } from 'src/app/models/course-subject'
+import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
-import { QuestionControlService } from 'src/app/modules/questions/services/question-control.service'
-import firebase from 'firebase/app'
-import { QuizService } from '../../services/quiz.service'
 import { AppStateService } from 'src/app/services/app-state.service'
+import { QuizFormService } from '../../services/quiz-form.service'
+import { QuizService } from '../../services/quiz.service'
 
 @Component({
-  selector: 'app-create-quiz',
-  templateUrl: './create-quiz.component.html',
-  styleUrls: ['./create-quiz.component.scss'],
+  selector: 'app-quiz-form',
+  templateUrl: './quiz-form.component.html',
+  styleUrls: ['./quiz-form.component.scss'],
 })
-export class CreateQuizComponent implements OnInit {
+export class QuizFormComponent implements OnInit {
+  private subscription: Subscription
   subjects$: Observable<CourseSubject[]>
   form: FormGroup
   quizId: string
 
   constructor(
-    private readonly fb: FormBuilder,
     private readonly router: Router,
-    private readonly qcs: QuestionControlService,
     private readonly afs: AngularFirestore,
     private readonly auth: AuthService,
     private readonly quizService: QuizService,
-    private readonly appState: AppStateService
+    private readonly appState: AppStateService,
+    private readonly route: ActivatedRoute,
+    private readonly qfs: QuizFormService
   ) {}
 
   ngOnInit() {
     this.quizId = this.afs.createId()
     this.subjects$ = this.fetchCourseSubjects()
-    this.initForm()
+    this.form = this.qfs.toQuizFormGroup()
+
+    this.subscription = this.route.data.subscribe((data) => {
+      if (data.quiz && data.questions) {
+        const quiz = data.quiz as Quiz
+        this.quizId = quiz.id as string
+        quiz.questions = data.questions as Question[]
+        this.form = this.qfs.toQuizFormGroup(data.quiz as Quiz)
+      }
+    })
   }
 
   // =========================================================================
@@ -90,19 +95,6 @@ export class CreateQuizComponent implements OnInit {
       )
   }
 
-  initForm() {
-    this.form = this.fb.group({
-      name: this.fb.control('', [
-        Validators.required,
-        Validators.maxLength(2048),
-      ]),
-      description: this.fb.control('', [Validators.maxLength(4096)]),
-      subject: this.fb.control('', [Validators.required]),
-      visibility: this.fb.control('public', [Validators.required]),
-      questions: this.fb.array([]),
-    })
-  }
-
   toFormGroup(control: AbstractControl) {
     return control as FormGroup
   }
@@ -116,7 +108,7 @@ export class CreateQuizComponent implements OnInit {
       this.questions.push(form)
     } else {
       this.questions.push(
-        this.qcs.newQuestionFormGroup({ type: 'multiple choice' })
+        this.qfs.newQuestionFormGroup({ type: 'multiple choice' })
       )
     }
   }
@@ -129,7 +121,7 @@ export class CreateQuizComponent implements OnInit {
     if (this.form.invalid) {
       // this.snackbar.open('Please fill in all required fields');
       console.log('form is invalid')
-      return;
+      return
     }
 
     const userId = await this.auth.getUserIdAsync()
@@ -139,8 +131,8 @@ export class CreateQuizComponent implements OnInit {
     }
 
     this.appState.isLoading(true)
-    
-    const questions = this.qcs.toQuestions(this.questions)
+
+    const questions = this.qfs.toQuestions(this.questions)
     const quiz = new Quiz({
       id: this.quizId,
       name: this.name.value,
@@ -157,7 +149,6 @@ export class CreateQuizComponent implements OnInit {
     this.quizService
       .add(quiz)
       .then(() => {
-        console.log('A new quiz was created')
         this.router.navigate(['/quizzes'])
       })
       .catch((err) => {

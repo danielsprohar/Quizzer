@@ -33,17 +33,19 @@
   <!-- ====================================== -->
   <!-- Questions -->
   <!-- ====================================== -->
-  <div formArrayName="questions" class="questions-container">
-    <ng-container *ngFor="let qc of questions?.controls; let i = index">
-      <app-question-form
-        [quizId]="quizId"
-        [questionForm]="toFormGroup(qc)"
-        [index]="i"
-        (questionDeleted)="deleteQuestion($event)"
-        (questionDuplicated)="addQuestion($event)"
-      ></app-question-form>
-    </ng-container>
-  </div>
+  <ng-container *ngIf="questions">
+    <div formArrayName="questions" class="questions-container">
+      <ng-container *ngFor="let qc of questions?.controls; let i = index">
+        <app-question-form
+          [quizId]="quizId"
+          [questionForm]="toFormGroup(qc)"
+          [index]="i"
+          (questionDeleted)="deleteQuestion($event)"
+          (questionDuplicated)="addQuestion($event)"
+        ></app-question-form>
+      </ng-container>
+    </div>
+  </ng-container>
 
   <div class="btn-bar">
     <button mat-button (click)="addQuestion()">Add question</button>

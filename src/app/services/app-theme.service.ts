@@ -21,12 +21,12 @@ export class AppThemeService implements OnDestroy {
     this.mql.removeEventListener('change', this.setDarkTheme)
   }
 
-  private setDarkTheme(event: MediaQueryListEvent) {
-    this.isDarkTheme(event.matches ? true : false)
-  }
-
   isDarkTheme(value: boolean): void {
     this.isDarkTheme$.next(value)
+  }
+
+  private setDarkTheme(event: MediaQueryListEvent) {
+    this.isDarkTheme(event.matches ? true : false)
   }
 
   getIsDarkTheme(): boolean {

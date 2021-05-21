@@ -23,15 +23,22 @@ export class QuizService {
       .doc<Quiz>(quiz.id).ref
 
     const batch = this.afs.firestore.batch()
-    batch.set(quizRef, {
-      name: quiz.name,
-      subject: quiz.subject,
-      description: quiz.description,
-      numberOfQuestions: quiz.numberOfQuestions,
-      ownerId: quiz.ownerId,
-      editors: quiz.editors,
-      visibility: quiz.visibility,
-    })
+    const timestamp = firebase.firestore.Timestamp.fromDate(new Date())
+    batch.set(
+      quizRef,
+      {
+        name: quiz.name,
+        subject: quiz.subject,
+        description: quiz.description,
+        numberOfQuestions: quiz.numberOfQuestions,
+        ownerId: quiz.ownerId,
+        editors: quiz.editors,
+        visibility: quiz.visibility,
+        createdOn: timestamp,
+        modifiedOn: timestamp,
+      },
+      { merge: true }
+    )
 
     // Add each question as a document to the subcollection
     const questionsRef = quizRef.collection(Collections.QUIZ_QUESTIONS)
@@ -45,11 +52,12 @@ export class QuizService {
 
   /**
    * Deletes a `Quiz` from the database.
-   * @param quizId The quiz id in the database.
+   * @param quiz The `Quiz` model.
    * @returns A `Promise` after the database operation is complete.
    */
-  delete(quizId: string) {
-    return this.afs.collection(Collections.QUIZZES).doc<Quiz>(quizId).delete()
+  delete(quiz: Quiz) {
+    // TODO: Delete quiz
+    throw new Error()
   }
 
   /**
