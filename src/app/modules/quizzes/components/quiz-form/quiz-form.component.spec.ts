@@ -15,7 +15,7 @@ import { QuizFormComponent } from './quiz-form.component'
 // ===========================================================================
 
 const collectionStub = {
-  get: jasmine.createSpy('get').and.returnValue(of([{}])),
+  valueChanges: jasmine.createSpy('valueChanges').and.returnValue(of([{}])),
 }
 
 const firestoreSpy = jasmine.createSpyObj('AngularFirestore', [

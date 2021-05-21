@@ -89,16 +89,7 @@ export class QuizFormComponent implements OnInit, OnDestroy {
       .collection<CourseSubject>(Collections.SUBJECTS, (ref) =>
         ref.orderBy('name')
       )
-      .get()
-      .pipe(
-        map((actions) =>
-          actions.docs?.map((doc) => {
-            const subject = doc.data() as CourseSubject
-            subject.id = doc.id
-            return subject
-          })
-        )
-      )
+      .valueChanges()
   }
 
   toFormGroup(control: AbstractControl) {
