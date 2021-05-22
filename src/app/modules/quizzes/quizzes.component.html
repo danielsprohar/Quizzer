@@ -41,7 +41,13 @@
             </mat-card-content>
             <mat-card-actions>
               <a mat-button [routerLink]="[quiz.id, 'edit']">Edit</a>
-              <a color="primary" mat-raised-button>Take</a>
+              <a
+                mat-raised-button
+                color="primary"
+                [routerLink]="['/assessments', quiz.id]"
+              >
+                Take
+              </a>
             </mat-card-actions>
           </mat-card-content>
         </mat-card>
