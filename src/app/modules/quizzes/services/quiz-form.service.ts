@@ -34,42 +34,6 @@ export class QuizFormService {
       options: this.fb.array([this.toOptionFormGroup(new QuestionOption())]),
     })
 
-    // if (options?.type !== 'multiple choice' || options?.type !== 'dropdown') {
-    //   const options = this.fb.array([
-    //     this.toOptionFormGroup(new QuestionOption()),
-    //   ])
-    //   form.addControl('options', options)
-    // }
-
-    return form
-  }
-
-  /**
-   * Converts a question model to a `FormGroup`.
-   * @param question The question model.
-   * @returns A new instance of a `FormGroup`.
-   */
-  toQuestionFormGroup(question: Question): FormGroup {
-    const form = this.fb.group({
-      text: question.text,
-      type: question.type,
-      hint: question.hint,
-      explanation: question.explanation,
-      imageURL: question.imageURL,
-      imageCaption: question.imageCaption,
-    })
-
-    const optionsFormGroups: FormGroup[] = []
-    if (question.options) {
-      for (let option of question.options) {
-        optionsFormGroups.push(this.toOptionFormGroup(option))
-      }
-
-      if (optionsFormGroups.length > 0) {
-        form.addControl('options', this.fb.array(optionsFormGroups))
-      }
-    }
-
     return form
   }
 
@@ -125,11 +89,43 @@ export class QuizFormService {
       isAnswer: this.fb.control(option ? option.isAnswer : false, [
         Validators.required,
       ]),
+      isChecked: this.fb.control(option ? option.isChecked : false, [
+        Validators.required,
+      ]),
       text: this.fb.control(option ? option.text : '', [
         Validators.required,
         Validators.maxLength(2048),
       ]),
     })
+  }
+
+  /**
+   * Converts a question model to a `FormGroup`.
+   * @param question The question model.
+   * @returns A new instance of a `FormGroup`.
+   */
+  toQuestionFormGroup(question: Question): FormGroup {
+    const form = this.fb.group({
+      text: question.text,
+      type: question.type,
+      hint: question.hint,
+      explanation: question.explanation,
+      imageURL: question.imageURL,
+      imageCaption: question.imageCaption,
+    })
+
+    const optionsFormGroups: FormGroup[] = []
+    if (question.options) {
+      for (let option of question.options) {
+        optionsFormGroups.push(this.toOptionFormGroup(option))
+      }
+
+      if (optionsFormGroups.length > 0) {
+        form.addControl('options', this.fb.array(optionsFormGroups))
+      }
+    }
+
+    return form
   }
 
   /**

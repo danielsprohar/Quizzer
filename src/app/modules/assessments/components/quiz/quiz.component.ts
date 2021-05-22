@@ -29,4 +29,14 @@ export class QuizComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe()
     }
   }
+
+  // =========================================================================
+  // Event Handlers
+  // =========================================================================
+
+  nextQuestion() {}
+
+  previousQuestion() {}
+
+  submit() {}
 }
