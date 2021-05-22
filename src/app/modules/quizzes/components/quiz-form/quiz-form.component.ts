@@ -153,6 +153,7 @@ export class QuizFormComponent implements OnInit, OnDestroy {
     this.quizService
       .add(quiz)
       .then(() => {
+        this.snackbar.success('Saved!')
         this.router.navigate(['/quizzes'])
       })
       .catch((err) => {

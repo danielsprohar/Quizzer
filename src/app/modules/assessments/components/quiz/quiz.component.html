@@ -1,1 +1,14 @@
-<p>quiz works!</p>
+<h1>{{ quiz.name }}</h1>
+<h3>{{ quiz.subject }}</h3>
+<mat-divider></mat-divider>
+
+<mat-list>
+  <mat-list-item *ngFor="let question of quiz.questions; let i = index">
+    <span matLine>{{ question.text }}</span>
+    <ul matLine>
+      <li *ngFor="let option of question.options">
+        {{ option.text }}
+      </li>
+    </ul>
+  </mat-list-item>
+</mat-list>

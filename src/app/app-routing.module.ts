@@ -15,6 +15,7 @@ const routes: Routes = [
       import('./modules/assessments/assessments.module').then(
         (m) => m.AssessmentsModule
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'quizzes',
