@@ -6,7 +6,6 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog'
 import { MatSnackBarModule } from '@angular/material/snack-bar'
-import { Collections } from 'src/app/constants/collections'
 import { angularFirestoreSpy } from 'src/app/mocks/angular-firestore-mock'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 import { NewSubjectDialogComponent } from './new-subject-dialog.component'
@@ -63,8 +62,5 @@ describe('NewSubjectDialogComponent', () => {
     component.name.setValue('Computer Science')
     component.save()
     expect(angularFirestoreSpy.collection).toHaveBeenCalled()
-    expect(angularFirestoreSpy.collection).toHaveBeenCalledWith(
-      Collections.SUBJECTS
-    )
   })
 })

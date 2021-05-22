@@ -39,14 +39,29 @@ export class NewSubjectDialogComponent implements OnInit {
     this.dialogRef.close()
   }
 
-  save(): void {
-    this.appState.isLoading(true)
+  async save(): Promise<void> {
     const subjectName = (this.name.value as string).trim()
-    this.firestore
-      .collection(Collections.SUBJECTS)
-      .add({ name: subjectName })
-      .then(() => this.snackbar.success('Saved!'))
-      .catch((err) => this.snackbar.warn(err.message))
-      .finally(() => this.appState.isLoading(false))
+    const querySnapshot = await this.firestore
+      .collection(Collections.SUBJECTS, (ref) =>
+        ref.where('name', '==', subjectName)
+      )
+      .get()
+      .toPromise()
+
+    const subjectExists = querySnapshot.size > 0 ? true : false
+    if (subjectExists) {
+      this.snackbar.info('Subject already exists')
+    } else {
+      this.appState.isLoading(true)
+      this.firestore
+        .collection(Collections.SUBJECTS)
+        .add({ name: subjectName })
+        .then(() => this.snackbar.success('Saved!'))
+        .catch((err) => this.snackbar.warn(err.message))
+        .finally(() => {
+          this.appState.isLoading(false)
+          this.dialogRef.close(this.name.value)
+        })
+    }
   }
 }

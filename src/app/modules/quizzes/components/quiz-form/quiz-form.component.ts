@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog'
 import { ActivatedRoute, Router } from '@angular/router'
 import firebase from 'firebase/app'
 import { Observable, Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
 import { NewSubjectDialogComponent } from 'src/app/components/new-subject-dialog/new-subject-dialog.component'
 import { Collections } from 'src/app/constants/collections'
 import { CourseSubject } from 'src/app/models/course-subject'
@@ -110,7 +109,12 @@ export class QuizFormComponent implements OnInit, OnDestroy {
   }
 
   addSubject() {
-    this.dialog.open(NewSubjectDialogComponent)
+    const dialogRef = this.dialog.open(NewSubjectDialogComponent)
+    dialogRef.afterClosed().subscribe((newSubjectName) => {
+      if (newSubjectName) {
+        this.subject.setValue(newSubjectName)
+      }
+    })
   }
 
   deleteQuestion(index: number) {
