@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router'
 import { QuestionsResolver } from '../questions/resolvers/questions.resolver'
 import { QuizResolver } from '../quizzes/resolvers/quiz.resolver'
 import { AssessmentsComponent } from './assessments.component'
+import { AssessmentSummaryComponent } from './components/assessment-summary/assessment-summary.component'
 import { QuizComponent } from './components/quiz/quiz.component'
 
 const routes: Routes = [
@@ -15,8 +16,12 @@ const routes: Routes = [
     component: QuizComponent,
     resolve: {
       quiz: QuizResolver,
-      questions: QuestionsResolver
-    }
+      questions: QuestionsResolver,
+    },
+  },
+  {
+    path: ':id/summary',
+    component: AssessmentSummaryComponent,
   },
 ]
 

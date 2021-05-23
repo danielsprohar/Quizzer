@@ -1,8 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
+import { QuizService } from 'src/app/modules/quizzes/services/quiz.service'
+import { AppStateService } from 'src/app/services/app-state.service'
+import { SnackbarService } from 'src/app/services/snackbar.service'
+import { AssessmentService } from '../../services/assessment.service'
 
 @Component({
   selector: 'app-quiz',
@@ -13,7 +17,14 @@ export class QuizComponent implements OnInit, OnDestroy {
   private subscription: Subscription
   quiz: Quiz
 
-  constructor(private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly assessmentService: AssessmentService,
+    private readonly quizService: QuizService,
+    private readonly snackbar: SnackbarService,
+    private readonly appState: AppStateService
+  ) {}
 
   ngOnInit(): void {
     this.subscription = this.route.data.subscribe((data) => {
@@ -39,10 +50,13 @@ export class QuizComponent implements OnInit, OnDestroy {
   previousQuestion() {}
 
   submit() {
-    // TODO: Submit a quiz
-    console.log(this.quiz)
-
-    // Iterate over each question and add a timestamp to "dateSubmitted"
-    // Fetch the question option from DB to grade the quiz
+    this.appState.isLoading(true)
+    this.assessmentService.assess(this.quiz)
+      .then((quiz) => this.quizService.update(quiz))
+      .then(() => {
+        this.router.navigate([''])
+      })
+      .catch()
+      .finally(() => this.appState.isLoading(false))
   }
 }
