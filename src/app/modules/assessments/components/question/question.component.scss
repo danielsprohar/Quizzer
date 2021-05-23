@@ -13,7 +13,7 @@
 // }
 
 // .image-caption-container {
-  
+
 // }
 
 // ===========================================================================
@@ -26,13 +26,14 @@
   gap: 16px;
 }
 
-.option-overlay {
-  border: 1px solid #dadce0;
+.option-container {
+  border: 1px solid rgba($color: #fff, $alpha: 0.3);
   border-radius: 5px;
 }
 
-.option-overlay:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+.option-container:hover {
+  background-color: rgba($color: #000000, $alpha: 0.04);
+  border-color: #fff;
 }
 
 .option {

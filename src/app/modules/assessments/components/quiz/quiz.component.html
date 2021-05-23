@@ -5,4 +5,8 @@
   <ng-container *ngFor="let question of quiz.questions; let i = index">
     <app-question [question]="question"></app-question>
   </ng-container>
+
+  <div class="btn-bar">
+    <button mat-raised-button color="primary">Submit</button>
+  </div>
 </div>

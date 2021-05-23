@@ -143,7 +143,7 @@ export class QuizFormService {
         Validators.maxLength(4096),
       ]),
       subject: this.fb.control(quiz ? quiz.subject : '', [Validators.required]),
-      visibility: this.fb.control(quiz ? quiz.description : 'public', [
+      visibility: this.fb.control(quiz ? quiz.visibility : 'private', [
         Validators.required,
       ]),
       questions: this.fb.array([]),

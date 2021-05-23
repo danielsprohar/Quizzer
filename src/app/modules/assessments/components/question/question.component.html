@@ -40,25 +40,20 @@
           <!-- Short Answer container -->
           <!-- ================================== -->
           <div *ngSwitchCase="'short answer'">
-            <mat-form-field>
+            <mat-form-field class="full-width" appearance="outline">
               <input
                 matInput
                 type="text"
                 aria-label="User input for a short answer type question"
                 formControlName="input"
               />
-              <textarea
-                matInput
-                aria-label="User input for a paragraph type question."
-                formControlName="input"
-              ></textarea>
             </mat-form-field>
           </div>
           <!-- ================================== -->
           <!-- Paragraph container -->
           <!-- ================================== -->
           <div *ngSwitchCase="'paragraph'">
-            <mat-form-field>
+            <mat-form-field class="full-width" appearance="outline">
               <textarea
                 matInput
                 aria-label="User input for a paragraph type question."
@@ -77,7 +72,7 @@
             <ng-container
               *ngFor="let option of question.options; let i = index"
             >
-              <div class="option-overlay" [formGroupName]="i">
+              <div class="option-container" [formGroupName]="i">
                 <div class="option" (click)="toggleIsAnswer(i)">
                   <mat-checkbox
                     [formControl]="getOptionIsCheckedControl(i)"
