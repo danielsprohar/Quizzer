@@ -38,5 +38,11 @@ export class QuizComponent implements OnInit, OnDestroy {
 
   previousQuestion() {}
 
-  submit() {}
+  submit() {
+    // TODO: Submit a quiz
+    console.log(this.quiz)
+
+    // Iterate over each question and add a timestamp to "dateSubmitted"
+    // Fetch the question option from DB to grade the quiz
+  }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/firestore'
 import { FormArray, FormGroup } from '@angular/forms'
 import { QuestionOption } from 'src/app/models/question-option'
+import { Quiz } from 'src/app/models/quiz'
 import { QuizFormService } from '../../quizzes/services/quiz-form.service'
 
 @Injectable({
@@ -12,6 +13,10 @@ export class AssessmentService {
     private readonly firestore: AngularFirestore,
     private readonly qfs: QuizFormService
   ) {}
+
+  assess(quiz: Quiz) {
+    
+  }
 
   updateQuestion(questionId: string, options: QuestionOption[]) {
     // TODO: Update a question while taking an assessment

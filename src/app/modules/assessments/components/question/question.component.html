@@ -28,9 +28,15 @@
           <!-- Dropdown container -->
           <!-- ================================== -->
           <div *ngSwitchCase="'dropdown'">
-            <mat-form-field>
-              <mat-select formControlName="selectInput">
-                <mat-option *ngFor="let option of question.options">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-select
+                formControlName="selectInput"
+                (selectionChange)="updateUserSelectInput()"
+              >
+                <mat-option
+                  *ngFor="let option of question.options"
+                  [value]="option.text"
+                >
                   {{ option.text }}
                 </mat-option>
               </mat-select>
@@ -40,12 +46,13 @@
           <!-- Short Answer container -->
           <!-- ================================== -->
           <div *ngSwitchCase="'short answer'">
-            <mat-form-field class="full-width" appearance="outline">
+            <mat-form-field class="full-width" appearance="fill">
               <input
                 matInput
                 type="text"
                 aria-label="User input for a short answer type question"
-                formControlName="input"
+                formControlName="userSubmissionText"
+                (blur)="updateUserSubmissionText('userSubmissionText')"
               />
             </mat-form-field>
           </div>
@@ -53,11 +60,12 @@
           <!-- Paragraph container -->
           <!-- ================================== -->
           <div *ngSwitchCase="'paragraph'">
-            <mat-form-field class="full-width" appearance="outline">
+            <mat-form-field class="full-width" appearance="fill">
               <textarea
                 matInput
                 aria-label="User input for a paragraph type question."
-                formControlName="input"
+                formControlName="userSubmissionText"
+                (blur)="updateUserSubmissionText('userSubmissionText')"
               ></textarea>
             </mat-form-field>
           </div>
@@ -73,7 +81,7 @@
               *ngFor="let option of question.options; let i = index"
             >
               <div class="option-container" [formGroupName]="i">
-                <div class="option" (click)="toggleIsAnswer(i)">
+                <div class="option" (click)="toggleMultipleChoiceSelection(i)">
                   <mat-checkbox
                     [formControl]="getOptionIsCheckedControl(i)"
                   ></mat-checkbox>

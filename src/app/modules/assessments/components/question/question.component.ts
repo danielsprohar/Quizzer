@@ -1,7 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms'
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms'
 import { Question } from 'src/app/models/question'
-import { QuizFormService } from 'src/app/modules/quizzes/services/quiz-form.service'
 import { AppStateService } from 'src/app/services/app-state.service'
 import { AssessmentService } from '../../services/assessment.service'
 
@@ -17,14 +22,13 @@ export class QuestionComponent implements OnInit {
   constructor(
     private readonly assessment: AssessmentService,
     private readonly appState: AppStateService,
-    private readonly qfs: QuizFormService,
     private readonly fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     if (this.question && this.question.options) {
       this.form = new FormGroup({
-        input: this.fb.control(''),
+        userSubmissionText: this.fb.control('', [Validators.maxLength(4096)]),
         selectInput: this.fb.control(''),
         options: this.assessment.toOptionsFormArray(this.question.options),
       })
@@ -35,8 +39,12 @@ export class QuestionComponent implements OnInit {
   // Getters
   // =========================================================================
 
-  get input() {
-    return this.form.get('input')!
+  get userSubmissionText() {
+    return this.form.get('userSubmissionText')!
+  }
+
+  get selectInput() {
+    return this.form.get('selectInput')!
   }
 
   get options() {
@@ -59,13 +67,51 @@ export class QuestionComponent implements OnInit {
     const questionType = this.question.type
     return questionType === 'multiple choice' ? true : false
   }
-  
+
   // =========================================================================
   // Event handlers
   // =========================================================================
 
-  toggleIsAnswer(index: number) {
+  /**
+   * Updated the selected option for a "dropdown" question type.
+   */
+  updateUserSelectInput() {
+    const options = this.question.options
+    const selectedOption = options.find(
+      (option) => option.text === this.selectInput.value
+    )
+    if (selectedOption) {
+      selectedOption.isChecked = true
+      options
+        .filter((option) => option.text !== selectedOption.text)
+        .forEach((otherOption) => (otherOption.isChecked = false))
+    }
+  }
+
+  /**
+   * Updates the user submission text for a "paragraph" or 
+   * "short answer" question type.
+   * @param controlName The control name
+   */
+  updateUserSubmissionText(controlName: string) {
+    const ctrl = this.form.get(controlName)
+    this.question.userSubmissionText = ctrl?.value
+  }
+
+  // =========================================================================
+  // Multiple choice
+  // =========================================================================
+
+  private updateSelectedOption(index: number) {
+    const selectedOption = this.question.options[index]
+    if (selectedOption) {
+      selectedOption.isChecked = !selectedOption.isChecked
+    }
+  }
+
+  toggleMultipleChoiceSelection(index: number) {
     const ctrl = this.getOptionIsCheckedControl(index)
     ctrl.setValue(!(ctrl.value as boolean))
+    this.updateSelectedOption(index)
   }
 }

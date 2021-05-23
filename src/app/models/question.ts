@@ -25,6 +25,8 @@ export class Question {
   type: QuestionType
   hint: string
   explanation: string
+  userSubmissionText: string
+  userSelectedOptions?: string[]
   isAttempted: boolean
   isCorrect: any
   imageURL: string
@@ -40,6 +42,8 @@ export class Question {
     type?: QuestionType
     hint?: string
     explanation?: string
+    userSubmissionText?: string
+    userSelectedOptions?: string[]
     isAttempted?: boolean
     isCorrect?: any
     imageURL?: string
