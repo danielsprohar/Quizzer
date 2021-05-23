@@ -22,6 +22,7 @@ export class QuizFormService {
    */
   newQuestionFormGroup(): FormGroup {
     const form = this.fb.group({
+      id: this.fb.control(undefined),
       text: this.fb.control('', [
         Validators.required,
         Validators.maxLength(4096),
@@ -40,6 +41,7 @@ export class QuizFormService {
   toQuestion(questionForm: AbstractControl): Question {
     const f = questionForm
     const question = new Question({
+      id: f.get('id')?.value,
       text: f.get('text')?.value,
       type: f.get('type')?.value,
       hint: f.get('hint')?.value,
@@ -106,12 +108,13 @@ export class QuizFormService {
    */
   toQuestionFormGroup(question: Question): FormGroup {
     const form = this.fb.group({
-      text: question.text,
-      type: question.type,
-      hint: question.hint,
-      explanation: question.explanation,
-      imageURL: question.imageURL,
-      imageCaption: question.imageCaption,
+      id: this.fb.control(question.id),
+      text: this.fb.control(question.text, [Validators.maxLength(4096)]),
+      type: this.fb.control(question.type),
+      hint: this.fb.control(question.hint, [Validators.maxLength(4096)]),
+      explanation: this.fb.control(question.explanation, [Validators.maxLength(4096)]),
+      imageURL: this.fb.control(question.imageURL),
+      imageCaption: this.fb.control(question.imageCaption),
     })
 
     const optionsFormGroups: FormGroup[] = []
@@ -135,6 +138,7 @@ export class QuizFormService {
    */
   toQuizFormGroup(quiz?: Quiz): FormGroup {
     const form = this.fb.group({
+      id: this.fb.control(quiz ? quiz.id : ''),
       name: this.fb.control(quiz ? quiz.name : '', [
         Validators.required,
         Validators.maxLength(2048),

@@ -5,6 +5,7 @@ import { Collections } from 'src/app/constants/collections'
 import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
 import firebase from 'firebase/app'
+import { QuestionOption } from 'src/app/models/question-option'
 
 @Injectable({
   providedIn: 'root',
@@ -24,21 +25,17 @@ export class QuizService {
 
     const batch = this.afs.firestore.batch()
     const timestamp = firebase.firestore.Timestamp.fromDate(new Date())
-    batch.set(
-      quizRef,
-      {
-        name: quiz.name,
-        subject: quiz.subject,
-        description: quiz.description,
-        numberOfQuestions: quiz.numberOfQuestions,
-        ownerId: quiz.ownerId,
-        editors: quiz.editors,
-        visibility: quiz.visibility,
-        createdOn: timestamp,
-        modifiedOn: timestamp,
-      },
-      { merge: true }
-    )
+    batch.set(quizRef, {
+      name: quiz.name,
+      subject: quiz.subject,
+      description: quiz.description,
+      numberOfQuestions: quiz.numberOfQuestions,
+      ownerId: quiz.ownerId,
+      editors: quiz.editors,
+      visibility: quiz.visibility,
+      createdOn: timestamp,
+      modifiedOn: timestamp,
+    })
 
     // Add each question as a document to the subcollection
     const questionsRef = quizRef.collection(Collections.QUIZ_QUESTIONS)
@@ -110,15 +107,86 @@ export class QuizService {
       )
   }
 
+  // =========================================================================
+  // Update
+  // =========================================================================
+
+  toUpdateOptionModels(options: QuestionOption[]) {
+    const models: any[] = []
+    for (let option of options) {
+      models.push({
+        text: option.text,
+        isAnswer: option.isAnswer,
+        isChecked: option.isChecked,
+      })
+    }
+
+    return models
+  }
+
+  // =========================================================================
+
+  private toUpdateQuestionModel(question: Question): any {
+    const model: any = {
+      text: question.text,
+      type: question.type,
+      hint: question.hint,
+      explanation: question.explanation,
+      isAttempted: question.isAttempted || false,
+      isCorrect: question.isCorrect || null,
+      imageURL: question.imageURL,
+      imageCaption: question.imageCaption,
+      dateSubmitted: question.dateSubmitted || null,
+      modifiedOn: firebase.firestore.Timestamp.fromDate(new Date()),
+    }
+
+    if (question.options && question.options.length > 0) {
+      model['options'] = firebase.firestore.FieldValue.arrayUnion(
+        ...this.toUpdateOptionModels(question.options)
+      )
+    }
+
+    return model
+  }
+
+  // =========================================================================
+
+  toUpdateQuizModel(quiz: Quiz): any {
+    return {
+      name: quiz.name,
+      subject: quiz.subject,
+      description: quiz.description,
+      numberOfQuestions: quiz.numberOfQuestions,
+      ownerId: quiz.ownerId,
+      editors: quiz.editors,
+      visibility: quiz.visibility,
+      modifiedOn: firebase.firestore.Timestamp.fromDate(new Date()),
+    }
+  }
+
   /**
    * Updates a `Quiz` in the database.
    * @param quiz The quiz.
    * @returns A `Promise` after the database operation completes.
    */
   update(quiz: Quiz) {
-    return this.afs
-      .collection(Collections.QUIZZES)
-      .doc<Quiz>(quiz.id)
-      .update({ ...quiz })
+    const quizDoc = this.afs.collection(Collections.QUIZZES).doc(quiz.id)
+    const batch = this.afs.firestore.batch()
+    batch.update(quizDoc.ref, this.toUpdateQuizModel(quiz))
+
+    // Update each question
+    if (quiz.questions) {
+      for (let question of quiz.questions) {
+        const questionDoc = quizDoc
+          .collection(Collections.QUIZ_QUESTIONS)
+          .doc(question.id ? question.id : undefined)
+
+        batch.set(questionDoc.ref, this.toUpdateQuestionModel(question), {
+          merge: true,
+        })
+      }
+    }
+
+    return batch.commit()
   }
 }

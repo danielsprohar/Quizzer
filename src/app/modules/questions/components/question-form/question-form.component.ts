@@ -37,7 +37,7 @@ import { ImageService } from 'src/app/services/image.service'
           marginRight: '110%',
         })
       ),
-      transition('exists => removed', [animate('0.5s')]),
+      transition('exists => removed', [animate('0.25s')]),
     ]),
   ],
 })

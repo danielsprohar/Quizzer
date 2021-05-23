@@ -23,6 +23,8 @@ import { QuizService } from '../../services/quiz.service'
 })
 export class QuizFormComponent implements OnInit, OnDestroy {
   private subscription: Subscription
+  private isEditMode: boolean = false
+
   subjects$: Observable<CourseSubject[]>
   form: FormGroup
   quizId: string
@@ -46,6 +48,8 @@ export class QuizFormComponent implements OnInit, OnDestroy {
 
     this.subscription = this.route.data.subscribe((data) => {
       if (data.quiz && data.questions) {
+        // User is editing a quiz.
+        this.isEditMode = true
         const quiz = data.quiz as Quiz
         this.quizId = quiz.id as string
         quiz.questions = data.questions as Question[]
@@ -121,10 +125,35 @@ export class QuizFormComponent implements OnInit, OnDestroy {
     this.questions.removeAt(index)
   }
 
+  private addQuiz(quiz: Quiz) {
+    this.quizService
+      .add(quiz)
+      .then(() => {
+        this.snackbar.success('Saved!')
+        this.router.navigate(['/quizzes'])
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => this.appState.isLoading(false))
+  }
+
+  private updateQuiz(quiz: Quiz) {
+    this.quizService
+      .update(quiz)
+      .then(() => {
+        this.snackbar.success('Saved!')
+        this.router.navigate(['/quizzes'])
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => this.appState.isLoading(false))
+  }
+
   async save() {
     if (this.form.invalid) {
-      // this.snackbar.open('Please fill in all required fields');
-      console.log('form is invalid')
+      this.snackbar.info('Please fill in all required fields')
       return
     }
 
@@ -150,15 +179,10 @@ export class QuizFormComponent implements OnInit, OnDestroy {
       createdOn: firebase.firestore.Timestamp.fromDate(new Date()),
     })
 
-    this.quizService
-      .add(quiz)
-      .then(() => {
-        this.snackbar.success('Saved!')
-        this.router.navigate(['/quizzes'])
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-      .finally(() => this.appState.isLoading(false))
+    if (this.isEditMode) {
+      this.updateQuiz(quiz)
+    } else {
+      this.addQuiz(quiz)
+    }
   }
 }
