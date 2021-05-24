@@ -136,7 +136,6 @@ export class QuizService {
       isCorrect: question.isCorrect || null,
       imageURL: question.imageURL,
       imageCaption: question.imageCaption,
-      dateSubmitted: question.dateSubmitted || null,
       modifiedOn: firebase.firestore.Timestamp.fromDate(new Date()),
     }
 

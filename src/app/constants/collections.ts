@@ -1,4 +1,8 @@
 export enum Collections {
+  /**
+   * A subcollection of the `Users` collection.
+   */
+  ASSESSMENTS = 'assessments',
   COURSES = 'courses',
   COURSE_ENROLLEES = 'course_enrollees',
   SUBJECTS = 'subjects',
@@ -14,7 +18,7 @@ export enum Collections {
   QUIZZES = 'quizzes',
 
   /**
-   * A subcollection of the top-level `Quizzes` collection
+   * A subcollection of the `Quizzes` collection
    */
   QUIZ_QUESTIONS = 'questions',
 }

@@ -5,6 +5,12 @@ import { QuestionOption } from 'src/app/models/question-option'
 import { Quiz } from 'src/app/models/quiz'
 import { QuizFormService } from '../../quizzes/services/quiz-form.service'
 import { QuizService } from '../../quizzes/services/quiz.service'
+import {
+  Assessment,
+  UserSubmittedQuiz,
+  UserSubmittedQuestion,
+} from '../models/assessment'
+import firebase from 'firebase/app'
 
 @Injectable({
   providedIn: 'root',
@@ -41,7 +47,7 @@ export class AssessmentService {
    * @param expected The question that was fetched from the database
    * after the user submitted the quiz
    */
-  private assessMultipleChoice(actual: Question, expected: Question) {
+  private assessMultipleChoice(actual: Question, expected: Question): void {
     const correctAnswerChoices = expected.options.filter(
       (option) => option.isAnswer
     )
@@ -74,7 +80,7 @@ export class AssessmentService {
    * @param expected The quesiton that was fetched from the database
    * after the user submitted the quiz.
    */
-  private assessWrittenResponse(actual: Question, expected: Question) {
+  private assessWrittenResponse(actual: Question, expected: Question): void {
     actual.isCorrect =
       actual.userSubmissionText === expected.explanation ? true : false
   }
@@ -86,7 +92,7 @@ export class AssessmentService {
    * @param expected The questions that were fetched from the database
    * after the user submitted the quiz.
    */
-  private assessQuestions(actual: Question[], expected: Question[]) {
+  private assessQuestions(actual: Question[], expected: Question[]): void {
     if (actual.length !== expected.length) {
       throw new Error('Actual and expected are not the same length')
     }
@@ -100,7 +106,9 @@ export class AssessmentService {
     })
   }
 
-  async assess(quiz: Quiz) {
+  // =========================================================================
+  
+  async assess(quiz: Quiz): Promise<Assessment> {
     if (!quiz.id) throw new Error('Quiz id is null')
     if (!quiz.questions) throw new Error('Questions are not defined')
 
@@ -110,8 +118,57 @@ export class AssessmentService {
 
     this.assessQuestions(quiz.questions!, expectedQuestions)
     this.calcGrade(quiz)
-    return quiz
+    return this.buildAssessment(quiz)
   }
+
+  // =========================================================================
+
+  private buildAssessment(quiz: Quiz): Assessment {
+    if (!quiz.questions) throw new Error('Questions are undefined')
+    return {
+      createdOn: firebase.firestore.Timestamp.fromDate(new Date()),
+      quiz: this.buildUserSubmittedQuiz(quiz),
+      questions: this.buildUserSubmittedQuestions(quiz.questions),
+    }
+  }
+
+  // =========================================================================
+
+  private buildUserSubmittedQuiz(quiz: Quiz): UserSubmittedQuiz {
+    if (!quiz.id) throw new Error('Quiz ID is undefined')
+    if (!quiz.grade) throw new Error('Quiz grade is undefined')
+    return {
+      id: quiz.id,
+      name: quiz.name,
+      subject: quiz.subject,
+      grade: quiz.grade,
+    }
+  }
+
+  // =========================================================================
+
+  private buildUserSubmittedQuestions(questions: Question[]) {
+    const usq: UserSubmittedQuestion[] = []
+    for (let question of questions) {
+      const userSelectedOptions = question.options
+        .filter((option) => option.isChecked)
+        .map((option) => option.text)
+
+      usq.push({
+        id: question.id,
+        text: question.text,
+        type: question.type,
+        explanation: question.explanation,
+        isCorrect: question.isCorrect,
+        userInputText: question.userSubmissionText,
+        userSelectedOptions: userSelectedOptions,
+      })
+    }
+
+    return usq
+  }
+
+  // =========================================================================
 
   private calcGrade(quiz: Quiz) {
     if (!quiz.questions) throw new Error('Questions are not defined')

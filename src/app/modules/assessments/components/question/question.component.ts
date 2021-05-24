@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms'
 import { Question } from 'src/app/models/question'
-import { AppStateService } from 'src/app/services/app-state.service'
 import { AssessmentService } from '../../services/assessment.service'
 
 @Component({
@@ -21,16 +20,20 @@ export class QuestionComponent implements OnInit {
 
   constructor(
     private readonly assessment: AssessmentService,
-    private readonly appState: AppStateService,
     private readonly fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     if (this.question && this.question.options) {
-      this.form = new FormGroup({
+      this.form = this.fb.group({
         userSubmissionText: this.fb.control('', [Validators.maxLength(4096)]),
         selectInput: this.fb.control(''),
         options: this.assessment.toOptionsFormArray(this.question.options),
+      })
+    } else if (this.question) {
+      this.form = this.fb.group({
+        userSubmissionText: this.fb.control('', [Validators.maxLength(4096)]),
+        selectInput: this.fb.control(''),
       })
     }
   }
@@ -63,7 +66,7 @@ export class QuestionComponent implements OnInit {
   // Facilitators
   // =========================================================================
 
-  isMultipleChoiceQuestion() {
+  isMultipleChoiceQuestion(): boolean {
     const questionType = this.question.type
     return questionType === 'multiple choice' ? true : false
   }
@@ -89,7 +92,7 @@ export class QuestionComponent implements OnInit {
   }
 
   /**
-   * Updates the user submission text for a "paragraph" or 
+   * Updates the user submission text for a "paragraph" or
    * "short answer" question type.
    * @param controlName The control name
    */

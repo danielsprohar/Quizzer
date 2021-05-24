@@ -8,10 +8,7 @@ export const questionTypes = [
   'dropdown',
 ]
 
-export const multipleOptionsType = [
-  'multiple choice',
-  'dropdown',
-]
+export const multipleOptionsType = ['multiple choice', 'dropdown']
 
 export type QuestionType =
   | 'short answer'
@@ -23,15 +20,14 @@ export class Question {
   id: string
   text: string
   type: QuestionType
-  hint: string
-  explanation: string
-  userSubmissionText: string
+  hint?: string
+  explanation?: string
+  userSubmissionText?: string
   userSelectedOptions?: string[]
-  isAttempted: boolean
+  isAttempted?: boolean
   isCorrect: any
-  imageURL: string
-  imageCaption: string
-  dateSubmitted: Date
+  imageURL?: string
+  imageCaption?: string
   options: QuestionOption[]
   createdOn: firebase.firestore.Timestamp
   modifiedOn: firebase.firestore.Timestamp
@@ -48,7 +44,6 @@ export class Question {
     isCorrect?: any
     imageURL?: string
     imageCaption?: string
-    dateSubmitted?: Date
     options?: QuestionOption[]
     createdOn?: firebase.firestore.Timestamp
     modifiedOn?: firebase.firestore.Timestamp
