@@ -47,8 +47,8 @@ export class AssessmentService {
   private assessWrittenResponse(actual: Question, expected: Question): void {
     // TODO: Add a Document Distance algorithm
     actual.isCorrect =
-      actual.userSubmissionText?.toUpperCase() ===
-      expected.explanation?.toUpperCase()
+      actual.userSubmissionText?.toUpperCase().trim() ===
+      expected.explanation?.toUpperCase().trim()
   }
 
   /**
@@ -112,6 +112,16 @@ export class AssessmentService {
 
   // =========================================================================
 
+  private buildUserSelectedOptions(question: Question) {
+    if (!question.options) return undefined
+    if (question.options.length === 0) return undefined
+    return question.options
+      .filter((option) => option.isChecked)
+      .map((option) => option.text)
+  }
+
+  // =========================================================================
+
   private buildUserSubmittedQuestions(
     questions: Question[]
   ): UserSubmittedQuestion[] {
@@ -124,9 +134,7 @@ export class AssessmentService {
           explanation: question.explanation,
           isCorrect: question.isCorrect,
           userInputText: question.userSubmissionText,
-          userSelectedOptions: question.options
-            .filter((option) => option.isChecked)
-            .map((option) => option.text),
+          userSelectedOptions: this.buildUserSelectedOptions(question),
         } as UserSubmittedQuestion)
     )
   }

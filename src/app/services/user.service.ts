@@ -20,6 +20,6 @@ export class UserService {
       .collection(Collections.USERS)
       .doc(user.uid)
       .collection(Collections.ASSESSMENTS)
-      .add(assessment)
+      .add(JSON.parse(JSON.stringify(assessment)))
   }
 }

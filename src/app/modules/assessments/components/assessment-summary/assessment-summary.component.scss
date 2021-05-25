@@ -1,4 +1,15 @@
+.wrapper {
+  margin: 0 auto 64px;
+}
 .assessment-results-container {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+}
+
+.questions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 16px auto;
 }

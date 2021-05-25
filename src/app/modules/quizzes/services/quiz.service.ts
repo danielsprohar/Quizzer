@@ -95,16 +95,27 @@ export class QuizService {
       .collection(Collections.QUIZZES)
       .doc(quizId)
       .collection(Collections.QUIZ_QUESTIONS)
-      .stateChanges()
+      .get()
       .pipe(
-        map((actions) =>
-          actions.map((action) => {
-            const question = action.payload.doc.data() as Question
-            question.id = action.payload.doc.id
+        map((snapshot) =>
+          snapshot.docs.map((doc) => {
+            const question = doc.data() as Question
+            question.id = doc.id
             return question
           })
         )
       )
+    // .stateChanges()
+    // .pipe(
+    //   map((actions) =>
+    //     actions.map((action) => {
+    //       const question = action.payload.doc.data() as Question
+    //       question.id = action.payload.doc.id
+    //       console.log(question)
+    //       return question
+    //     })
+    //   )
+    // )
   }
 
   // =========================================================================

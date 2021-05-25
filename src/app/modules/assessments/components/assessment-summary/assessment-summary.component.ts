@@ -26,7 +26,6 @@ export class AssessmentSummaryComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.appState.isLoading(true)
     this.routeDataSubscription = this.route.data.subscribe(
       (data) => {
         if (data.assessment) {
@@ -40,8 +39,7 @@ export class AssessmentSummaryComponent implements OnInit, OnDestroy {
         console.error(err)
         this.snackbar.warn('Uh oh. Something went wrong :/')
         this.router.navigate(['/quizzes'])
-      },
-      () => this.appState.isLoading(false)
+      }
     )
   }
 
@@ -49,5 +47,9 @@ export class AssessmentSummaryComponent implements OnInit, OnDestroy {
     if (this.routeDataSubscription) {
       this.routeDataSubscription.unsubscribe()
     }
+  }
+
+  getUserSubmittedQuestion(index: number) {
+    return this.assessment.questions[index]
   }
 }

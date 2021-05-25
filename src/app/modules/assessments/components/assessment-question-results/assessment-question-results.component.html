@@ -1,36 +1,61 @@
 <ng-container *ngIf="question && userSubmittedQuestion">
-  <mat-card>
+  <mat-card
+    [ngClass]="
+      userSubmittedQuestion.isCorrect
+        ? 'question-is-correct'
+        : 'question-is-incorrect'
+    "
+  >
     <mat-card-header>
       <mat-card-title> {{ question.text }} </mat-card-title>
     </mat-card-header>
     <mat-card-content>
+      <!-- ================================================= -->
+      <!-- Multiple choice -->
+      <!-- ================================================= -->
       <ng-container *ngIf="isMultipleChoice; else writtenResponse">
         <mat-list>
-          <ng-container *ngFor="let option of question.options; let i = index">
+          <ng-container
+            *ngFor="let option of question.options; index as i; last as isLast"
+          >
             <mat-list-item>
-              <mat-icon
-                mat-list-icon
-                [ngClass]="isOptionCorrect(i) ? 'is-correct' : 'is-incorrect'"
-              >
-                {{ isOptionCorrect(i) ? 'check' : 'close' }}
-              </mat-icon>
-              <div mat-line>{{ option.text }}</div>
-              <ng-container *ngIf="isUserSelection(i)">
-                <div mat-line>Your answer</div>
+              <!-- ========================== -->
+              <!-- Icons -->
+              <!-- ========================== -->
+              <ng-container *ngIf="isOptionCorrect(i); else incorrect">
+                <mat-icon mat-list-icon class="is-correct">check</mat-icon>
               </ng-container>
+              <ng-template #incorrect>
+                <mat-icon mat-list-icon class="is-incorrect">close</mat-icon>
+              </ng-template>
+              <!-- ========================== -->
+              <!-- Text -->
+              <!-- ========================== -->
+              <div mat-line>{{ option.text }}</div>
+              <div *ngIf="isUserSelection(i)" mat-line class="metadata">
+                Your answer
+              </div>
             </mat-list-item>
+            <ng-container *ngIf="!isLast">
+              <mat-divider></mat-divider>
+            </ng-container>
           </ng-container>
         </mat-list>
       </ng-container>
+
+      <!-- ================================================= -->
+      <!-- Written response -->
+      <!-- ================================================= -->
       <ng-template #writtenResponse>
         <mat-list>
-          <div mat-subheader>Correct answer</div>
           <mat-list-item>
-            {{ question.explanation }}
+            <div mat-line>{{ question.explanation }}</div>
+            <div mat-line class="metadata">Correct answer</div>
           </mat-list-item>
-          <div mat-subheader>Your answer</div>
+          <mat-divider></mat-divider>
           <mat-list-item>
-            {{ userSubmittedQuestion.userInputText }}
+            <div mat-line>{{ userSubmittedQuestion.userInputText }}</div>
+            <div mat-line class="metadata">Your answer</div>
           </mat-list-item>
         </mat-list>
       </ng-template>

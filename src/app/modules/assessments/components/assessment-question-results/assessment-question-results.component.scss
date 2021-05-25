@@ -1,7 +1,19 @@
+.question-is-correct {
+  border-left: 4px solid #4caf50;
+}
+
+.question-is-incorrect {
+  border-left: 4px solid #f44336;
+}
+
 .is-correct {
-  border-color: #4caf50;
+  color: #4caf50;
 }
 
 .is-incorrect {
-  border-color: #f44336;
+  color: #f44336;
+}
+
+.metadata {
+  font-style: italic;
 }
