@@ -7,10 +7,9 @@ import { QuizFormService } from '../../quizzes/services/quiz-form.service'
 import { QuizService } from '../../quizzes/services/quiz.service'
 import {
   Assessment,
-  UserSubmittedQuiz,
   UserSubmittedQuestion,
+  UserSubmittedQuiz,
 } from '../models/assessment'
-import firebase from 'firebase/app'
 
 @Injectable({
   providedIn: 'root',
@@ -20,26 +19,6 @@ export class AssessmentService {
     private readonly quizService: QuizService,
     private readonly qfs: QuizFormService
   ) {}
-
-  /**
-   * A helper function to compare strings
-   * when sorting an array of strings.
-   * @param a
-   * @param b
-   * @returns -1 if a < b; 1 if a > b; otherwise 0 (equal)
-   */
-  private stringComparator(a: string, b: string): number {
-    const strA = a.toUpperCase()
-    const strB = b.toUpperCase()
-    if (strA < strB) {
-      return -1
-    }
-    if (strA > strB) {
-      return 1
-    }
-    // Must be equal
-    return 0
-  }
 
   /**
    * Assesses a question of type: multiple choice, checkboxes, or drowdown.
@@ -59,20 +38,9 @@ export class AssessmentService {
     if (selectedAnswerChoices.length !== correctAnswerChoices.length) {
       actual.isCorrect = false
     } else {
-      correctAnswerChoices.sort((a, b) => this.stringComparator(a.text, b.text))
-      selectedAnswerChoices.sort((a, b) =>
-        this.stringComparator(a.text, b.text)
-      )
-
-      let isCorrect = true
-      for (let selectedOption of selectedAnswerChoices) {
-        if (!selectedOption.isChecked) {
-          isCorrect = false
-          break
-        }
-      }
-
-      actual.isCorrect = isCorrect
+      actual.isCorrect = selectedAnswerChoices
+        .map((q) => q.isChecked && q.isAnswer)
+        .reduce((prev, cur) => prev && cur)
     }
   }
 
