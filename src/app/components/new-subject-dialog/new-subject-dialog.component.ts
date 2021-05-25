@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/firestore'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialogRef } from '@angular/material/dialog'
 import { Collections } from 'src/app/constants/collections'
 import { AppStateService } from 'src/app/services/app-state.service'
@@ -31,7 +31,7 @@ export class NewSubjectDialogComponent implements OnInit {
     })
   }
 
-  get name() {
+  get name(): AbstractControl {
     return this.form.get('name')!
   }
 
@@ -51,17 +51,20 @@ export class NewSubjectDialogComponent implements OnInit {
     const subjectExists = querySnapshot.size > 0 ? true : false
     if (subjectExists) {
       this.snackbar.info('Subject already exists')
-    } else {
+      return
+    }
+
+    try {
       this.appState.isLoading(true)
-      this.firestore
+      await this.firestore
         .collection(Collections.SUBJECTS)
         .add({ name: subjectName })
-        .then(() => this.snackbar.success('Saved!'))
-        .catch((err) => this.snackbar.warn(err.message))
-        .finally(() => {
-          this.appState.isLoading(false)
-          this.dialogRef.close(this.name.value)
-        })
+      this.snackbar.success('Saved!')
+    } catch (error) {
+      this.snackbar.warn(error.message)
+    } finally {
+      this.appState.isLoading(false)
+      this.dialogRef.close(this.name.value)
     }
   }
 }

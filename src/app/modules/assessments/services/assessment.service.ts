@@ -83,7 +83,7 @@ export class AssessmentService {
       .toPromise()
 
     this.assessQuestions(quiz.questions!, expectedQuestions)
-    this.calcGrade(quiz)
+    quiz.grade = this.calcGrade(quiz.questions)
     return this.buildAssessment(quiz)
   }
 
@@ -141,14 +141,14 @@ export class AssessmentService {
 
   // =========================================================================
 
-  private calcGrade(quiz: Quiz): void {
-    if (!quiz.questions) throw new Error('Questions are not defined')
-    const total = quiz.questions.length
-    const correct = quiz.questions.filter((q) => q.isCorrect).length
+  private calcGrade(questions: Question[]): number {
+    if (!questions) throw new Error('Questions are not defined')
+    const total = questions.length
+    const correct = questions.filter((q) => q.isCorrect).length
     const grade = (correct / total) * 100
     const floorGrade = Math.floor(grade)
     const remainder = grade - floorGrade
-    quiz.grade = remainder >= 0.5 ? Math.ceil(grade) : floorGrade
+    return remainder >= 0.5 ? Math.ceil(grade) : floorGrade
   }
 
   /**

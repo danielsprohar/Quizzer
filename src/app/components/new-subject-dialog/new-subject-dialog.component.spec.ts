@@ -17,7 +17,7 @@ describe('NewSubjectDialogComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NewSubjectDialogComponent],
-      imports: [MatDialogModule, MatSnackBarModule],
+      imports: [MatDialogModule, MatSnackBarModule, MatDialogModule],
       providers: [
         SnackbarService,
         {
