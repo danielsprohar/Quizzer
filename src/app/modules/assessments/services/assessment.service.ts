@@ -27,21 +27,15 @@ export class AssessmentService {
    * after the user submitted the quiz
    */
   private assessMultipleChoice(actual: Question, expected: Question): void {
-    const correctAnswerChoices = expected.options.filter(
-      (option) => option.isAnswer
-    )
+    const expectedChoices = expected.options.filter((option) => option.isAnswer)
+    const actualChoices = actual.options.filter((option) => option.isChecked)
 
-    const selectedAnswerChoices = actual.options.filter(
-      (option) => option.isChecked
-    )
-
-    if (selectedAnswerChoices.length !== correctAnswerChoices.length) {
-      actual.isCorrect = false
-    } else {
-      actual.isCorrect = selectedAnswerChoices
-        .map((q) => q.isChecked && q.isAnswer)
-        .reduce((prev, cur) => prev && cur)
-    }
+    actual.isCorrect =
+      actualChoices.length === expectedChoices.length
+        ? actualChoices
+            .map((q) => q.isChecked && q.isAnswer)
+            .reduce((prev, cur) => prev && cur)
+        : false
   }
 
   /**
@@ -53,7 +47,8 @@ export class AssessmentService {
   private assessWrittenResponse(actual: Question, expected: Question): void {
     // TODO: Add a Document Distance algorithm
     actual.isCorrect =
-      actual.userSubmissionText === expected.explanation ? true : false
+      actual.userSubmissionText?.toUpperCase() ===
+      expected.explanation?.toUpperCase()
   }
 
   /**

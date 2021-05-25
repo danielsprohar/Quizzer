@@ -11,9 +11,9 @@
 <ng-container *ngIf="questions$ | async as questions">
   <div class="questions-container">
     <ng-container *ngFor="let question of questions; let i = index">
-      <app-question-assessment-results
+      <app-assessment-question-results
         [question]="question"
-      ></app-question-assessment-results>
+      ></app-assessment-question-results>
     </ng-container>
 
     <div class="btn-bar">

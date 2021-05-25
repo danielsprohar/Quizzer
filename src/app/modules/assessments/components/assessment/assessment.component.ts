@@ -48,26 +48,22 @@ export class AssessmentComponent implements OnInit, OnDestroy {
   // Event Handlers
   // =========================================================================
 
-  submit() {
-    this.appState.isLoading(true)
+  async submit() {
+    try {
+      this.appState.isLoading(true)
+      const assessment = await this.assessmentService.assess(this.quiz)
+      this.cache.setAssessment(assessment)
 
-    this.assessmentService
-      .assess(this.quiz)
-      .then((assessment: Assessment) => {
-        this.cache.setAssessment(assessment)
-        return this.userService.addAssessment(assessment)
-      })
-      .then((doc) => {
-        this.cache.setQuiz(this.quiz)
-        this.snackbar.success("Done! Let's see how you did.")
-        this.router.navigate(['assessments', doc.id, 'summary'])
-      })
-      .catch((err) => {
-        this.snackbar.warn('Uh oh. Something went wrong :/')
-        this.cache.setAssessment(null)
-        this.cache.setQuiz(null)
-        console.error(err)
-      })
-      .finally(() => this.appState.isLoading(false))
+      const docRef = await this.userService.addAssessment(assessment)
+      this.snackbar.success("Done! Let's see how you did.")
+      this.router.navigate(['assessments', docRef.id, 'summary'])
+    } catch (error) {
+      this.snackbar.warn('Uh oh. Something went wrong :/')
+      this.cache.setAssessment(null)
+      this.cache.setQuiz(null)
+      console.error(error)
+    } finally {
+      this.appState.isLoading(false)
+    }
   }
 }

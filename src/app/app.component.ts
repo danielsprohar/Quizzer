@@ -71,6 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.isHandsetSubscription) {
       this.isHandsetSubscription.unsubscribe();
     }
+    localStorage.clear()
   }
 
   // =========================================================================
