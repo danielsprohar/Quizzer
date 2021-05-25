@@ -7,7 +7,6 @@ import { AppStateService } from 'src/app/services/app-state.service'
 import { CacheService } from 'src/app/services/cache.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 import { UserService } from 'src/app/services/user.service'
-import { Assessment } from '../../models/assessment'
 import { AssessmentService } from '../../services/assessment.service'
 
 @Component({

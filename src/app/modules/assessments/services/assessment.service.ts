@@ -112,7 +112,7 @@ export class AssessmentService {
 
   // =========================================================================
 
-  private buildUserSelectedOptions(question: Question) {
+  private buildUserSelectedOptions(question: Question): string[] | undefined {
     if (!question.options) return undefined
     if (question.options.length === 0) return undefined
     return question.options
@@ -141,7 +141,7 @@ export class AssessmentService {
 
   // =========================================================================
 
-  private calcGrade(quiz: Quiz) {
+  private calcGrade(quiz: Quiz): void {
     if (!quiz.questions) throw new Error('Questions are not defined')
     const total = quiz.questions.length
     const correct = quiz.questions.filter((q) => q.isCorrect).length
@@ -149,10 +149,6 @@ export class AssessmentService {
     const floorGrade = Math.floor(grade)
     const remainder = grade - floorGrade
     quiz.grade = remainder >= 0.5 ? Math.ceil(grade) : floorGrade
-  }
-
-  updateQuestion(questionId: string, options: QuestionOption[]) {
-    // TODO: Update a question while taking an assessment
   }
 
   /**

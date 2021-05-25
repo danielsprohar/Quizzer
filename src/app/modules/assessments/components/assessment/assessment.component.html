@@ -1,12 +1,16 @@
-<h1>{{ quiz.name }}</h1>
-<mat-divider></mat-divider>
+<ng-container *ngIf="quiz">
+  <h1>{{ quiz.name }}</h1>
+  <mat-divider></mat-divider>
 
-<div class="questions-container">
-  <ng-container *ngFor="let question of quiz.questions; let i = index">
-    <app-assessment-question [question]="question"></app-assessment-question>
-  </ng-container>
+  <div class="questions-container">
+    <ng-container *ngFor="let question of quiz.questions; let i = index">
+      <app-assessment-question [question]="question"></app-assessment-question>
+    </ng-container>
 
-  <div class="btn-bar">
-    <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+    <div class="btn-bar">
+      <button mat-raised-button color="primary" (click)="submit()">
+        Submit
+      </button>
+    </div>
   </div>
-</div>
+</ng-container>

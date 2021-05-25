@@ -1,27 +1,48 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-
-import { AssessmentComponent } from './assessment.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { MatSnackBarModule } from '@angular/material/snack-bar'
+import { RouterTestingModule } from '@angular/router/testing'
+import { userServiceSpy } from 'src/app/mocks/user-service-mock'
+import { quizServiceSpy } from 'src/app/modules/quizzes/mocks/quiz-service-mock'
+import { QuizService } from 'src/app/modules/quizzes/services/quiz.service'
+import { SnackbarService } from 'src/app/services/snackbar.service'
+import { UserService } from 'src/app/services/user.service'
+import { assessmentServiceSpy } from '../../mocks/assessment-service-mock'
+import { AssessmentService } from '../../services/assessment.service'
+import { AssessmentComponent } from './assessment.component'
 
 describe('AssessmentComponent', () => {
-  let component: AssessmentComponent;
-  let fixture: ComponentFixture<AssessmentComponent>;
+  let component: AssessmentComponent
+  let fixture: ComponentFixture<AssessmentComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AssessmentComponent ],
-      imports: [RouterTestingModule]
-    })
-    .compileComponents();
-  });
+      declarations: [AssessmentComponent],
+      imports: [RouterTestingModule, MatSnackBarModule],
+      providers: [
+        SnackbarService,
+        {
+          provide: AssessmentService,
+          useValue: assessmentServiceSpy,
+        },
+        {
+          provide: UserService,
+          useValue: userServiceSpy
+        },
+        {
+          provide: QuizService,
+          useValue: quizServiceSpy,
+        },
+      ],
+    }).compileComponents()
+  })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AssessmentComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(AssessmentComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

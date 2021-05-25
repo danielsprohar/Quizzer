@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Observable, Subscription } from 'rxjs'
 import { Question } from 'src/app/models/question'
 import { QuizService } from 'src/app/modules/quizzes/services/quiz.service'
-import { AppStateService } from 'src/app/services/app-state.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 import { Assessment } from '../../models/assessment'
 
@@ -20,7 +19,6 @@ export class AssessmentSummaryComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private appState: AppStateService,
     private quizService: QuizService,
     private snackbar: SnackbarService
   ) {}
