@@ -4,7 +4,7 @@ import { QuestionsResolver } from '../questions/resolvers/questions.resolver'
 import { QuizResolver } from '../quizzes/resolvers/quiz.resolver'
 import { AssessmentsComponent } from './assessments.component'
 import { AssessmentSummaryComponent } from './components/assessment-summary/assessment-summary.component'
-import { QuizComponent } from './components/quiz/quiz.component'
+import { AssessmentComponent } from './components/assessment/assessment.component'
 import { AssessmentResolver } from './resolvers/assessment.resolver'
 
 const routes: Routes = [
@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: ':id',
-    component: QuizComponent,
+    component: AssessmentComponent,
     resolve: {
       quiz: QuizResolver,
       questions: QuestionsResolver,

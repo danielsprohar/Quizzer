@@ -3,11 +3,11 @@ import { Question } from 'src/app/models/question'
 import { UserSubmittedQuestion } from '../../models/assessment'
 
 @Component({
-  selector: 'app-question-assessment-results',
-  templateUrl: './question-assessment-results.component.html',
-  styleUrls: ['./question-assessment-results.component.scss'],
+  selector: 'app-assessment-question-results',
+  templateUrl: './assessment-question-results.component.html',
+  styleUrls: ['./assessment-question-results.component.scss'],
 })
-export class QuestionAssessmentResultsComponent implements OnInit {
+export class AssessmentQuestionResultsComponent implements OnInit {
   @Input() question: Question
   @Input() userSubmittedQuestion: UserSubmittedQuestion
   isMultipleChoice = true

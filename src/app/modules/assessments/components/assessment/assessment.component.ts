@@ -11,11 +11,11 @@ import { Assessment } from '../../models/assessment'
 import { AssessmentService } from '../../services/assessment.service'
 
 @Component({
-  selector: 'app-quiz',
-  templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.scss'],
+  selector: 'app-assessment',
+  templateUrl: './assessment.component.html',
+  styleUrls: ['./assessment.component.scss'],
 })
-export class QuizComponent implements OnInit, OnDestroy {
+export class AssessmentComponent implements OnInit, OnDestroy {
   private subscription: Subscription
   quiz: Quiz
 

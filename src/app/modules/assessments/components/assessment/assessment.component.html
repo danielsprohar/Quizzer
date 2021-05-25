@@ -3,7 +3,7 @@
 
 <div class="questions-container">
   <ng-container *ngFor="let question of quiz.questions; let i = index">
-    <app-question [question]="question"></app-question>
+    <app-assessment-question [question]="question"></app-assessment-question>
   </ng-container>
 
   <div class="btn-bar">

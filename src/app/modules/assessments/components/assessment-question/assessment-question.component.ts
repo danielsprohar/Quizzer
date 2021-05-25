@@ -10,11 +10,11 @@ import { Question } from 'src/app/models/question'
 import { AssessmentService } from '../../services/assessment.service'
 
 @Component({
-  selector: 'app-question',
-  templateUrl: './question.component.html',
-  styleUrls: ['./question.component.scss'],
+  selector: 'app-assessment-question',
+  templateUrl: './assessment-question.component.html',
+  styleUrls: ['./assessment-question.component.scss'],
 })
-export class QuestionComponent implements OnInit {
+export class AssessmentQuestionComponent implements OnInit {
   @Input() question: Question
   form: FormGroup
 
