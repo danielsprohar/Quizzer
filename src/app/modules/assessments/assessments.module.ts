@@ -7,7 +7,8 @@ import { QuizComponent } from './components/quiz/quiz.component'
 import { MaterialDesignModule } from 'src/app/theme/material-design/material-design.module'
 import { QuestionComponent } from './components/question/question.component'
 import { ReactiveFormsModule } from '@angular/forms';
-import { AssessmentSummaryComponent } from './components/assessment-summary/assessment-summary.component'
+import { AssessmentSummaryComponent } from './components/assessment-summary/assessment-summary.component';
+import { QuestionAssessmentResultsComponent } from './components/question-assessment-results/question-assessment-results.component'
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { AssessmentSummaryComponent } from './components/assessment-summary/asse
     QuizComponent,
     QuestionComponent,
     AssessmentSummaryComponent,
+    QuestionAssessmentResultsComponent,
   ],
   imports: [
     CommonModule,

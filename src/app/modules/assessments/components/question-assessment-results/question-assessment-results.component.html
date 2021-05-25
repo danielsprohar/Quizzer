@@ -1,0 +1,39 @@
+<ng-container *ngIf="question && userSubmittedQuestion">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> {{ question.text }} </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <ng-container *ngIf="isMultipleChoice; else writtenResponse">
+        <mat-list>
+          <ng-container *ngFor="let option of question.options; let i = index">
+            <mat-list-item>
+              <mat-icon
+                mat-list-icon
+                [ngClass]="isOptionCorrect(i) ? 'is-correct' : 'is-incorrect'"
+              >
+                {{ isOptionCorrect(i) ? 'check' : 'close' }}
+              </mat-icon>
+              <div mat-line>{{ option.text }}</div>
+              <ng-container *ngIf="isUserSelection(i)">
+                <div mat-line>Your answer</div>
+              </ng-container>
+            </mat-list-item>
+          </ng-container>
+        </mat-list>
+      </ng-container>
+      <ng-template #writtenResponse>
+        <mat-list>
+          <div mat-subheader>Correct answer</div>
+          <mat-list-item>
+            {{ question.explanation }}
+          </mat-list-item>
+          <div mat-subheader>Your answer</div>
+          <mat-list-item>
+            {{ userSubmittedQuestion.userInputText }}
+          </mat-list-item>
+        </mat-list>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
