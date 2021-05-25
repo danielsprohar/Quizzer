@@ -16,7 +16,7 @@ import { Quiz } from 'src/app/models/quiz'
 })
 export class QuizResolver implements Resolve<Quiz> {
   constructor(
-    private readonly afs: AngularFirestore,
+    private readonly firestore: AngularFirestore,
     private readonly router: Router
   ) {}
 
@@ -25,7 +25,7 @@ export class QuizResolver implements Resolve<Quiz> {
     state: RouterStateSnapshot
   ): Observable<Quiz> {
     const id = route.paramMap.get('id')!
-    return this.afs
+    return this.firestore
       .collection(Collections.QUIZZES)
       .doc<Quiz>(id)
       .get()
@@ -35,10 +35,9 @@ export class QuizResolver implements Resolve<Quiz> {
             const quiz = doc.data() as Quiz
             quiz.id = doc.id
             return of(quiz)
-          } else {
-            this.router.navigate(['/quizzes'])
-            return EMPTY
           }
+          this.router.navigate(['/quizzes'])
+          return EMPTY
         })
       )
   }

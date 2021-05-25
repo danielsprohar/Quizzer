@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core'
 import { Question } from '../models/question'
 import { Quiz } from '../models/quiz'
+import { Assessment } from '../modules/assessments/models/assessment'
 
 enum CacheKeys {
+  ASSESSMENT = 'assessment',
   QUIZ = 'quiz',
   QUESTION = 'question',
 }
@@ -13,21 +15,42 @@ enum CacheKeys {
 export class CacheService {
   constructor() {}
 
-  setQuiz(quiz: Quiz) {
-    localStorage.setItem(CacheKeys.QUIZ, JSON.stringify(quiz))
+  setAssessment(assessment: Assessment | null) {
+    if (!assessment) {
+      localStorage.removeItem(CacheKeys.ASSESSMENT)
+    } else {
+      localStorage.setItem(CacheKeys.ASSESSMENT, JSON.stringify(assessment))
+    }
+  }
+
+  setQuiz(quiz: Quiz | null) {
+    if (!quiz) {
+      localStorage.removeItem(CacheKeys.QUIZ)
+    } else {
+      localStorage.setItem(CacheKeys.QUIZ, JSON.stringify(quiz))
+    }
   }
 
   setQuestion(question: Question) {
-    localStorage.setItem(CacheKeys.QUESTION, JSON.stringify(question))
+    if (!question) {
+      localStorage.removeItem(CacheKeys.QUESTION)
+    } else {
+      localStorage.setItem(CacheKeys.QUESTION, JSON.stringify(question))
+    }
+  }
+
+  getAssessment() {
+    const value = localStorage.getItem(CacheKeys.ASSESSMENT)
+    return value ? (JSON.parse(value) as Assessment) : null
   }
 
   getQuiz() {
     const value = localStorage.getItem(CacheKeys.QUIZ)
-    return value ? JSON.parse(value) : null
+    return value ? (JSON.parse(value) as Quiz) : null
   }
 
   getQuestion() {
-    const value = localStorage.getItem('question')
+    const value = localStorage.getItem(CacheKeys.QUESTION)
     return value ? JSON.parse(value) : null
   }
 }

@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import { Question } from 'src/app/models/question'
 
 export interface UserSubmittedQuestion {
   id: string
@@ -33,10 +34,18 @@ export class Assessment {
   quiz: UserSubmittedQuiz
   questions: UserSubmittedQuestion[]
   createdOn: firebase.firestore.Timestamp
+  correctQuestions: number
+  totalQuestions: number
 
   constructor(quiz: UserSubmittedQuiz, questions: UserSubmittedQuestion[]) {
     this.quiz = quiz
     this.questions = questions
     this.createdOn = firebase.firestore.Timestamp.fromDate(new Date())
+    this.totalQuestions = questions.length
+    this.correctQuestions = this.calcQuestionsCorrect(questions)
+  }
+
+  private calcQuestionsCorrect(userSubmittedQuestions: UserSubmittedQuestion[]) {
+    return userSubmittedQuestions.filter((quesiton) => quesiton.isCorrect).length
   }
 }

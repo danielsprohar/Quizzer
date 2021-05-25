@@ -58,20 +58,22 @@ export class AssessmentService {
 
     if (selectedAnswerChoices.length !== correctAnswerChoices.length) {
       actual.isCorrect = false
-    }
+    } else {
+      correctAnswerChoices.sort((a, b) => this.stringComparator(a.text, b.text))
+      selectedAnswerChoices.sort((a, b) =>
+        this.stringComparator(a.text, b.text)
+      )
 
-    correctAnswerChoices.sort((a, b) => this.stringComparator(a.text, b.text))
-    selectedAnswerChoices.sort((a, b) => this.stringComparator(a.text, b.text))
-
-    let isCorrect = true
-    for (let selectedOption of selectedAnswerChoices) {
-      if (!selectedOption.isChecked) {
-        isCorrect = false
-        break
+      let isCorrect = true
+      for (let selectedOption of selectedAnswerChoices) {
+        if (!selectedOption.isChecked) {
+          isCorrect = false
+          break
+        }
       }
-    }
 
-    actual.isCorrect = isCorrect
+      actual.isCorrect = isCorrect
+    }
   }
 
   /**
@@ -81,6 +83,7 @@ export class AssessmentService {
    * after the user submitted the quiz.
    */
   private assessWrittenResponse(actual: Question, expected: Question): void {
+    // TODO: Add a Document Distance algorithm
     actual.isCorrect =
       actual.userSubmissionText === expected.explanation ? true : false
   }
@@ -107,7 +110,7 @@ export class AssessmentService {
   }
 
   // =========================================================================
-  
+
   async assess(quiz: Quiz): Promise<Assessment> {
     if (!quiz.id) throw new Error('Quiz id is null')
     if (!quiz.questions) throw new Error('Questions are not defined')
@@ -125,11 +128,10 @@ export class AssessmentService {
 
   private buildAssessment(quiz: Quiz): Assessment {
     if (!quiz.questions) throw new Error('Questions are undefined')
-    return {
-      createdOn: firebase.firestore.Timestamp.fromDate(new Date()),
-      quiz: this.buildUserSubmittedQuiz(quiz),
-      questions: this.buildUserSubmittedQuestions(quiz.questions),
-    }
+    return new Assessment(
+      this.buildUserSubmittedQuiz(quiz),
+      this.buildUserSubmittedQuestions(quiz.questions)
+    )
   }
 
   // =========================================================================
@@ -147,25 +149,23 @@ export class AssessmentService {
 
   // =========================================================================
 
-  private buildUserSubmittedQuestions(questions: Question[]) {
-    const usq: UserSubmittedQuestion[] = []
-    for (let question of questions) {
-      const userSelectedOptions = question.options
-        .filter((option) => option.isChecked)
-        .map((option) => option.text)
-
-      usq.push({
-        id: question.id,
-        text: question.text,
-        type: question.type,
-        explanation: question.explanation,
-        isCorrect: question.isCorrect,
-        userInputText: question.userSubmissionText,
-        userSelectedOptions: userSelectedOptions,
-      })
-    }
-
-    return usq
+  private buildUserSubmittedQuestions(
+    questions: Question[]
+  ): UserSubmittedQuestion[] {
+    return questions.map(
+      (question) =>
+        ({
+          id: question.id,
+          text: question.text,
+          type: question.type,
+          explanation: question.explanation,
+          isCorrect: question.isCorrect,
+          userInputText: question.userSubmissionText,
+          userSelectedOptions: question.options
+            .filter((option) => option.isChecked)
+            .map((option) => option.text),
+        } as UserSubmittedQuestion)
+    )
   }
 
   // =========================================================================
@@ -173,12 +173,7 @@ export class AssessmentService {
   private calcGrade(quiz: Quiz) {
     if (!quiz.questions) throw new Error('Questions are not defined')
     const total = quiz.questions.length
-    let correct = 0
-    for (let question of quiz.questions) {
-      if (question.isCorrect) {
-        correct++
-      }
-    }
+    const correct = quiz.questions.filter((q) => q.isCorrect).length
     const grade = (correct / total) * 100
     const floorGrade = Math.floor(grade)
     const remainder = grade - floorGrade

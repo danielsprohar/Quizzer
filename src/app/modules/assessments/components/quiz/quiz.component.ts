@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs'
 import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
 import { AppStateService } from 'src/app/services/app-state.service'
+import { CacheService } from 'src/app/services/cache.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 import { UserService } from 'src/app/services/user.service'
 import { Assessment } from '../../models/assessment'
@@ -24,7 +25,8 @@ export class QuizComponent implements OnInit, OnDestroy {
     private readonly assessmentService: AssessmentService,
     private readonly snackbar: SnackbarService,
     private readonly appState: AppStateService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly cache: CacheService
   ) {}
 
   ngOnInit(): void {
@@ -46,25 +48,24 @@ export class QuizComponent implements OnInit, OnDestroy {
   // Event Handlers
   // =========================================================================
 
-  nextQuestion() {}
-
-  previousQuestion() {}
-
   submit() {
     this.appState.isLoading(true)
+
     this.assessmentService
       .assess(this.quiz)
-      .then((assessment: Assessment) =>
-        this.userService.addAssessment(assessment)
-      )
+      .then((assessment: Assessment) => {
+        this.cache.setAssessment(assessment)
+        return this.userService.addAssessment(assessment)
+      })
       .then((doc) => {
+        this.cache.setQuiz(this.quiz)
         this.snackbar.success("Done! Let's see how you did.")
-        this.router.navigate(['assessments', doc.id, 'summary'], {
-          skipLocationChange: true,
-        })
+        this.router.navigate(['assessments', doc.id, 'summary'])
       })
       .catch((err) => {
         this.snackbar.warn('Uh oh. Something went wrong :/')
+        this.cache.setAssessment(null)
+        this.cache.setQuiz(null)
         console.error(err)
       })
       .finally(() => this.appState.isLoading(false))

@@ -1,1 +1,22 @@
-<p>assessment-summary works!</p>
+<div class="assessment-results-container">
+  <h1>{{ assessment.quiz.name }}</h1>
+  <h2>Overview</h2>
+  <p>Correct: {{ assessment.correctQuestions }}</p>
+  <p>Total: {{ assessment.totalQuestions }}</p>
+  <p>Grade: {{ assessment.quiz.grade }}</p>
+</div>
+
+<mat-divider></mat-divider>
+
+<ng-container *ngIf="questions$ | async as questions">
+  <div class="questions-container">
+    <ng-container *ngFor="let question of questions; let i = index">
+      <app-question [question]="question"></app-question>
+    </ng-container>
+
+    <div class="btn-bar">
+      <button mat-button color="primary">Retry</button>
+      <button mat-raised-button color="primary">Continue</button>
+    </div>
+  </div>
+</ng-container>
