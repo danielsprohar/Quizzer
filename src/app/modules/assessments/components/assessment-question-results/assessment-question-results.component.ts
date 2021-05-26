@@ -25,20 +25,14 @@ export class AssessmentQuestionResultsComponent implements OnInit {
     }
   }
 
-  isOptionCorrect(index: number) {
-    const userSelectedOptions = this.userSubmittedQuestion.userSelectedOptions
-    if (!Array.isArray(userSelectedOptions)) {
-      throw new Error('User selected options are not defined')
-    }
+  isOptionCorrect(index: number): boolean {
     if (!Array.isArray(this.question.options)) {
       throw new Error('Question options are not defined')
     }
-    const expectedOptionText = this.question.options[index].text.toUpperCase()
-    const actualOptionText = userSelectedOptions[index].toUpperCase()
-    return expectedOptionText === actualOptionText
+    return this.question.options[index].isAnswer
   }
 
-  isUserSelection(index: number) {
+  isUserSelectedOption(index: number): boolean {
     const userSelectedOptions = this.userSubmittedQuestion.userSelectedOptions
     if (!Array.isArray(userSelectedOptions)) {
       throw new Error('User selected options are not defined')
@@ -47,7 +41,9 @@ export class AssessmentQuestionResultsComponent implements OnInit {
       throw new Error('Question options are not defined')
     }
     const expected = this.question.options[index].text.toUpperCase()
-    const actual = userSelectedOptions[index]?.toUpperCase() || ''
-    return actual === expected
+    const i = userSelectedOptions.findIndex(
+      (opt) => opt.toUpperCase() === expected
+    )
+    return i !== -1
   }
 }
