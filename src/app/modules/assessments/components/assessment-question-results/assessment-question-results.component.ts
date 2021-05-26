@@ -15,26 +15,37 @@ export class AssessmentQuestionResultsComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    if (this.question && this.userSubmittedQuestion) {
+    if (
+      this.question &&
+      this.userSubmittedQuestion &&
+      Array.isArray(this.question.options)
+    ) {
       this.isMultipleChoice =
         this.question.options && this.question.options.length > 0
     }
   }
 
   isOptionCorrect(index: number) {
-    const options = this.userSubmittedQuestion.userSelectedOptions
-    if (!options) return false
-    if (options.length === 0) return false
-    if (index < 0 || index >= options.length) return false
+    const userSelectedOptions = this.userSubmittedQuestion.userSelectedOptions
+    if (!Array.isArray(userSelectedOptions)) {
+      throw new Error('User selected options are not defined')
+    }
+    if (!Array.isArray(this.question.options)) {
+      throw new Error('Question options are not defined')
+    }
     const expectedOptionText = this.question.options[index].text.toUpperCase()
-    const actualOptionText = options[index].toUpperCase()
+    const actualOptionText = userSelectedOptions[index].toUpperCase()
     return expectedOptionText === actualOptionText
   }
 
   isUserSelection(index: number) {
     const userSelectedOptions = this.userSubmittedQuestion.userSelectedOptions
-    if (!userSelectedOptions) return false
-    if (userSelectedOptions.length === 0) return false
+    if (!Array.isArray(userSelectedOptions)) {
+      throw new Error('User selected options are not defined')
+    }
+    if (!Array.isArray(this.question.options)) {
+      throw new Error('Question options are not defined')
+    }
     const expected = this.question.options[index].text.toUpperCase()
     const actual = userSelectedOptions[index]?.toUpperCase() || ''
     return actual === expected

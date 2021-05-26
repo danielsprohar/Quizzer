@@ -27,6 +27,8 @@ export class AssessmentService {
    * after the user submitted the quiz
    */
   private assessMultipleChoice(actual: Question, expected: Question): void {
+    if (!expected.options) throw new Error('expected options are not defined')
+    if (!actual.options) throw new Error('actual options are not defined')
     const expectedChoices = expected.options.filter((option) => option.isAnswer)
     const actualChoices = actual.options.filter((option) => option.isChecked)
 
@@ -101,7 +103,7 @@ export class AssessmentService {
 
   private buildUserSubmittedQuiz(quiz: Quiz): UserSubmittedQuiz {
     if (!quiz.id) throw new Error('Quiz ID is undefined')
-    if (!quiz.grade) throw new Error('Quiz grade is undefined')
+    if (quiz.grade === undefined) throw new Error('Quiz grade is undefined')
     return {
       id: quiz.id,
       name: quiz.name,

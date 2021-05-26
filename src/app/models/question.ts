@@ -25,10 +25,10 @@ export class Question {
   userSubmissionText?: string
   userSelectedOptions?: string[]
   isAttempted?: boolean
-  isCorrect: any
+  isCorrect?: any
   imageURL?: string
   imageCaption?: string
-  options: QuestionOption[]
+  options?: QuestionOption[]
   createdOn: firebase.firestore.Timestamp
   modifiedOn: firebase.firestore.Timestamp
 

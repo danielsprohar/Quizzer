@@ -79,6 +79,8 @@ export class AssessmentQuestionComponent implements OnInit {
    * Updated the selected option for a "dropdown" question type.
    */
   updateUserSelectInput() {
+    if (!this.question.options)
+      throw new Error('Question options are not defined')
     const options = this.question.options
     const selectedOption = options.find(
       (option) => option.text === this.selectInput.value
@@ -106,6 +108,12 @@ export class AssessmentQuestionComponent implements OnInit {
   // =========================================================================
 
   private updateSelectedOption(index: number) {
+    if (!Array.isArray(this.question.options)) {
+      throw new Error('Question options are not defined')
+    }
+    if (index < 0 || index >= this.question.options.length) {
+      throw new Error('Index out of bounds')
+    }
     const selectedOption = this.question.options[index]
     if (selectedOption) {
       selectedOption.isChecked = !selectedOption.isChecked
