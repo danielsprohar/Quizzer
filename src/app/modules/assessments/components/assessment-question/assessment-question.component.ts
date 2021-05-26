@@ -25,12 +25,16 @@ export class AssessmentQuestionComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.question && this.question.options) {
+      // Multiple choice question
       this.form = this.fb.group({
         userSubmissionText: this.fb.control('', [Validators.maxLength(4096)]),
         selectInput: this.fb.control(''),
         options: this.assessment.toOptionsFormArray(this.question.options),
       })
+      this.assessment.addQuestionFormGroup(this.form)
+      console.log('added question form')
     } else if (this.question) {
+      // Written response question
       this.form = this.fb.group({
         userSubmissionText: this.fb.control('', [Validators.maxLength(4096)]),
         selectInput: this.fb.control(''),
@@ -76,7 +80,7 @@ export class AssessmentQuestionComponent implements OnInit {
   // =========================================================================
 
   /**
-   * Updated the selected option for a "dropdown" question type.
+   * Update the selected option for a "dropdown" question type.
    */
   updateUserSelectInput() {
     if (!this.question.options)
@@ -94,7 +98,7 @@ export class AssessmentQuestionComponent implements OnInit {
   }
 
   /**
-   * Updates the user submission text for a "paragraph" or
+   * Update the user submission text for a "paragraph" or
    * "short answer" question type.
    * @param controlName The control name
    */

@@ -7,8 +7,13 @@
       <app-assessment-question [question]="question"></app-assessment-question>
     </ng-container>
 
-    <div class="btn-bar">
-      <button mat-raised-button color="primary" (click)="submit()">
+    <div *ngIf="quiz.questions" class="btn-bar">
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="isAssessmentIncomplete()"
+        (click)="submit()"
+      >
         Submit
       </button>
     </div>

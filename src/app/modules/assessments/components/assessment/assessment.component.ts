@@ -45,6 +45,10 @@ export class AssessmentComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe()
     }
   }
+  
+  isAssessmentIncomplete(): boolean {
+    return this.assessmentService.isIncomplete()
+  }
 
   // =========================================================================
   // Event Handlers

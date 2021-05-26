@@ -15,10 +15,16 @@ import {
   providedIn: 'root',
 })
 export class AssessmentService {
+  private questionFormGroups: FormGroup[] = []
+
   constructor(
     private readonly quizService: QuizService,
     private readonly qfs: QuizFormService
   ) {}
+
+  addQuestionFormGroup(form: FormGroup): void {
+    this.questionFormGroups.push(form)
+  }
 
   /**
    * Assesses a question of type: multiple choice, checkboxes, or drowdown.
@@ -153,6 +159,13 @@ export class AssessmentService {
     return remainder >= 0.5 ? Math.ceil(grade) : floorGrade
   }
 
+  isIncomplete() {
+    const forms = this.questionFormGroups
+    return (
+      forms.length === 0 || forms.some((form) => !form.pristine || form.errors)
+    )
+  }
+
   /**
    * Converts the given options into a `FormArray`.
    * @param options
@@ -160,10 +173,7 @@ export class AssessmentService {
    */
   toOptionsFormArray(options: QuestionOption[]): FormArray {
     const forms: FormGroup[] = []
-    for (let option of options) {
-      forms.push(this.qfs.toOptionFormGroup(option))
-    }
-
+    options.forEach((option) => forms.push(this.qfs.toOptionFormGroup(option)))
     return new FormArray(forms)
   }
 }

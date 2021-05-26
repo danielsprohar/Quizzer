@@ -59,23 +59,22 @@ export class QuizFormService {
 
   toQuestions(questionsFormArray: FormArray): Question[] {
     const questions: Question[] = []
-    for (let ctrl of questionsFormArray.controls) {
-      questions.push(this.toQuestion(ctrl))
-    }
-
+    questionsFormArray.controls.forEach((control) =>
+      questions.push(this.toQuestion(control))
+    )
     return questions
   }
 
   toQuestionOptions(optionsFormArray: FormArray): QuestionOption[] {
     const options: QuestionOption[] = []
-    for (let opt of optionsFormArray.controls) {
+    optionsFormArray.controls.forEach((control) =>
       options.push(
         new QuestionOption({
-          text: opt.get('text')?.value,
-          isAnswer: opt.get('isAnswer')?.value,
+          text: control.get('text')?.value,
+          isAnswer: control.get('isAnswer')?.value,
         })
       )
-    }
+    )
 
     return options
   }
@@ -112,16 +111,18 @@ export class QuizFormService {
       text: this.fb.control(question.text, [Validators.maxLength(4096)]),
       type: this.fb.control(question.type),
       hint: this.fb.control(question.hint, [Validators.maxLength(4096)]),
-      explanation: this.fb.control(question.explanation, [Validators.maxLength(4096)]),
+      explanation: this.fb.control(question.explanation, [
+        Validators.maxLength(4096),
+      ]),
       imageURL: this.fb.control(question.imageURL),
       imageCaption: this.fb.control(question.imageCaption),
     })
 
-    const optionsFormGroups: FormGroup[] = []
     if (question.options) {
-      for (let option of question.options) {
+      const optionsFormGroups: FormGroup[] = []
+      question.options.forEach((option) =>
         optionsFormGroups.push(this.toOptionFormGroup(option))
-      }
+      )
 
       if (optionsFormGroups.length > 0) {
         form.addControl('options', this.fb.array(optionsFormGroups))
@@ -155,9 +156,10 @@ export class QuizFormService {
 
     if (quiz && quiz.questions) {
       const questionsFormGroups: FormGroup[] = []
-      for (let question of quiz.questions) {
+      quiz.questions.forEach((question) =>
         questionsFormGroups.push(this.toQuestionFormGroup(question))
-      }
+      )
+
       if (questionsFormGroups.length > 0) {
         form.setControl('questions', this.fb.array(questionsFormGroups))
       }
