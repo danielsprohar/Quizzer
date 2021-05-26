@@ -31,6 +31,7 @@ export interface UserSubmittedQuiz {
 }
 
 export class Assessment {
+  id?: string
   quiz: UserSubmittedQuiz
   questions: UserSubmittedQuestion[]
   createdOn: firebase.firestore.Timestamp
@@ -45,7 +46,10 @@ export class Assessment {
     this.correctQuestions = this.calcQuestionsCorrect(questions)
   }
 
-  private calcQuestionsCorrect(userSubmittedQuestions: UserSubmittedQuestion[]) {
-    return userSubmittedQuestions.filter((quesiton) => quesiton.isCorrect).length
+  private calcQuestionsCorrect(
+    userSubmittedQuestions: UserSubmittedQuestion[]
+  ) {
+    return userSubmittedQuestions.filter((quesiton) => quesiton.isCorrect)
+      .length
   }
 }

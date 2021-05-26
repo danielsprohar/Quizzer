@@ -3,10 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
+import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import { AppStateService } from 'src/app/services/app-state.service'
 import { CacheService } from 'src/app/services/cache.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 import { UserService } from 'src/app/services/user.service'
+import { AssessmentDataService } from '../../services/assessment-data.service'
 import { AssessmentService } from '../../services/assessment.service'
 
 @Component({
@@ -24,7 +26,8 @@ export class AssessmentComponent implements OnInit, OnDestroy {
     private readonly assessmentService: AssessmentService,
     private readonly snackbar: SnackbarService,
     private readonly appState: AppStateService,
-    private readonly userService: UserService,
+    private readonly auth: AuthService,
+    private readonly assessmentDataService: AssessmentDataService,
     private readonly cache: CacheService
   ) {}
 
@@ -49,11 +52,17 @@ export class AssessmentComponent implements OnInit, OnDestroy {
 
   async submit() {
     try {
+      const userId = await this.auth.getUserIdAsync()
+      if (!userId) {
+        this.router.navigate(['/login'])
+        return
+      }
+
       this.appState.isLoading(true)
       const assessment = await this.assessmentService.assess(this.quiz)
       this.cache.setAssessment(assessment)
 
-      const docRef = await this.userService.addAssessment(assessment)
+      const docRef = await this.assessmentDataService.add(userId, assessment)
       this.snackbar.success("Done! Let's see how you did.")
       this.router.navigate(['assessments', docRef.id, 'summary'])
     } catch (error) {
