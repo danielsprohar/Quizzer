@@ -11,9 +11,7 @@ export class AppThemeService implements OnDestroy {
 
   constructor(private readonly mediaMatcher: MediaMatcher) {
     this.mql = this.mediaMatcher.matchMedia('(prefers-color-scheme: dark)')
-    this.isDarkTheme$ = new BehaviorSubject<boolean>(
-      this.mql.matches ? true : false
-    )
+    this.isDarkTheme$ = new BehaviorSubject<boolean>(this.mql.matches)
     this.mql.addEventListener('change', this.setDarkTheme)
   }
 
@@ -26,7 +24,7 @@ export class AppThemeService implements OnDestroy {
   }
 
   private setDarkTheme(event: MediaQueryListEvent) {
-    this.isDarkTheme(event.matches ? true : false)
+    this.isDarkTheme(event.matches)
   }
 
   getIsDarkTheme(): boolean {
