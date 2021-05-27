@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
-import { FormArray, FormGroup } from '@angular/forms'
+import { FormGroup } from '@angular/forms'
 import { Question } from 'src/app/models/question'
-import { QuestionOption } from 'src/app/models/question-option'
 import { Quiz } from 'src/app/models/quiz'
 import { QuizFormService } from '../../quizzes/services/quiz-form.service'
 import { QuizService } from '../../quizzes/services/quiz.service'
@@ -21,10 +20,6 @@ export class AssessmentService {
     private readonly quizService: QuizService,
     private readonly qfs: QuizFormService
   ) {}
-
-  addQuestionFormGroup(form: FormGroup): void {
-    this.questionFormGroups.push(form)
-  }
 
   /**
    * Assesses a question of type: multiple choice, checkboxes, or drowdown.
@@ -164,16 +159,5 @@ export class AssessmentService {
     return (
       forms.length === 0 || forms.some((form) => !form.pristine || form.errors)
     )
-  }
-
-  /**
-   * Converts the given options into a `FormArray`.
-   * @param options
-   * @returns
-   */
-  toOptionsFormArray(options: QuestionOption[]): FormArray {
-    const forms: FormGroup[] = []
-    options.forEach((option) => forms.push(this.qfs.toOptionFormGroup(option)))
-    return new FormArray(forms)
   }
 }

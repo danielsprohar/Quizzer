@@ -1,17 +1,25 @@
 <ng-container *ngIf="question">
   <mat-card>
+    <ng-container *ngIf="question.imageURL">
+      <img
+        mat-card-image
+        [src]="question.imageURL"
+        [alt]="question.imageCaption"
+      />
+    </ng-container>
     <mat-card-content>
       <h3>{{ question.text }}</h3>
 
       <!-- ================================== -->
       <!-- Image container -->
       <!-- ================================== -->
-      <ng-container *ngIf="question.imageURL">
+      <!-- <ng-container *ngIf="question.imageURL">
         <div class="image-wrapper">
           <div class="image-container">
             <img
+              mat-card-image
               [src]="question.imageURL"
-              alt="An image related to the question"
+              [alt]="question.imageCaption"
             />
           </div>
           <ng-container *ngIf="question.imageCaption">
@@ -20,9 +28,9 @@
             </div>
           </ng-container>
         </div>
-      </ng-container>
+      </ng-container> -->
 
-      <form [formGroup]="form">
+      <form [formGroup]="questionForm">
         <div [ngSwitch]="question.type">
           <!-- ================================== -->
           <!-- Dropdown container -->
@@ -52,7 +60,6 @@
                 type="text"
                 aria-label="User input for a short answer type question"
                 formControlName="userSubmissionText"
-                (blur)="updateUserSubmissionText('userSubmissionText')"
               />
             </mat-form-field>
           </div>
@@ -65,12 +72,11 @@
                 matInput
                 aria-label="User input for a paragraph type question."
                 formControlName="userSubmissionText"
-                (blur)="updateUserSubmissionText('userSubmissionText')"
               ></textarea>
             </mat-form-field>
           </div>
           <!-- ================================== -->
-          <!-- Options container -->
+          <!-- Multiple Choice Options container -->
           <!-- ================================== -->
           <div
             *ngSwitchDefault

@@ -20,7 +20,7 @@ export class QuizFormService {
    * @param options The options to apply to the `FormGroup`.
    * @returns A new instance of a `FormGroup`.
    */
-  newQuestionFormGroup(): FormGroup {
+  instance(): FormGroup {
     const form = this.fb.group({
       id: this.fb.control(undefined),
       text: this.fb.control('', [
@@ -132,6 +132,17 @@ export class QuizFormService {
     return form
   }
 
+  toQuestionFormArray(questions: Question[]): FormArray {
+    const forms: FormGroup[] = []
+    if (questions) {
+      const questionsFormGroups: FormGroup[] = []
+      questions.forEach((question) =>
+        questionsFormGroups.push(this.toQuestionFormGroup(question))
+      )
+    }
+    return this.fb.array([forms])
+  }
+
   /**
    * Converts a `Quiz` model to a `FormGroup`.
    * @param quiz The quiz model.
@@ -155,13 +166,9 @@ export class QuizFormService {
     })
 
     if (quiz && quiz.questions) {
-      const questionsFormGroups: FormGroup[] = []
-      quiz.questions.forEach((question) =>
-        questionsFormGroups.push(this.toQuestionFormGroup(question))
-      )
-
-      if (questionsFormGroups.length > 0) {
-        form.setControl('questions', this.fb.array(questionsFormGroups))
+      const questionFormArray = this.toQuestionFormArray(quiz.questions)
+      if (questionFormArray.length > 0) {
+        form.setControl('questions', questionFormArray)
       }
     }
 

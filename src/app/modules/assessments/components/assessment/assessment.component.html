@@ -1,21 +1,26 @@
-<ng-container *ngIf="quiz">
-  <h1>{{ quiz.name }}</h1>
-  <mat-divider></mat-divider>
+<ng-container *ngIf="quiz && quiz.questions">
+  <form [formGroup]="assessmentForm">
+    <h1>{{ quiz.name }}</h1>
+    <mat-divider></mat-divider>
 
-  <div class="questions-container">
-    <ng-container *ngFor="let question of quiz.questions; let i = index">
-      <app-assessment-question [question]="question"></app-assessment-question>
-    </ng-container>
+    <div formArrayName="questions" class="questions-container">
+      <ng-container *ngFor="let question of quiz.questions; let i = index">
+        <app-assessment-question
+          [question]="question"
+          [questionForm]="getQuestionFormGroup(i)"
+        ></app-assessment-question>
+      </ng-container>
 
-    <div *ngIf="quiz.questions" class="btn-bar">
-      <button
-        mat-raised-button
-        color="primary"
-        [disabled]="isAssessmentIncomplete()"
-        (click)="submit()"
-      >
-        Submit
-      </button>
+      <div *ngIf="quiz.questions" class="btn-bar">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="assessmentForm.invalid"
+          (click)="submit()"
+        >
+          Submit
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
 </ng-container>

@@ -67,7 +67,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (!this.questionForm) {
       // Create a new question for an existing Quiz
-      this.questionForm = this.qfs.newQuestionFormGroup()
+      this.questionForm = this.qfs.instance()
     }
   }
 

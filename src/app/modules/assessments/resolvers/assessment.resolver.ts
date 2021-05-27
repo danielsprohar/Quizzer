@@ -10,7 +10,6 @@ import {
 import { EMPTY, Observable, of } from 'rxjs'
 import { mergeMap } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
-import { CacheService } from 'src/app/services/cache.service'
 import { Assessment } from '../models/assessment'
 
 @Injectable({
@@ -18,14 +17,13 @@ import { Assessment } from '../models/assessment'
 })
 export class AssessmentResolver implements Resolve<Assessment> {
   constructor(
-    private readonly cache: CacheService,
     private readonly router: Router,
     private firestore: AngularFirestore,
     private afAuth: AngularFireAuth
   ) {}
 
   // =========================================================================
-  
+
   private fetchAssessment(
     userId: string,
     assessmentId: string
@@ -38,8 +36,9 @@ export class AssessmentResolver implements Resolve<Assessment> {
       .get()
       .pipe(
         mergeMap((snapshot) => {
-          if (snapshot) {
-            return of(snapshot.data() as Assessment)
+          const assessment = snapshot.data() as Assessment
+          if (assessment) {
+            return of(assessment)
           }
           this.router.navigate(['/quizzes'])
           return EMPTY
@@ -48,16 +47,11 @@ export class AssessmentResolver implements Resolve<Assessment> {
   }
 
   // =========================================================================
-  
+
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<Assessment> {
-    const cachedAssessment = this.cache.getAssessment()
-    if (cachedAssessment) {
-      return of(cachedAssessment)
-    }
-
     const assessmentId = route.paramMap.get('id')
     if (!assessmentId) {
       this.router.navigate(['/quizzes'])

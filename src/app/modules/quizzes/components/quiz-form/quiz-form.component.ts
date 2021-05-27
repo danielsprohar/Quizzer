@@ -26,7 +26,7 @@ export class QuizFormComponent implements OnInit, OnDestroy {
   private isEditMode: boolean = false
 
   subjects$: Observable<CourseSubject[]>
-  form: FormGroup
+  quizForm: FormGroup
   quizId: string
 
   constructor(
@@ -44,7 +44,7 @@ export class QuizFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.quizId = this.firestore.createId()
     this.subjects$ = this.fetchCourseSubjects()
-    this.form = this.qfs.toQuizFormGroup()
+    this.quizForm = this.qfs.toQuizFormGroup()
 
     this.subscription = this.route.data.subscribe((data) => {
       if (data.quiz && data.questions) {
@@ -53,7 +53,7 @@ export class QuizFormComponent implements OnInit, OnDestroy {
         const quiz = data.quiz as Quiz
         this.quizId = quiz.id as string
         quiz.questions = data.questions as Question[]
-        this.form = this.qfs.toQuizFormGroup(data.quiz as Quiz)
+        this.quizForm = this.qfs.toQuizFormGroup(data.quiz as Quiz)
       }
     })
   }
@@ -69,23 +69,23 @@ export class QuizFormComponent implements OnInit, OnDestroy {
   // =========================================================================
 
   get name() {
-    return this.form.get('name')!
+    return this.quizForm.get('name')!
   }
 
   get description() {
-    return this.form.get('description')!
+    return this.quizForm.get('description')!
   }
 
   get subject() {
-    return this.form.get('subject')!
+    return this.quizForm.get('subject')!
   }
 
   get visibility() {
-    return this.form.get('visibility')!
+    return this.quizForm.get('visibility')!
   }
 
   get questions() {
-    return this.form.get('questions')! as FormArray
+    return this.quizForm.get('questions')! as FormArray
   }
 
   // =========================================================================
@@ -109,7 +109,7 @@ export class QuizFormComponent implements OnInit, OnDestroy {
   // =========================================================================
 
   addQuestion(form?: FormGroup) {
-    this.questions.push(form ? form : this.qfs.newQuestionFormGroup())
+    this.questions.push(form ? form : this.qfs.instance())
   }
 
   addSubject() {
@@ -152,7 +152,7 @@ export class QuizFormComponent implements OnInit, OnDestroy {
   }
 
   async save() {
-    if (this.form.invalid) {
+    if (this.quizForm.invalid) {
       this.snackbar.info('Please fill in all required fields')
       return
     }

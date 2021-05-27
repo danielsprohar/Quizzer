@@ -1,13 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms'
+import { FormArray, FormControl, FormGroup } from '@angular/forms'
 import { Question } from 'src/app/models/question'
-import { AssessmentService } from '../../services/assessment.service'
 
 @Component({
   selector: 'app-assessment-question',
@@ -16,46 +9,26 @@ import { AssessmentService } from '../../services/assessment.service'
 })
 export class AssessmentQuestionComponent implements OnInit {
   @Input() question: Question
-  form: FormGroup
+  @Input() questionForm: FormGroup
 
-  constructor(
-    private readonly assessment: AssessmentService,
-    private readonly fb: FormBuilder
-  ) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    if (this.question && this.question.options) {
-      // Multiple choice question
-      this.form = this.fb.group({
-        userSubmissionText: this.fb.control('', [Validators.maxLength(4096)]),
-        selectInput: this.fb.control(''),
-        options: this.assessment.toOptionsFormArray(this.question.options),
-      })
-      this.assessment.addQuestionFormGroup(this.form)
-      console.log('added question form')
-    } else if (this.question) {
-      // Written response question
-      this.form = this.fb.group({
-        userSubmissionText: this.fb.control('', [Validators.maxLength(4096)]),
-        selectInput: this.fb.control(''),
-      })
-    }
-  }
+  ngOnInit(): void {}
 
   // =========================================================================
   // Getters
   // =========================================================================
 
   get userSubmissionText() {
-    return this.form.get('userSubmissionText')!
+    return this.questionForm.get('userSubmissionText')!
   }
 
   get selectInput() {
-    return this.form.get('selectInput')!
+    return this.questionForm.get('selectInput')!
   }
 
   get options() {
-    return this.form?.get('options')! as FormArray
+    return this.questionForm?.get('options')! as FormArray
   }
 
   getOptionIsCheckedControl(index: number) {
@@ -103,7 +76,7 @@ export class AssessmentQuestionComponent implements OnInit {
    * @param controlName The control name
    */
   updateUserSubmissionText(controlName: string) {
-    const ctrl = this.form.get(controlName)
+    const ctrl = this.questionForm.get(controlName)
     this.question.userSubmissionText = ctrl?.value
   }
 

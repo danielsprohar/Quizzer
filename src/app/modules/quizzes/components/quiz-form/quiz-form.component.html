@@ -1,4 +1,4 @@
-<form [formGroup]="form" class="quiz-form">
+<form [formGroup]="quizForm" class="quiz-form">
   <!-- ====================================== -->
   <!-- Quiz subject, title, and description -->
   <!-- ====================================== -->
@@ -21,7 +21,7 @@
         matTooltip="Create a new subject"
         (click)="addSubject()"
       >
-      <mat-icon>add</mat-icon>
+        <mat-icon>add</mat-icon>
       </button>
     </div>
 
@@ -63,7 +63,7 @@
     <button
       mat-raised-button
       color="primary"
-      [disabled]="form.invalid"
+      [disabled]="quizForm.invalid"
       (click)="save()"
     >
       Save
