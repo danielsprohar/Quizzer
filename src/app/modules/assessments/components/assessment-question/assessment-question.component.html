@@ -89,6 +89,7 @@
                 <div class="option" (click)="toggleMultipleChoiceSelection(i)">
                   <mat-checkbox
                     [formControl]="getOptionIsSelectedControl(i)"
+                    (click)="stopPropagation($event)"
                   ></mat-checkbox>
                   <span>{{ option.text }}</span>
                 </div>

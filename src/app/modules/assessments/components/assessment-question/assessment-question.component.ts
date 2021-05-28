@@ -54,6 +54,10 @@ export class AssessmentQuestionComponent implements OnInit {
   // Event handlers
   // =========================================================================
 
+  stopPropagation(event: Event): void {
+    event.stopPropagation()
+  }
+
   toggleMultipleChoiceSelection(index: number) {
     const ctrl = this.getOptionIsSelectedControl(index)
     ctrl.setValue(!(ctrl.value as boolean))
