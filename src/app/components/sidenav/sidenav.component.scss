@@ -1,5 +1,4 @@
 .sidenav-list {
-  width: 80%;
   height: 100%;
   overflow-x: hidden;
 }
@@ -8,18 +7,19 @@
   opacity: 0.54;
 }
 
-.yellow-icon {
+.user-photo {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  opacity: 1;
+}
+
+.sun {
   color: #ffea00;
   opacity: 1 !important;
 }
 
-.active {
-  border-left: 1px solid #ff3d00;
-}
-
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-  .sidenav-list {
-    width: 240px;
-  }
 }

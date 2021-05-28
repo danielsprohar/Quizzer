@@ -1,5 +1,9 @@
 .progress-bar {
   display: none;
+  position: fixed;
+  top: 65px;
+  right: 0;
+  left: 0;
 }
 
 .loading {
@@ -10,20 +14,9 @@
 // Sidenav
 // ===========================================================================
 
-.toggle-btn-container {
-  background-color: #fff;
-}
-
-.mat-sidenav {
-  overflow-x: hidden !important;
-}
-
-.sidenav-container {
-  height: 100%;
-}
-
 .sidenav {
-  width: 80%;
+  width: 75%;
+  min-width: 260px;
 }
 
 .sidenav mat-icon {
@@ -36,7 +29,6 @@
 
 mat-sidenav-content {
   position: inherit;
-  height: 100vh;
   display: inherit;
   transform: inherit;
 }
@@ -45,8 +37,8 @@ mat-sidenav-content {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  margin: 16px auto;
-  padding: 0 16px;
+  margin: 65px auto 16px;
+  padding: 16px;
   max-width: 960px;
   height: 100%;
 }
@@ -60,14 +52,6 @@ mat-sidenav-content {
   .sidenav {
     width: 240px;
   }
-
-  // .top-nav-links {
-  //   display: flex;
-  // }
-
-  // .auth-links {
-  //   display: flex;
-  // }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */

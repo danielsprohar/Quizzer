@@ -6,6 +6,7 @@
         {{ user.displayName }}
       </a>
     </mat-list-item>
+
     <mat-list-item>
       <mat-icon mat-list-icon class="icon">logout</mat-icon>
       <a mat-line (click)="signOut()">Log out</a>
@@ -38,13 +39,24 @@
   <mat-list-item>
     <mat-icon mat-list-icon class="icon">settings</mat-icon>
     <a mat-line routerLink="/settings">Settings</a>
-    <button
-      mat-icon-button
-      matTooltip="Switch to dark theme"
-      (click)="toggleAppTheme()"
-    >
-      <mat-icon [class.yellow-icon]="isDarkTheme$ | async">dark_mode</mat-icon>
-    </button>
+    <ng-container *ngIf="isDarkTheme$ | async; else isLightTheme">
+      <button
+        mat-icon-button
+        matTooltip="Switch to light theme"
+        (click)="toggleAppTheme()"
+      >
+        <mat-icon class="sun">light_mode</mat-icon>
+      </button>
+    </ng-container>
+    <ng-template #isLightTheme>
+      <button
+        mat-icon-button
+        matTooltip="Switch to dark theme"
+        (click)="toggleAppTheme()"
+      >
+        <mat-icon>dark_mode</mat-icon>
+      </button>
+    </ng-template>
   </mat-list-item>
 
   <mat-divider></mat-divider>

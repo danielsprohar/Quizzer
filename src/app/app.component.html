@@ -1,25 +1,18 @@
-<div class="mat-app-background" [ngClass]="{ 'dark-theme': isDarkTheme }">
-  <mat-sidenav-container class="sidenav-container">
+<div class="mat-app-background" [class.dark-theme]="isDarkTheme">
+  <!-- =============================================================== -->
+  <!-- Top navigation -->
+  <!-- =============================================================== -->
+  <app-topnav [drawer]="drawer"></app-topnav>
+
+  <mat-sidenav-container>
     <mat-sidenav
       #drawer
       class="sidenav"
-      fixedInViewport
+      fixedInViewport="true"
+      fixedTopGap="64"
       [attr.role]="isHandset ? 'dialog' : 'navigation'"
-      mode="over"
+      [mode]="isHandset ? 'over' : 'side'"
     >
-      <mat-toolbar
-        class="toggle-btn-container"
-        [ngClass]="{ 'content-dark': isDarkTheme }"
-      >
-        <button
-          type="button"
-          aria-label="Toggle sidenav"
-          mat-icon-button
-          (click)="drawer.toggle()"
-        >
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-        </button>
-      </mat-toolbar>
       <!-- ================================================================= -->
       <!-- Side navigation -->
       <!-- ================================================================= -->
@@ -28,14 +21,9 @@
       </div>
     </mat-sidenav>
 
-    <mat-sidenav-content>
+    <mat-sidenav-content class="full-height">
       <!-- =============================================================== -->
-      <!-- Top navigation -->
-      <!-- =============================================================== -->
-      <app-topnav [drawer]="drawer"></app-topnav>
-
-      <!-- =============================================================== -->
-      <!-- Top navigation -->
+      <!-- Progress bar -->
       <!-- =============================================================== -->
       <mat-progress-bar
         class="progress-bar"
@@ -43,7 +31,6 @@
         [class.loading]="appState.isLoadingAsObservable() | async"
       >
       </mat-progress-bar>
-
       <!-- ============================================================= -->
       <!-- Main content -->
       <!-- ============================================================= -->
