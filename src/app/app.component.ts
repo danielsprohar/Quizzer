@@ -1,4 +1,4 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
+import { BreakpointObserver } from '@angular/cdk/layout'
 import { OverlayContainer } from '@angular/cdk/overlay'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/auth'
@@ -10,10 +10,9 @@ import {
   Router,
 } from '@angular/router'
 import { Subscription } from 'rxjs'
-import { map, shareReplay } from 'rxjs/operators'
-import { AuthService } from './modules/auth/services/auth.service'
 import { AppStateService } from './services/app-state.service'
 import { AppThemeService } from './services/app-theme.service'
+import { BreakpointService } from './services/breakpoint.service'
 
 @Component({
   selector: 'app-root',
@@ -33,8 +32,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private readonly overlayContainer: OverlayContainer,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly router: Router,
-    public readonly authService: AuthService,
-    public readonly theme: AppThemeService,
+    private readonly theme: AppThemeService,
+    private readonly breakpoint: BreakpointService,
     public readonly appState: AppStateService
   ) {}
 
@@ -68,12 +67,8 @@ export class AppComponent implements OnInit, OnDestroy {
   // =========================================================================
 
   initBreakpointObserver(): void {
-    this.isHandsetSubscription = this.breakpointObserver
-      .observe([Breakpoints.Handset])
-      .pipe(
-        map((result) => result.matches),
-        shareReplay()
-      )
+    this.isHandsetSubscription = this.breakpoint
+      .isHandsetAsObservable()
       .subscribe((isHandset) => (this.isHandset = isHandset))
   }
 

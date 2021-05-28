@@ -9,16 +9,15 @@
       #drawer
       class="sidenav"
       fixedInViewport="true"
-      fixedTopGap="64"
+      [fixedTopGap]="isHandset ? 56 : 64"
       [attr.role]="isHandset ? 'dialog' : 'navigation'"
       [mode]="isHandset ? 'over' : 'side'"
+      [opened]="!isHandset"
     >
       <!-- ================================================================= -->
       <!-- Side navigation -->
       <!-- ================================================================= -->
-      <div>
-        <app-sidenav></app-sidenav>
-      </div>
+      <app-sidenav></app-sidenav>
     </mat-sidenav>
 
     <mat-sidenav-content class="full-height">

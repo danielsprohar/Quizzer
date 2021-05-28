@@ -11,16 +11,18 @@
   </div>
 
   <div class="app-logo-container">
-    <span class="app-logo-letter">Q</span>
-    <!-- TODO: Fix responsiveness issue -->
-    <ng-container *ngIf="!isHandset">
+    <ng-container *ngIf="isHandset; else notHandset">
+      <span class="app-logo-letter">Q</span>
+    </ng-container>
+    <ng-template #notHandset>
+      <span class="app-logo-letter">Q</span>
       <span class="app-logo-letter">U</span>
       <span class="app-logo-letter">I</span>
       <span class="app-logo-letter">Z</span>
       <span class="app-logo-letter">Z</span>
       <span class="app-logo-letter">E</span>
       <span class="app-logo-letter">R</span>
-    </ng-container>
+    </ng-template>
   </div>
   <span class="spacer"></span>
   <div class="auth-links">
@@ -46,13 +48,13 @@
 
     <!-- User is not signed in -->
     <ng-template #notSignedIn>
-      <!-- User is on mobile -->
+      <!-- User is on a mobile device -->
       <ng-container *ngIf="isHandset; else notHandset">
         <button mat-icon-button routerLink="/login" aria-label="User sign in">
           <mat-icon>account_circle</mat-icon>
         </button>
       </ng-container>
-      <!-- User in on laptop/desktop -->
+      <!-- User in on laptop/desktop device -->
       <ng-template #notHandset>
         <a
           mat-stroked-button
