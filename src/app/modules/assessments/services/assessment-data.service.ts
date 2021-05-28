@@ -3,7 +3,7 @@ import { AngularFirestore, DocumentReference } from '@angular/fire/firestore'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
-import { QuizAssessment } from '../models/quiz-assessment'
+import { Assessment } from '../models/assessment'
 import firebase from 'firebase/app'
 
 @Injectable({
@@ -14,7 +14,7 @@ export class AssessmentDataService {
 
   add(
     userId: string,
-    assessment: QuizAssessment
+    assessment: Assessment
   ): Promise<DocumentReference<firebase.firestore.DocumentData>> {
     return this.firestore
       .collection(Collections.USERS)
@@ -23,23 +23,23 @@ export class AssessmentDataService {
       .add(JSON.parse(JSON.stringify(assessment)))
   }
 
-  get(userId: string, assessmentId: string): Observable<QuizAssessment> {
+  get(userId: string, assessmentId: string): Observable<Assessment> {
     return this.firestore
       .collection(Collections.USERS)
       .doc(userId)
       .collection(Collections.ASSESSMENTS)
-      .doc<QuizAssessment>(assessmentId)
+      .doc<Assessment>(assessmentId)
       .get()
       .pipe(
         map((snapshot) => {
-          const assessment = snapshot.data() as QuizAssessment
+          const assessment = snapshot.data() as Assessment
           assessment.id = snapshot.id
           return assessment
         })
       )
   }
 
-  getAll(userId: string): Observable<QuizAssessment[]> {
+  getAll(userId: string): Observable<Assessment[]> {
     return this.firestore
       .collection(Collections.USERS)
       .doc(userId)
@@ -48,7 +48,7 @@ export class AssessmentDataService {
       .pipe(
         map((snapshot) =>
           snapshot.docs.map((doc) => {
-            const assessment = doc.data() as QuizAssessment
+            const assessment = doc.data() as Assessment
             assessment.id = doc.id
             return assessment
           })

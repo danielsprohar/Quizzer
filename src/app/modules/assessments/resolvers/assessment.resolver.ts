@@ -10,12 +10,12 @@ import {
 import { EMPTY, Observable, of } from 'rxjs'
 import { first, mergeMap } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
-import { QuizAssessment } from '../models/quiz-assessment'
+import { Assessment } from '../models/assessment'
 
 @Injectable({
   providedIn: 'root',
 })
-export class QuizAssessmentResolver implements Resolve<QuizAssessment> {
+export class QuizAssessmentResolver implements Resolve<Assessment> {
   constructor(
     private readonly router: Router,
     private readonly firestore: AngularFirestore,
@@ -27,17 +27,17 @@ export class QuizAssessmentResolver implements Resolve<QuizAssessment> {
   private fetchAssessment(
     userId: string,
     assessmentId: string
-  ): Observable<QuizAssessment> {
+  ): Observable<Assessment> {
     return this.firestore
       .collection(Collections.USERS)
       .doc(userId)
       .collection(Collections.ASSESSMENTS)
-      .doc<QuizAssessment>(assessmentId)
+      .doc<Assessment>(assessmentId)
       .get()
       .pipe(
         first(),
         mergeMap((snapshot) => {
-          const assessment = snapshot.data() as QuizAssessment
+          const assessment = snapshot.data() as Assessment
           if (assessment) {
             return of(assessment)
           }
@@ -52,7 +52,7 @@ export class QuizAssessmentResolver implements Resolve<QuizAssessment> {
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<QuizAssessment> {
+  ): Observable<Assessment> {
     const assessmentId = route.paramMap.get('id')
     if (!assessmentId) {
       this.router.navigate(['/quizzes'])

@@ -9,6 +9,7 @@ import {
 import { Question } from 'src/app/models/question'
 import { QuestionOption } from 'src/app/models/question-option'
 import { Quiz } from 'src/app/models/quiz'
+import { multipleChoiceValidator } from '../../assessments/validators/multiple-choice-validator'
 
 @Injectable({
   providedIn: 'root',
@@ -117,14 +118,11 @@ export class QuizFormService {
     })
 
     if (question.options) {
-      const optionsFormGroups: FormGroup[] = []
-      question.options.forEach((option) =>
-        optionsFormGroups.push(this.toOptionFormGroup(option))
+      const options = question.options.map((option) =>
+        this.toOptionFormGroup(option)
       )
-
-      if (optionsFormGroups.length > 0) {
-        form.addControl('options', this.fb.array(optionsFormGroups))
-      }
+      form.addControl('options', this.fb.array(options))
+      form.setValidators(multipleChoiceValidator)
     }
 
     return form

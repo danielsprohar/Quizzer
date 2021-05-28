@@ -1,4 +1,4 @@
-export class QuizAssessmentOption {
+export class AssessmentOption {
   isSelected: boolean
   text: string
 

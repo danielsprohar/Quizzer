@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Question } from 'src/app/models/question'
-import { QuizAssessmentQuestion } from '../../models/quiz-assessment-question'
+import { AssessmentQuestion } from '../../models/assessment-question'
 
 @Component({
   selector: 'app-assessment-question-results',
@@ -9,7 +9,7 @@ import { QuizAssessmentQuestion } from '../../models/quiz-assessment-question'
 })
 export class AssessmentQuestionResultsComponent implements OnInit {
   @Input() question: Question
-  @Input() assessmentQuestion: QuizAssessmentQuestion
+  @Input() assessmentQuestion: AssessmentQuestion
   isMultipleChoice = true
 
   constructor() {}

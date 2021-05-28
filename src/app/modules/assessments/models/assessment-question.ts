@@ -1,7 +1,7 @@
 import { QuestionType } from 'src/app/models/question'
-import { QuizAssessmentOption } from './quiz-assessment-option'
+import { AssessmentOption as AssessmentOption } from './assessment-option'
 
-export class QuizAssessmentQuestion {
+export class AssessmentQuestion {
   questionId: string
   type: QuestionType
   isCorrect?: boolean
@@ -16,7 +16,7 @@ export class QuizAssessmentQuestion {
   /**
    * The user's selected options for a "multiple choice" question.
    */
-  options?: QuizAssessmentOption[]
+  options?: AssessmentOption[]
 
   constructor(fields: {
     questionId: string
@@ -24,7 +24,7 @@ export class QuizAssessmentQuestion {
     idCorrect?: boolean
     selectedOption?: string
     userInputText?: string
-    options?: QuizAssessmentOption[]
+    options?: AssessmentOption[]
   }) {
     Object.assign(this, fields)
   }

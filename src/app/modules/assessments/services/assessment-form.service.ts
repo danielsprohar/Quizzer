@@ -4,9 +4,9 @@ import { Question, QuestionType } from 'src/app/models/question'
 import { QuestionOption } from 'src/app/models/question-option'
 import { Quiz } from 'src/app/models/quiz'
 import { QuizFormService } from '../../quizzes/services/quiz-form.service'
-import { QuizAssessment } from '../models/quiz-assessment'
-import { QuizAssessmentOption } from '../models/quiz-assessment-option'
-import { QuizAssessmentQuestion } from '../models/quiz-assessment-question'
+import { Assessment } from '../models/assessment'
+import { AssessmentOption } from '../models/assessment-option'
+import { AssessmentQuestion } from '../models/assessment-question'
 import { multipleChoiceValidator } from '../validators/multiple-choice-validator'
 
 @Injectable({
@@ -40,10 +40,10 @@ export class AssessmentFormService {
   // Forms to Models
   // =========================================================================
 
-  toQuizAssessmentOptions(options: FormArray): QuizAssessmentOption[] {
+  toQuizAssessmentOptions(options: FormArray): AssessmentOption[] {
     return options.controls.map(
       (control) =>
-        new QuizAssessmentOption({
+        new AssessmentOption({
           isSelected: control.get('isSelected')?.value,
           text: control.get('text')?.value,
         })
@@ -55,8 +55,8 @@ export class AssessmentFormService {
    * @param questionForm
    * @returns
    */
-  toQuizAssessmentQuestion(questionForm: FormGroup): QuizAssessmentQuestion {
-    const question = new QuizAssessmentQuestion({
+  toQuizAssessmentQuestion(questionForm: FormGroup): AssessmentQuestion {
+    const question = new AssessmentQuestion({
       questionId: questionForm.get('questionId')?.value,
       type: questionForm.get('questionType')?.value as QuestionType,
     })
@@ -64,13 +64,15 @@ export class AssessmentFormService {
     if (question.type === 'short answer' || question.type === 'paragraph') {
       const userInputText = questionForm.get('userInputText')?.value
       question.userInputText = userInputText
-    } else if (question.type === 'dropdown') {
-      question.selectedOption = questionForm.get('selectedOption')?.value
-    } else {
-      question.options = this.toQuizAssessmentOptions(
-        questionForm.get('options') as FormArray
-      )
+      return question
     }
+    if (question.type === 'dropdown') {
+      question.selectedOption = questionForm.get('selectedOption')?.value
+    }
+
+    question.options = this.toQuizAssessmentOptions(
+      questionForm.get('options') as FormArray
+    )
 
     return question
   }
@@ -83,7 +85,7 @@ export class AssessmentFormService {
    */
   toQuizAssessmentQuestions(
     questionForms: FormArray
-  ): QuizAssessmentQuestion[] {
+  ): AssessmentQuestion[] {
     return questionForms.controls.map((control) =>
       this.toQuizAssessmentQuestion(control as FormGroup)
     )
@@ -94,8 +96,8 @@ export class AssessmentFormService {
    * @param assessmentForm
    * @returns A new instance of a `QuizAssessment`
    */
-  toQuizAssessment(assessmentForm: FormGroup): QuizAssessment {
-    return new QuizAssessment({
+  toQuizAssessment(assessmentForm: FormGroup): Assessment {
+    return new Assessment({
       quizId: assessmentForm.get('quizId')?.value,
       name: assessmentForm.get('name')?.value,
       subject: assessmentForm.get('subject')?.value,

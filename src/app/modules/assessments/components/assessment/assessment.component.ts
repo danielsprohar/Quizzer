@@ -78,9 +78,10 @@ export class AssessmentComponent implements OnInit, OnDestroy {
         this.assessmentForm
       )
 
-      const docRef = await this.ads.add(userId, quizAssessment)
-      this.snackbar.success("Done! Let's see how you did.")
-      this.router.navigate(['assessments', docRef.id, 'summary'])
+      console.log(quizAssessment)
+      // const docRef = await this.ads.add(userId, quizAssessment)
+      // this.snackbar.success("Done! Let's see how you did.")
+      // this.router.navigate(['assessments', docRef.id, 'summary'])
     } catch (error) {
       this.snackbar.warn('Uh oh. Something went wrong :/')
       console.error(error)

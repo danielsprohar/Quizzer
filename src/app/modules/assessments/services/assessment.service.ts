@@ -3,9 +3,9 @@ import { FormArray, FormGroup } from '@angular/forms'
 import { Question } from 'src/app/models/question'
 import { QuestionOption } from 'src/app/models/question-option'
 import { QuizService } from '../../quizzes/services/quiz.service'
-import { QuizAssessment } from '../models/quiz-assessment'
-import { QuizAssessmentOption } from '../models/quiz-assessment-option'
-import { QuizAssessmentQuestion } from '../models/quiz-assessment-question'
+import { Assessment } from '../models/assessment'
+import { AssessmentOption } from '../models/assessment-option'
+import { AssessmentQuestion } from '../models/assessment-question'
 import { AssessmentFormService } from './assessment-form.service'
 
 @Injectable({
@@ -24,7 +24,7 @@ export class AssessmentService {
    * @returns `true` if the user selected the correct options; otherwise `false`
    */
   private assessMultipleChoiceOptions(
-    assessmentOptions: QuizAssessmentOption[],
+    assessmentOptions: AssessmentOption[],
     options: QuestionOption[]
   ): boolean {
     return options
@@ -59,11 +59,11 @@ export class AssessmentService {
     userInput: string,
     expectedInput: string
   ): boolean {
-    const actual = userInput.replace(' ', '').toLowerCase()
-    const expected = expectedInput.replace(' ', '').toLowerCase()
+    const actual = userInput.replace(/\s/g, '').toLowerCase()
+    const expected = expectedInput.replace(/\s/g, '').toLowerCase()
     // TODO: Replace with a Document Distance algorithm
-    console.log('actual', actual)
-    console.log('expected', expected)
+    console.log('actual: ', actual)
+    console.log('expected: ', expected)
     return actual === expected
   }
 
@@ -74,7 +74,7 @@ export class AssessmentService {
    * @returns The number of questions the user answered correctly.
    */
   private assessQuestions(
-    assessmentQuestions: QuizAssessmentQuestion[],
+    assessmentQuestions: AssessmentQuestion[],
     questions: Question[]
   ): number {
     if (assessmentQuestions.length !== questions.length) {
@@ -107,17 +107,16 @@ export class AssessmentService {
 
   // =========================================================================
 
-  async assessQuiz(assessmentForm: FormGroup): Promise<QuizAssessment> {
+  async assessQuiz(assessmentForm: FormGroup): Promise<Assessment> {
     const quizId = assessmentForm.get('quizId')?.value
     const questions = await this.quizService.getQuestions(quizId).toPromise()
-
-    const userSubmittedQuestions = this.afs.toQuizAssessmentQuestions(
+    const assessmentQuestions = this.afs.toQuizAssessmentQuestions(
       assessmentForm.get('questions') as FormArray
     )
 
     const assessment = this.afs.toQuizAssessment(assessmentForm)
     assessment.correctQuestions = this.assessQuestions(
-      userSubmittedQuestions,
+      assessmentQuestions,
       questions
     )
 

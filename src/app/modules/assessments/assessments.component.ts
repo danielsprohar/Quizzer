@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { Observable } from 'rxjs'
 import { AuthService } from '../auth/services/auth.service'
-import { QuizAssessment } from './models/quiz-assessment'
+import { Assessment } from './models/assessment'
 import { AssessmentDataService } from './services/assessment-data.service'
 
 @Component({
@@ -11,7 +11,7 @@ import { AssessmentDataService } from './services/assessment-data.service'
   styleUrls: ['./assessments.component.scss'],
 })
 export class AssessmentsComponent implements OnInit {
-  assessments$: Observable<QuizAssessment[]>
+  assessments$: Observable<Assessment[]>
 
   constructor(
     private readonly router: Router,

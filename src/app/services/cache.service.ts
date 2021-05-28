@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Question } from '../models/question'
 import { Quiz } from '../models/quiz'
-import { QuizAssessment } from '../modules/assessments/models/quiz-assessment'
+import { Assessment } from '../modules/assessments/models/assessment'
 
 enum CacheKeys {
   ASSESSMENT = 'assessment',
@@ -15,7 +15,7 @@ enum CacheKeys {
 export class CacheService {
   constructor() {}
 
-  setAssessment(assessment: QuizAssessment | null) {
+  setAssessment(assessment: Assessment | null) {
     if (!assessment) {
       localStorage.removeItem(CacheKeys.ASSESSMENT)
     } else {
@@ -41,7 +41,7 @@ export class CacheService {
 
   getAssessment() {
     const value = localStorage.getItem(CacheKeys.ASSESSMENT)
-    return value ? (JSON.parse(value) as QuizAssessment) : null
+    return value ? (JSON.parse(value) as Assessment) : null
   }
 
   getQuiz() {

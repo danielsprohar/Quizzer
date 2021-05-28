@@ -1,7 +1,7 @@
 import firebase from 'firebase/app'
-import { QuizAssessmentQuestion } from './quiz-assessment-question'
+import { AssessmentQuestion } from './assessment-question'
 
-export class QuizAssessment {
+export class Assessment {
   id?: string
   quizId: string
   name: string
@@ -9,13 +9,13 @@ export class QuizAssessment {
   correctQuestions: number
   grade: number
   createdOn: firebase.firestore.Timestamp
-  questions: QuizAssessmentQuestion[]
+  questions: AssessmentQuestion[]
 
   constructor(fields: {
     quizId: string
     name: string
     subject: string
-    questions: QuizAssessmentQuestion[]
+    questions: AssessmentQuestion[]
     correctQuestions?: number
     grade?: number
   }) {

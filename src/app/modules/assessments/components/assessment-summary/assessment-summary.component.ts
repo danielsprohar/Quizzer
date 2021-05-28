@@ -5,7 +5,7 @@ import { tap } from 'rxjs/operators'
 import { Question } from 'src/app/models/question'
 import { QuizService } from 'src/app/modules/quizzes/services/quiz.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
-import { QuizAssessment } from '../../models/quiz-assessment'
+import { Assessment } from '../../models/assessment'
 
 @Component({
   selector: 'app-assessment-summary',
@@ -14,7 +14,7 @@ import { QuizAssessment } from '../../models/quiz-assessment'
 })
 export class AssessmentSummaryComponent implements OnInit, OnDestroy {
   private routeDataSubscription: Subscription
-  assessment: QuizAssessment
+  assessment: Assessment
   questions$: Observable<Question[]>
 
   constructor(
@@ -28,7 +28,7 @@ export class AssessmentSummaryComponent implements OnInit, OnDestroy {
     this.routeDataSubscription = this.route.data.subscribe(
       (data) => {
         if (data.assessment) {
-          this.assessment = data.assessment as QuizAssessment
+          this.assessment = data.assessment as Assessment
           this.questions$ = this.quizService
             .getQuestions(this.assessment.quizId)
             // .pipe(
