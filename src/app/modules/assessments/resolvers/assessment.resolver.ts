@@ -8,18 +8,18 @@ import {
   RouterStateSnapshot,
 } from '@angular/router'
 import { EMPTY, Observable, of } from 'rxjs'
-import { mergeMap } from 'rxjs/operators'
+import { first, mergeMap } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
-import { Assessment } from '../models/assessment'
+import { QuizAssessment } from '../models/quiz-assessment'
 
 @Injectable({
   providedIn: 'root',
 })
-export class AssessmentResolver implements Resolve<Assessment> {
+export class QuizAssessmentResolver implements Resolve<QuizAssessment> {
   constructor(
     private readonly router: Router,
-    private firestore: AngularFirestore,
-    private afAuth: AngularFireAuth
+    private readonly firestore: AngularFirestore,
+    private readonly afAuth: AngularFireAuth
   ) {}
 
   // =========================================================================
@@ -27,16 +27,17 @@ export class AssessmentResolver implements Resolve<Assessment> {
   private fetchAssessment(
     userId: string,
     assessmentId: string
-  ): Observable<Assessment> {
+  ): Observable<QuizAssessment> {
     return this.firestore
       .collection(Collections.USERS)
       .doc(userId)
       .collection(Collections.ASSESSMENTS)
-      .doc<Assessment>(assessmentId)
+      .doc<QuizAssessment>(assessmentId)
       .get()
       .pipe(
+        first(),
         mergeMap((snapshot) => {
-          const assessment = snapshot.data() as Assessment
+          const assessment = snapshot.data() as QuizAssessment
           if (assessment) {
             return of(assessment)
           }
@@ -51,7 +52,7 @@ export class AssessmentResolver implements Resolve<Assessment> {
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<Assessment> {
+  ): Observable<QuizAssessment> {
     const assessmentId = route.paramMap.get('id')
     if (!assessmentId) {
       this.router.navigate(['/quizzes'])
@@ -59,6 +60,7 @@ export class AssessmentResolver implements Resolve<Assessment> {
     }
 
     return this.afAuth.user.pipe(
+      first(),
       mergeMap((currentUser) => {
         if (!currentUser) {
           this.router.navigate(['/quizzes'])

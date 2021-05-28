@@ -1,27 +1,23 @@
 <div *ngIf="questions$ | async as questions" class="wrapper">
-  <h1>{{ assessment.quiz.name }} - Overview</h1>
+  <h1>{{ assessment.name }} - Overview</h1>
 
   <div class="assessment-results-container">
     <p>Correct: {{ assessment.correctQuestions }}</p>
-    <p>Total: {{ assessment.totalQuestions }}</p>
-    <p>Grade: {{ assessment.quiz.grade }}%</p>
+    <p>Total: {{ questions.length }}</p>
+    <p>Grade: {{ assessment.grade }}%</p>
   </div>
 
   <div class="questions-container">
     <ng-container *ngFor="let question of questions; let i = index">
       <app-assessment-question-results
         [question]="question"
-        [userSubmittedQuestion]="getUserSubmittedQuestion(i)"
+        [assessmentQuestion]="getUserSubmittedQuestion(i)"
       ></app-assessment-question-results>
     </ng-container>
   </div>
 
   <div class="btn-bar">
-    <a mat-button [routerLink]="['/assessments', assessment.quiz.id]">
-      Retry
-    </a>
-    <a mat-raised-button color="primary" routerLink="/quizzes">
-      Continue
-    </a>
+    <a mat-button [routerLink]="['/assessments', assessment.id]"> Retry </a>
+    <a mat-raised-button color="primary" routerLink="/quizzes"> Continue </a>
   </div>
 </div>

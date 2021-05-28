@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Question } from 'src/app/models/question'
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { Question, QuestionType } from 'src/app/models/question'
 import { QuestionOption } from 'src/app/models/question-option'
+import { Quiz } from 'src/app/models/quiz'
 import { QuizFormService } from '../../quizzes/services/quiz-form.service'
+import { QuizAssessment } from '../models/quiz-assessment'
+import { QuizAssessmentOption } from '../models/quiz-assessment-option'
+import { QuizAssessmentQuestion } from '../models/quiz-assessment-question'
+import { multipleChoiceValidator } from '../validators/multiple-choice-validator'
 
 @Injectable({
   providedIn: 'root',
@@ -14,57 +19,151 @@ export class AssessmentFormService {
   ) {}
 
   /**
-   * Creates a new instance of a `FormGroup` whose
-   * only child control is a `FormArray` constructed from
-   * the given questions.
+   * Creates a new instance of a `FormGroup` for an assessment.
    * @param questions The quiz's questions
    * @returns A new instance of a `FormGroup`
    */
-  instance(questions: Question[]): FormGroup {
+  instance(quiz: Quiz): FormGroup {
     const form = this.fb.group({
-      questions: this.fb.array(this.toQuestionAssessmentFormGroups(questions)),
+      quizId: this.fb.control(quiz.id),
+      name: this.fb.control(quiz.name),
+      subject: this.fb.control(quiz.subject),
+      grade: this.fb.control(''),
+      correctQuestions: this.fb.control(''),
+      totalQuestions: this.fb.control(quiz.questions?.length),
+      questions: this.toQuestionAssessmentFormArray(quiz.questions!),
     })
     return form
   }
+
+  // =========================================================================
+  // Forms to Models
+  // =========================================================================
+
+  toQuizAssessmentOptions(options: FormArray): QuizAssessmentOption[] {
+    return options.controls.map(
+      (control) =>
+        new QuizAssessmentOption({
+          isSelected: control.get('isSelected')?.value,
+          text: control.get('text')?.value,
+        })
+    )
+  }
+
+  /**
+   * Converts the given question form into a `QuizAssessmentQuestion`
+   * @param questionForm
+   * @returns
+   */
+  toQuizAssessmentQuestion(questionForm: FormGroup): QuizAssessmentQuestion {
+    const question = new QuizAssessmentQuestion({
+      questionId: questionForm.get('questionId')?.value,
+      type: questionForm.get('questionType')?.value as QuestionType,
+    })
+
+    if (question.type === 'short answer' || question.type === 'paragraph') {
+      const userInputText = questionForm.get('userInputText')?.value
+      question.userInputText = userInputText
+    } else if (question.type === 'dropdown') {
+      question.selectedOption = questionForm.get('selectedOption')?.value
+    } else {
+      question.options = this.toQuizAssessmentOptions(
+        questionForm.get('options') as FormArray
+      )
+    }
+
+    return question
+  }
+
+  /**
+   * Converts the given FormArray of question forms
+   * into an array of type `QuizAssessmentQuestion`
+   * @param questionForms
+   * @returns
+   */
+  toQuizAssessmentQuestions(
+    questionForms: FormArray
+  ): QuizAssessmentQuestion[] {
+    return questionForms.controls.map((control) =>
+      this.toQuizAssessmentQuestion(control as FormGroup)
+    )
+  }
+
+  /**
+   * Converts the given assessment form into a `QuizAssessment`
+   * @param assessmentForm
+   * @returns A new instance of a `QuizAssessment`
+   */
+  toQuizAssessment(assessmentForm: FormGroup): QuizAssessment {
+    return new QuizAssessment({
+      quizId: assessmentForm.get('quizId')?.value,
+      name: assessmentForm.get('name')?.value,
+      subject: assessmentForm.get('subject')?.value,
+      questions: this.toQuizAssessmentQuestions(
+        assessmentForm.get('questions') as FormArray
+      ),
+    })
+  }
+
+  // =========================================================================
+  // Models to Forms
+  // =========================================================================
 
   /**
    * Converts the given options into a `FormArray`.
    * @param options
    * @returns
    */
-  toOptionsFormGroups(options: QuestionOption[]): FormGroup[] {
-    const forms: FormGroup[] = []
-    options.forEach((option) => forms.push(this.qfs.toOptionFormGroup(option)))
-    return forms
+  toQuestionOptionFormArray(options: QuestionOption[]): FormArray {
+    return this.fb.array(
+      options.map((option) => this.qfs.toOptionFormGroup(option))
+    )
   }
 
+  /**
+   * Creates a new instance of a `FormGroup`: setting its
+   * initial values with the `Question` model.   *
+   * @param question The `Question` model
+   * @returns A new instance of a `FormGroup`
+   */
   toQuestionAssessmentFormGroup(question: Question): FormGroup {
     if (question.type === 'short answer' || question.type === 'paragraph') {
       return this.fb.group({
-        userSubmissionText: this.fb.control('', [
+        questionId: question.id,
+        questionType: question.type,
+        userInputText: this.fb.control('', [
           Validators.required,
           Validators.maxLength(4096),
         ]),
       })
     }
-    if (question.type === 'dropdown' && question.options) {
+    if (question.type === 'dropdown') {
       return this.fb.group({
-        selectInput: this.fb.control('', [
-          Validators.required,
-          Validators.maxLength(4096),
-        ]),
+        questionId: question.id,
+        questionType: question.type,
+        selectedOption: this.fb.control(null, [Validators.required]),
+        options: this.toQuestionOptionFormArray(question.options!),
       })
     }
-    return this.fb.group({
-      options: this.fb.array(this.toOptionsFormGroups(question.options!)),
-    })
+    return this.fb.group(
+      {
+        questionId: question.id,
+        questionType: question.type,
+        options: this.toQuestionOptionFormArray(question.options!),
+      },
+      { validators: multipleChoiceValidator }
+    )
   }
 
-  toQuestionAssessmentFormGroups(questions: Question[]): FormGroup[] {
-    const questionFormGroups: FormGroup[] = []
-    questions.forEach((question) => {
-      questionFormGroups.push(this.toQuestionAssessmentFormGroup(question))
-    })
-    return questionFormGroups
+  /**
+   * Converts the given array of type `Question` into an
+   * array of type`FormGroup`.
+   * @param questions The `Question` models.
+   * @returns A new array of type`FormGroup`.
+   */
+  toQuestionAssessmentFormArray(questions: Question[]): FormArray {
+    return this.fb.array(
+      questions.map((question) => this.toQuestionAssessmentFormGroup(question))
+    )
   }
 }

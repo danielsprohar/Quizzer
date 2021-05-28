@@ -6,11 +6,11 @@ import { quizServiceSpy } from 'src/app/modules/quizzes/mocks/quiz-service-mock'
 import { QuizService } from 'src/app/modules/quizzes/services/quiz.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 import { UserService } from 'src/app/services/user.service'
-import { assessmentServiceSpy } from '../../mocks/assessment-service-mock'
+import { quizAssessmentServiceSpy } from '../../mocks/assessment-service-mock'
 import { AssessmentService } from '../../services/assessment.service'
 import { AssessmentComponent } from './assessment.component'
 
-describe('AssessmentComponent', () => {
+describe('QuizAssessmentComponent', () => {
   let component: AssessmentComponent
   let fixture: ComponentFixture<AssessmentComponent>
 
@@ -22,7 +22,7 @@ describe('AssessmentComponent', () => {
         SnackbarService,
         {
           provide: AssessmentService,
-          useValue: assessmentServiceSpy,
+          useValue: quizAssessmentServiceSpy,
         },
         {
           provide: UserService,

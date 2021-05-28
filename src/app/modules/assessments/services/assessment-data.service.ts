@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Collections } from 'src/app/constants/collections'
-import { Assessment } from '../models/assessment'
+import { QuizAssessment } from '../models/quiz-assessment'
+import firebase from 'firebase/app'
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,10 @@ import { Assessment } from '../models/assessment'
 export class AssessmentDataService {
   constructor(private readonly firestore: AngularFirestore) {}
 
-  add(userId: string, assessment: Assessment) {
+  add(
+    userId: string,
+    assessment: QuizAssessment
+  ): Promise<DocumentReference<firebase.firestore.DocumentData>> {
     return this.firestore
       .collection(Collections.USERS)
       .doc(userId)
@@ -19,23 +23,23 @@ export class AssessmentDataService {
       .add(JSON.parse(JSON.stringify(assessment)))
   }
 
-  get(userId: string, assessmentId: string): Observable<Assessment> {
+  get(userId: string, assessmentId: string): Observable<QuizAssessment> {
     return this.firestore
       .collection(Collections.USERS)
       .doc(userId)
       .collection(Collections.ASSESSMENTS)
-      .doc<Assessment>(assessmentId)
+      .doc<QuizAssessment>(assessmentId)
       .get()
       .pipe(
         map((snapshot) => {
-          const assessment = snapshot.data() as Assessment
+          const assessment = snapshot.data() as QuizAssessment
           assessment.id = snapshot.id
           return assessment
         })
       )
   }
 
-  getAll(userId: string): Observable<Assessment[]> {
+  getAll(userId: string): Observable<QuizAssessment[]> {
     return this.firestore
       .collection(Collections.USERS)
       .doc(userId)
@@ -44,7 +48,7 @@ export class AssessmentDataService {
       .pipe(
         map((snapshot) =>
           snapshot.docs.map((doc) => {
-            const assessment = doc.data() as Assessment
+            const assessment = doc.data() as QuizAssessment
             assessment.id = doc.id
             return assessment
           })

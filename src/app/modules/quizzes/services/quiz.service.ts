@@ -128,7 +128,7 @@ export class QuizService {
       models.push({
         text: option.text,
         isAnswer: option.isAnswer,
-        isChecked: option.isChecked,
+        isSelected: option.isSelected,
       })
     }
 

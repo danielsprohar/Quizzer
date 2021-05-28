@@ -1,163 +1,139 @@
 import { Injectable } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { FormArray, FormGroup } from '@angular/forms'
 import { Question } from 'src/app/models/question'
-import { Quiz } from 'src/app/models/quiz'
-import { QuizFormService } from '../../quizzes/services/quiz-form.service'
+import { QuestionOption } from 'src/app/models/question-option'
 import { QuizService } from '../../quizzes/services/quiz.service'
-import {
-  Assessment,
-  UserSubmittedQuestion,
-  UserSubmittedQuiz,
-} from '../models/assessment'
+import { QuizAssessment } from '../models/quiz-assessment'
+import { QuizAssessmentOption } from '../models/quiz-assessment-option'
+import { QuizAssessmentQuestion } from '../models/quiz-assessment-question'
+import { AssessmentFormService } from './assessment-form.service'
 
 @Injectable({
   providedIn: 'root',
 })
 export class AssessmentService {
-  private questionFormGroups: FormGroup[] = []
-
   constructor(
     private readonly quizService: QuizService,
-    private readonly qfs: QuizFormService
+    private readonly afs: AssessmentFormService
   ) {}
 
   /**
-   * Assesses a question of type: multiple choice, checkboxes, or drowdown.
-   * @param actual The user submitted question
-   * @param expected The question that was fetched from the database
-   * after the user submitted the quiz
+   *
+   * @param assessmentOptions
+   * @param options
+   * @returns `true` if the user selected the correct options; otherwise `false`
    */
-  private assessMultipleChoice(actual: Question, expected: Question): void {
-    if (!expected.options) throw new Error('expected options are not defined')
-    if (!actual.options) throw new Error('actual options are not defined')
-    const expectedChoices = expected.options.filter((option) => option.isAnswer)
-    const actualChoices = actual.options.filter((option) => option.isChecked)
-
-    actual.isCorrect =
-      actualChoices.length === expectedChoices.length
-        ? actualChoices
-            .map((q) => q.isChecked && q.isAnswer)
-            .reduce((prev, cur) => prev && cur)
-        : false
+  private assessMultipleChoiceOptions(
+    assessmentOptions: QuizAssessmentOption[],
+    options: QuestionOption[]
+  ): boolean {
+    return options
+      .map(
+        (option, index) =>
+          option.isAnswer && assessmentOptions[index].isSelected
+      )
+      .reduce((prev, cur) => prev && cur)
   }
 
   /**
-   * Assesses a question of type: short answer, paragraph
-   * @param actual The user submitted question.
-   * @param expected The quesiton that was fetched from the database
-   * after the user submitted the quiz.
+   *
+   * @param selectedOptionText The user selected option
+   * @param options The question options
+   * @returns `true` if the user selected the correct option; otherwise `false`
    */
-  private assessWrittenResponse(actual: Question, expected: Question): void {
-    // TODO: Add a Document Distance algorithm
-    actual.isCorrect =
-      actual.userSubmissionText?.toUpperCase().trim() ===
-      expected.explanation?.toUpperCase().trim()
+  private assessDropdownSelectedOption(
+    selectedOptionText: string,
+    options: QuestionOption[]
+  ): boolean {
+    const i = options.findIndex((option) => option.text === selectedOptionText)
+    return i !== -1
   }
 
   /**
-   * Assess the user submitted questions with the questions stored in
-   * the database.
-   * @param actual The user submitted questions.
-   * @param expected The questions that were fetched from the database
-   * after the user submitted the quiz.
+   *
+   * @param userInput
+   * @param expectedInput
+   * @returns `true` if the user's response is correct; otherwise `false`
    */
-  private assessQuestions(actual: Question[], expected: Question[]): void {
-    if (actual.length !== expected.length) {
-      throw new Error('Actual and expected are not the same length')
+  private assessUserInputText(
+    userInput: string,
+    expectedInput: string
+  ): boolean {
+    const actual = userInput.replace(' ', '').toLowerCase()
+    const expected = expectedInput.replace(' ', '').toLowerCase()
+    // TODO: Replace with a Document Distance algorithm
+    console.log('actual', actual)
+    console.log('expected', expected)
+    return actual === expected
+  }
+
+  /**
+   *
+   * @param assessmentQuestions
+   * @param questions
+   * @returns The number of questions the user answered correctly.
+   */
+  private assessQuestions(
+    assessmentQuestions: QuizAssessmentQuestion[],
+    questions: Question[]
+  ): number {
+    if (assessmentQuestions.length !== questions.length) {
+      throw new Error(
+        'user submitted questions are not the same length as the quiz questions'
+      )
     }
 
-    actual.forEach((question, i) => {
-      if (question.type === 'paragraph' || question.type === 'short answer') {
-        this.assessWrittenResponse(question, expected[i])
+    assessmentQuestions.forEach((assessmentQuestion, index) => {
+      if (assessmentQuestion.type === 'multiple choice') {
+        assessmentQuestion.isCorrect = this.assessMultipleChoiceOptions(
+          assessmentQuestion.options!,
+          questions[index].options!
+        )
+      } else if (assessmentQuestion.type === 'dropdown') {
+        assessmentQuestion.isCorrect = this.assessDropdownSelectedOption(
+          assessmentQuestion.selectedOption!,
+          questions[index].options!
+        )
       } else {
-        this.assessMultipleChoice(question, expected[i])
+        assessmentQuestion.isCorrect = this.assessUserInputText(
+          assessmentQuestion.userInputText!,
+          questions[index].explanation!
+        )
       }
     })
+
+    return assessmentQuestions.filter((question) => question.isCorrect).length
   }
 
   // =========================================================================
 
-  async assess(quiz: Quiz): Promise<Assessment> {
-    if (!quiz.id) throw new Error('Quiz id is null')
-    if (!quiz.questions) throw new Error('Questions are not defined')
+  async assessQuiz(assessmentForm: FormGroup): Promise<QuizAssessment> {
+    const quizId = assessmentForm.get('quizId')?.value
+    const questions = await this.quizService.getQuestions(quizId).toPromise()
 
-    const expectedQuestions = await this.quizService
-      .getQuestions(quiz.id)
-      .toPromise()
-
-    this.assessQuestions(quiz.questions!, expectedQuestions)
-    quiz.grade = this.calcGrade(quiz.questions)
-    return this.buildAssessment(quiz)
-  }
-
-  // =========================================================================
-
-  private buildAssessment(quiz: Quiz): Assessment {
-    if (!quiz.questions) throw new Error('Questions are undefined')
-    return new Assessment(
-      this.buildUserSubmittedQuiz(quiz),
-      this.buildUserSubmittedQuestions(quiz.questions)
+    const userSubmittedQuestions = this.afs.toQuizAssessmentQuestions(
+      assessmentForm.get('questions') as FormArray
     )
-  }
 
-  // =========================================================================
-
-  private buildUserSubmittedQuiz(quiz: Quiz): UserSubmittedQuiz {
-    if (!quiz.id) throw new Error('Quiz ID is undefined')
-    if (quiz.grade === undefined) throw new Error('Quiz grade is undefined')
-    return {
-      id: quiz.id,
-      name: quiz.name,
-      subject: quiz.subject,
-      grade: quiz.grade,
-    }
-  }
-
-  // =========================================================================
-
-  private buildUserSelectedOptions(question: Question): string[] | undefined {
-    if (!question.options) return undefined
-    if (question.options.length === 0) return undefined
-    return question.options
-      .filter((option) => option.isChecked)
-      .map((option) => option.text)
-  }
-
-  // =========================================================================
-
-  private buildUserSubmittedQuestions(
-    questions: Question[]
-  ): UserSubmittedQuestion[] {
-    return questions.map(
-      (question) =>
-        ({
-          id: question.id,
-          text: question.text,
-          type: question.type,
-          explanation: question.explanation,
-          isCorrect: question.isCorrect,
-          userInputText: question.userSubmissionText,
-          userSelectedOptions: this.buildUserSelectedOptions(question),
-        } as UserSubmittedQuestion)
+    const assessment = this.afs.toQuizAssessment(assessmentForm)
+    assessment.correctQuestions = this.assessQuestions(
+      userSubmittedQuestions,
+      questions
     )
+
+    assessment.grade = this.calcGrade(
+      assessment.correctQuestions,
+      questions.length
+    )
+    return assessment
   }
 
   // =========================================================================
 
-  private calcGrade(questions: Question[]): number {
-    if (!questions) throw new Error('Questions are not defined')
-    const total = questions.length
-    const correct = questions.filter((q) => q.isCorrect).length
+  private calcGrade(correct: number, total: number): number {
     const grade = (correct / total) * 100
     const floorGrade = Math.floor(grade)
     const remainder = grade - floorGrade
     return remainder >= 0.5 ? Math.ceil(grade) : floorGrade
-  }
-
-  isIncomplete() {
-    const forms = this.questionFormGroups
-    return (
-      forms.length === 0 || forms.some((form) => !form.pristine || form.errors)
-    )
   }
 }

@@ -37,10 +37,7 @@
           <!-- ================================== -->
           <div *ngSwitchCase="'dropdown'">
             <mat-form-field class="full-width" appearance="fill">
-              <mat-select
-                formControlName="selectInput"
-                (selectionChange)="updateUserSelectInput()"
-              >
+              <mat-select formControlName="selectedOption">
                 <mat-option
                   *ngFor="let option of question.options"
                   [value]="option.text"
@@ -59,7 +56,7 @@
                 matInput
                 type="text"
                 aria-label="User input for a short answer type question"
-                formControlName="userSubmissionText"
+                formControlName="userInputText"
               />
             </mat-form-field>
           </div>
@@ -71,7 +68,7 @@
               <textarea
                 matInput
                 aria-label="User input for a paragraph type question."
-                formControlName="userSubmissionText"
+                formControlName="userInputText"
               ></textarea>
             </mat-form-field>
           </div>
@@ -83,13 +80,11 @@
             class="options-container"
             [formArrayName]="'options'"
           >
-            <ng-container
-              *ngFor="let option of question.options; let i = index"
-            >
+            <ng-container *ngFor="let option of question.options; index as i">
               <div class="option-container" [formGroupName]="i">
                 <div class="option" (click)="toggleMultipleChoiceSelection(i)">
                   <mat-checkbox
-                    [formControl]="getOptionIsCheckedControl(i)"
+                    [formControl]="getOptionIsSelectedControl(i)"
                   ></mat-checkbox>
                   <span>{{ option.text }}</span>
                 </div>

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Question } from 'src/app/models/question'
-import { UserSubmittedQuestion } from '../../models/assessment'
+import { QuizAssessmentQuestion } from '../../models/quiz-assessment-question'
 
 @Component({
   selector: 'app-assessment-question-results',
@@ -9,20 +9,13 @@ import { UserSubmittedQuestion } from '../../models/assessment'
 })
 export class AssessmentQuestionResultsComponent implements OnInit {
   @Input() question: Question
-  @Input() userSubmittedQuestion: UserSubmittedQuestion
+  @Input() assessmentQuestion: QuizAssessmentQuestion
   isMultipleChoice = true
 
   constructor() {}
 
   ngOnInit(): void {
-    if (
-      this.question &&
-      this.userSubmittedQuestion &&
-      Array.isArray(this.question.options)
-    ) {
-      this.isMultipleChoice =
-        this.question.options && this.question.options.length > 0
-    }
+    this.isMultipleChoice = this.question.type === 'multiple choice'
   }
 
   isOptionCorrect(index: number): boolean {
@@ -33,16 +26,17 @@ export class AssessmentQuestionResultsComponent implements OnInit {
   }
 
   isUserSelectedOption(index: number): boolean {
-    const userSelectedOptions = this.userSubmittedQuestion.userSelectedOptions
-    if (!Array.isArray(userSelectedOptions)) {
-      throw new Error('User selected options are not defined')
+    const assessmentOptions = this.assessmentQuestion.options
+    const options = this.question.options
+    if (!Array.isArray(assessmentOptions)) {
+      throw new Error('Assessment options are not defined')
     }
-    if (!Array.isArray(this.question.options)) {
+    if (!Array.isArray(options)) {
       throw new Error('Question options are not defined')
     }
-    const expected = this.question.options[index].text.toUpperCase()
-    const i = userSelectedOptions.findIndex(
-      (opt) => opt.toUpperCase() === expected
+    const expected = options[index].text.toUpperCase()
+    const i = assessmentOptions.findIndex(
+      (option) => option.text.toUpperCase() === expected && option.isSelected
     )
     return i !== -1
   }

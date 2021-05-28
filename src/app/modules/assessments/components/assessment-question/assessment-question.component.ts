@@ -19,24 +19,20 @@ export class AssessmentQuestionComponent implements OnInit {
   // Getters
   // =========================================================================
 
-  get userSubmissionText() {
-    return this.questionForm.get('userSubmissionText')!
+  get userInputText() {
+    return this.questionForm.get('userInputText')!
   }
 
-  get selectInput() {
-    return this.questionForm.get('selectInput')!
+  get selectedOption() {
+    return this.questionForm.get('selectedOption')!
   }
 
   get options() {
     return this.questionForm?.get('options')! as FormArray
   }
 
-  getOptionIsCheckedControl(index: number) {
-    return this.options.at(index).get('isChecked') as FormControl
-  }
-
-  getOptionControl(index: number) {
-    return this.options.at(index).get('text') as FormControl
+  getOptionIsSelectedControl(index: number) {
+    return this.options.at(index).get('isSelected') as FormControl
   }
 
   // =========================================================================
@@ -45,43 +41,11 @@ export class AssessmentQuestionComponent implements OnInit {
 
   isMultipleChoiceQuestion(): boolean {
     const questionType = this.question.type
-    return questionType === 'multiple choice' ? true : false
+    return questionType === 'multiple choice'
   }
 
   // =========================================================================
   // Event handlers
-  // =========================================================================
-
-  /**
-   * Update the selected option for a "dropdown" question type.
-   */
-  updateUserSelectInput() {
-    if (!this.question.options)
-      throw new Error('Question options are not defined')
-    const options = this.question.options
-    const selectedOption = options.find(
-      (option) => option.text === this.selectInput.value
-    )
-    if (selectedOption) {
-      selectedOption.isChecked = true
-      options
-        .filter((option) => option.text !== selectedOption.text)
-        .forEach((otherOption) => (otherOption.isChecked = false))
-    }
-  }
-
-  /**
-   * Update the user submission text for a "paragraph" or
-   * "short answer" question type.
-   * @param controlName The control name
-   */
-  updateUserSubmissionText(controlName: string) {
-    const ctrl = this.questionForm.get(controlName)
-    this.question.userSubmissionText = ctrl?.value
-  }
-
-  // =========================================================================
-  // Multiple choice
   // =========================================================================
 
   private updateSelectedOption(index: number) {
@@ -92,13 +56,11 @@ export class AssessmentQuestionComponent implements OnInit {
       throw new Error('Index out of bounds')
     }
     const selectedOption = this.question.options[index]
-    if (selectedOption) {
-      selectedOption.isChecked = !selectedOption.isChecked
-    }
+    selectedOption.isSelected = !selectedOption.isSelected
   }
 
   toggleMultipleChoiceSelection(index: number) {
-    const ctrl = this.getOptionIsCheckedControl(index)
+    const ctrl = this.getOptionIsSelectedControl(index)
     ctrl.setValue(!(ctrl.value as boolean))
     this.updateSelectedOption(index)
   }

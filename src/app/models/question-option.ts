@@ -1,12 +1,12 @@
 export class QuestionOption {
   text: string
   isAnswer: boolean
-  isChecked = false
+  isSelected = false
 
   constructor(fields?: {
     text?: string
     isAnswer?: boolean
-    isChecked?: boolean
+    isSelected?: boolean
   }) {
     if (fields) {
       Object.assign(this, fields)

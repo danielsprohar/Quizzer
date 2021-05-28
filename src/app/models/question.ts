@@ -52,4 +52,8 @@ export class Question {
       Object.assign(this, fields)
     }
   }
+
+  public isMultipleChoice(): boolean {
+    return this.type === 'dropdown' || this.type === 'multiple choice'
+  }
 }

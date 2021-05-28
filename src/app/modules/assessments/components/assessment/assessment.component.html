@@ -1,4 +1,4 @@
-<ng-container *ngIf="quiz && quiz.questions">
+<ng-container *ngIf="quiz && quiz.questions && assessmentForm">
   <form [formGroup]="assessmentForm">
     <h1>{{ quiz.name }}</h1>
     <mat-divider></mat-divider>

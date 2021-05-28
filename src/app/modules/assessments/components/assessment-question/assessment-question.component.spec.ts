@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { ReactiveFormsModule } from '@angular/forms'
-import { assessmentServiceSpy } from '../../mocks/assessment-service-mock'
+import { quizAssessmentServiceSpy } from '../../mocks/assessment-service-mock'
 import { AssessmentService } from '../../services/assessment.service'
 import { AssessmentQuestionComponent } from './assessment-question.component'
 
-describe('AssessmentQuestionComponent', () => {
+describe('QuizAssessmentQuestionComponent', () => {
   let component: AssessmentQuestionComponent
   let fixture: ComponentFixture<AssessmentQuestionComponent>
 
@@ -15,7 +15,7 @@ describe('AssessmentQuestionComponent', () => {
       providers: [
         {
           provide: AssessmentService,
-          useValue: assessmentServiceSpy,
+          useValue: quizAssessmentServiceSpy,
         },
       ],
     }).compileComponents()

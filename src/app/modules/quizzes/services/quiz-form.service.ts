@@ -90,9 +90,7 @@ export class QuizFormService {
       isAnswer: this.fb.control(option ? option.isAnswer : false, [
         Validators.required,
       ]),
-      isChecked: this.fb.control(option ? option.isChecked : false, [
-        Validators.required,
-      ]),
+      isSelected: this.fb.control(option ? option.isSelected : false),
       text: this.fb.control(option ? option.text : '', [
         Validators.required,
         Validators.maxLength(2048),

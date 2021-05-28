@@ -37,7 +37,7 @@ export class AssessmentComponent implements OnInit, OnDestroy {
       if (data.quiz && data.questions) {
         this.quiz = data.quiz as Quiz
         this.quiz.questions = data.questions as Question[]
-        this.assessmentForm = this.afs.instance(this.quiz.questions)
+        this.assessmentForm = this.afs.instance(this.quiz)
       }
     })
   }
@@ -74,13 +74,16 @@ export class AssessmentComponent implements OnInit, OnDestroy {
       }
 
       this.appState.isLoading(true)
-      const assessment = await this.assessmentService.assess(this.quiz)
-      const docRef = await this.ads.add(userId, assessment)
+      const quizAssessment = await this.assessmentService.assessQuiz(
+        this.assessmentForm
+      )
+
+      const docRef = await this.ads.add(userId, quizAssessment)
       this.snackbar.success("Done! Let's see how you did.")
       this.router.navigate(['assessments', docRef.id, 'summary'])
     } catch (error) {
       this.snackbar.warn('Uh oh. Something went wrong :/')
-      console.error(error.message)
+      console.error(error)
     } finally {
       this.appState.isLoading(false)
     }

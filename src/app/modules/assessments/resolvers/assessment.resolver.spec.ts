@@ -5,10 +5,10 @@ import { RouterTestingModule } from '@angular/router/testing'
 import { angularFireAuthSpy } from 'src/app/mocks/angular-fire-auth-mock'
 import { angularFirestoreSpy } from 'src/app/mocks/angular-firestore-mock'
 
-import { AssessmentResolver } from './assessment.resolver'
+import { QuizAssessmentResolver } from './assessment.resolver'
 
-describe('AssessmentResolver', () => {
-  let resolver: AssessmentResolver
+describe('QuizAssessmentResolver', () => {
+  let resolver: QuizAssessmentResolver
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,7 +24,7 @@ describe('AssessmentResolver', () => {
         },
       ],
     })
-    resolver = TestBed.inject(AssessmentResolver)
+    resolver = TestBed.inject(QuizAssessmentResolver)
   })
 
   it('should be created', () => {

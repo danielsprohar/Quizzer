@@ -1,7 +1,7 @@
-<ng-container *ngIf="question && userSubmittedQuestion">
+<ng-container *ngIf="question && assessmentQuestion">
   <mat-card
     [ngClass]="
-      userSubmittedQuestion.isCorrect
+      assessmentQuestion.isCorrect
         ? 'question-is-correct'
         : 'question-is-incorrect'
     "
@@ -54,7 +54,7 @@
           </mat-list-item>
           <mat-divider></mat-divider>
           <mat-list-item>
-            <div mat-line>{{ userSubmittedQuestion.userInputText }}</div>
+            <div mat-line>{{ assessmentQuestion.userInputText }}</div>
             <div mat-line class="metadata">Your answer</div>
           </mat-list-item>
         </mat-list>
