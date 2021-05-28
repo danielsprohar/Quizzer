@@ -83,9 +83,7 @@ export class AssessmentFormService {
    * @param questionForms
    * @returns
    */
-  toQuizAssessmentQuestions(
-    questionForms: FormArray
-  ): AssessmentQuestion[] {
+  toQuizAssessmentQuestions(questionForms: FormArray): AssessmentQuestion[] {
     return questionForms.controls.map((control) =>
       this.toQuizAssessmentQuestion(control as FormGroup)
     )

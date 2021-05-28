@@ -27,12 +27,12 @@ export class AssessmentService {
     assessmentOptions: AssessmentOption[],
     options: QuestionOption[]
   ): boolean {
-    return options
-      .map(
+    return (
+      options.map(
         (option, index) =>
           option.isAnswer && assessmentOptions[index].isSelected
-      )
-      .reduce((prev, cur) => prev && cur)
+      ).length > 0
+    )
   }
 
   /**
@@ -59,11 +59,9 @@ export class AssessmentService {
     userInput: string,
     expectedInput: string
   ): boolean {
+    // TODO: Replace with a Document Distance algorithm
     const actual = userInput.replace(/\s/g, '').toLowerCase()
     const expected = expectedInput.replace(/\s/g, '').toLowerCase()
-    // TODO: Replace with a Document Distance algorithm
-    console.log('actual: ', actual)
-    console.log('expected: ', expected)
     return actual === expected
   }
 
@@ -76,7 +74,7 @@ export class AssessmentService {
   private assessQuestions(
     assessmentQuestions: AssessmentQuestion[],
     questions: Question[]
-  ): number {
+  ): AssessmentQuestion[] {
     if (assessmentQuestions.length !== questions.length) {
       throw new Error(
         'user submitted questions are not the same length as the quiz questions'
@@ -102,12 +100,12 @@ export class AssessmentService {
       }
     })
 
-    return assessmentQuestions.filter((question) => question.isCorrect).length
+    return assessmentQuestions
   }
 
   // =========================================================================
 
-  async assessQuiz(assessmentForm: FormGroup): Promise<Assessment> {
+  async assess(assessmentForm: FormGroup): Promise<Assessment> {
     const quizId = assessmentForm.get('quizId')?.value
     const questions = await this.quizService.getQuestions(quizId).toPromise()
     const assessmentQuestions = this.afs.toQuizAssessmentQuestions(
@@ -115,21 +113,16 @@ export class AssessmentService {
     )
 
     const assessment = this.afs.toQuizAssessment(assessmentForm)
-    assessment.correctQuestions = this.assessQuestions(
-      assessmentQuestions,
-      questions
-    )
-
-    assessment.grade = this.calcGrade(
-      assessment.correctQuestions,
-      questions.length
-    )
+    assessment.questions = this.assessQuestions(assessmentQuestions, questions)
+    assessment.grade = this.calcGrade(assessment.questions)
     return assessment
   }
 
   // =========================================================================
 
-  private calcGrade(correct: number, total: number): number {
+  private calcGrade(assessmentQuestions: AssessmentQuestion[]): number {
+    const correct = assessmentQuestions.filter((q) => q.isCorrect).length
+    const total = assessmentQuestions.length
     const grade = (correct / total) * 100
     const floorGrade = Math.floor(grade)
     const remainder = grade - floorGrade

@@ -6,7 +6,7 @@ export class Assessment {
   quizId: string
   name: string
   subject: string
-  correctQuestions: number
+  correctQuestions?: number
   grade: number
   createdOn: firebase.firestore.Timestamp
   questions: AssessmentQuestion[]
