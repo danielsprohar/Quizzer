@@ -33,21 +33,6 @@
       <form [formGroup]="questionForm">
         <div [ngSwitch]="question.type">
           <!-- ================================== -->
-          <!-- Dropdown container -->
-          <!-- ================================== -->
-          <div *ngSwitchCase="'dropdown'">
-            <mat-form-field class="full-width" appearance="fill">
-              <mat-select formControlName="selectedOption">
-                <mat-option
-                  *ngFor="let option of question.options"
-                  [value]="option.text"
-                >
-                  {{ option.text }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <!-- ================================== -->
           <!-- Short Answer container -->
           <!-- ================================== -->
           <div *ngSwitchCase="'short answer'">
@@ -70,6 +55,25 @@
                 aria-label="User input for a paragraph type question."
                 formControlName="userInputText"
               ></textarea>
+            </mat-form-field>
+          </div>
+          <!-- ================================== -->
+          <!-- Dropdown container -->
+          <!-- ================================== -->
+          <div *ngSwitchCase="'dropdown'">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-select
+                #dropdown
+                formControlName="selectedOption"
+                (selectionChange)="updateDropdownSelection(dropdown.value)"
+              >
+                <mat-option
+                  *ngFor="let option of question.options"
+                  [value]="option.text"
+                >
+                  {{ option.text }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
           <!-- ================================== -->

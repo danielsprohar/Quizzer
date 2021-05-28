@@ -15,7 +15,9 @@ export class AssessmentQuestionResultsComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.isMultipleChoice = this.question.type === 'multiple choice'
+    this.isMultipleChoice =
+      this.question.type === 'multiple choice' ||
+      this.question.type === 'dropdown'
   }
 
   isOptionCorrect(index: number): boolean {
@@ -34,9 +36,9 @@ export class AssessmentQuestionResultsComponent implements OnInit {
     if (!Array.isArray(options)) {
       throw new Error('Question options are not defined')
     }
-    const expected = options[index].text.toUpperCase()
+    const expectedOptionText = options[index].text.toUpperCase()
     const i = assessmentOptions.findIndex(
-      (option) => option.text.toUpperCase() === expected && option.isSelected
+      (ao) => ao.isSelected && ao.text.toUpperCase() === expectedOptionText
     )
     return i !== -1
   }

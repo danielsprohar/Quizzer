@@ -39,15 +39,6 @@ export class AssessmentQuestionComponent implements OnInit {
   // Facilitators
   // =========================================================================
 
-  isMultipleChoiceQuestion(): boolean {
-    const questionType = this.question.type
-    return questionType === 'multiple choice'
-  }
-
-  // =========================================================================
-  // Event handlers
-  // =========================================================================
-
   private updateSelectedOption(index: number) {
     if (!Array.isArray(this.question.options)) {
       throw new Error('Question options are not defined')
@@ -59,9 +50,27 @@ export class AssessmentQuestionComponent implements OnInit {
     selectedOption.isSelected = !selectedOption.isSelected
   }
 
+  // =========================================================================
+  // Event handlers
+  // =========================================================================
+
   toggleMultipleChoiceSelection(index: number) {
     const ctrl = this.getOptionIsSelectedControl(index)
     ctrl.setValue(!(ctrl.value as boolean))
     this.updateSelectedOption(index)
+  }
+
+  updateDropdownSelection(text: string) {
+    if (!Array.isArray(this.question.options)) {
+      throw new Error('Question options are not defined')
+    }
+
+    this.options.controls.forEach((control) =>
+      control.get('isSelected')?.setValue(false)
+    )
+
+    const i = this.question.options.findIndex((o) => o.text === text)
+    const ctrl = this.getOptionIsSelectedControl(i)
+    ctrl.setValue(!(ctrl.value as boolean))
   }
 }
