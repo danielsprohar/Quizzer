@@ -1,0 +1,40 @@
+<div *ngIf="quiz">
+  <header>
+    <h1>{{ quiz.name }}</h1>
+  </header>
+  <mat-divider></mat-divider>
+
+  <div class="actions-container">
+    <button></button>
+  </div>
+
+  <mat-divider></mat-divider>
+  <section *ngFor="let question of quiz.questions; index as i">
+    <div class="question-header">
+      <h2>{{ question.text }}</h2>
+      <a
+        mat-icon-button
+        matTooltip="Edit question"
+        [routerLink]="['../', question.id, 'edit']"
+      >
+        <mat-icon>edit</mat-icon>
+      </a>
+    </div>
+    <ng-container
+      *ngIf="
+        question.type === 'multiple choice' || question.type === 'dropdown';
+        else writtenResponse
+      "
+    >
+      <mat-list>
+        <mat-list-item *ngFor="let option of question.options">
+          {{ option.text }}
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+    <ng-template #writtenResponse>
+      <p>{{ question.explanation }}</p>
+    </ng-template>
+    <mat-divider></mat-divider>
+  </section>
+</div>

@@ -1,0 +1,26 @@
+header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.questions-container {
+  display: flex;
+  flex-direction: column;
+}
+
+section {
+  margin: 16px auto 0;
+}
+
+.question-header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.question-header mat-icon {
+  opacity: 0.54;
+}

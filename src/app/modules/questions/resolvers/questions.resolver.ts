@@ -17,14 +17,14 @@ import { Question } from 'src/app/models/question'
   providedIn: 'root',
 })
 export class QuestionsResolver implements Resolve<Question[]> {
-  constructor(private readonly afs: AngularFirestore) {}
+  constructor(private readonly firestore: AngularFirestore) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<Question[]> {
-    const quizId = route.paramMap.get('id')!
-    return this.afs
+    const quizId = route.paramMap.get('quizId')!
+    return this.firestore
       .collection(Collections.QUIZZES)
       .doc(quizId)
       .collection<Question>(Collections.QUIZ_QUESTIONS)
@@ -35,14 +35,10 @@ export class QuestionsResolver implements Resolve<Question[]> {
   private toQuestions(
     snapshots: QueryDocumentSnapshot<Question>[]
   ): Question[] {
-    const questions = []
-
-    for (let snapshot of snapshots) {
+    return snapshots.map((snapshot) => {
       const question = snapshot.data() as Question
       question.id = snapshot.id
-      questions.push(question)
-    }
-
-    return questions
+      return question
+    })
   }
 }
