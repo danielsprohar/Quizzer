@@ -1,11 +1,12 @@
-<div *ngIf="quiz">
+<div *ngIf="quiz$ | async as quiz">
   <header>
     <h1>{{ quiz.name }}</h1>
   </header>
   <mat-divider></mat-divider>
 
   <div class="actions-container">
-    <button></button>
+    <!-- TODO: Finish the actions for a Quiz -->
+    <button>Finish this</button>
   </div>
 
   <mat-divider></mat-divider>

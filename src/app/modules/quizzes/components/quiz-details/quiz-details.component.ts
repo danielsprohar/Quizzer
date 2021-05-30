@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { Question } from 'src/app/models/question'
 import { Quiz } from 'src/app/models/quiz'
 
@@ -9,19 +11,17 @@ import { Quiz } from 'src/app/models/quiz'
   styleUrls: ['./quiz-details.component.scss'],
 })
 export class QuizDetailsComponent implements OnInit {
-  quiz: Quiz
+  quiz$: Observable<Quiz>
 
-  constructor(
-    private readonly router: Router,
-    private readonly route: ActivatedRoute
-  ) {}
+  constructor(private readonly route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      if (data.quiz && data.questions) {
-        this.quiz = data.quiz as Quiz
-        this.quiz.questions = data.questions as Question[]
-      }
-    })
+    this.quiz$ = this.route.data.pipe(
+      map((data) => {
+        const quiz: Quiz = data.quiz
+        quiz.questions = data.questions as Question[]
+        return quiz
+      })
+    )
   }
 }

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
+import { EditQuestionComponent } from '../questions/components/edit-question/edit-question.component'
 import { QuestionFormComponent } from '../questions/components/question-form/question-form.component'
 import { QuestionDetailsResolver } from '../questions/resolvers/question-details.resolver'
 import { QuestionsResolver } from '../questions/resolvers/questions.resolver'
@@ -35,7 +36,7 @@ const routes: Routes = [
   },
   {
     path: ':quizId/questions/:questionId',
-    component: QuestionFormComponent,
+    component: EditQuestionComponent,
     resolve: {
       question: QuestionDetailsResolver,
     },
