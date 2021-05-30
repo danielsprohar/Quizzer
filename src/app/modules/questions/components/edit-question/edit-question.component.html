@@ -1,5 +1,87 @@
-<ng-container *ngIf="question$ | async as question">
+<ng-container *ngIf="form">
   <div>
-    <p>{{ question.text }}</p>
+    <h2>Edit question</h2>
+    <mat-divider></mat-divider>
+    <form [formGroup]="form" class="form" id="questionForm" (ngSubmit)="save()">
+      <!-- Text -->
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Text</mat-label>
+        <input
+          #textInput
+          matInput
+          formControlName="text"
+          type="text"
+          required
+        />
+        <mat-hint align="end">
+          {{ textInput.value?.length || 0 }}/ {{ textMaxLength }}
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- Hint -->
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Hint</mat-label>
+        <input #hintInput matInput formControlName="hint" type="text" />
+        <mat-hint align="end">
+          {{ hintInput.value?.length || 0 }}/ {{ hintMaxLength }}
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- Explanation -->
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Explanation</mat-label>
+        <textarea
+          #explanationInput
+          matInput
+          formControlName="explanation"
+          [required]="!isMultipleChoiceQuestion()"
+        ></textarea>
+        <mat-hint align="end">
+          {{ explanationInput.value?.length || 0 }}/{{ explanationMaxLength }}
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- Options -->
+      <div *ngIf="isMultipleChoiceQuestion()">
+        <div formArrayName="options" class="options-container">
+          <ng-container *ngFor="let option of options.controls; index as i">
+            <div class="option" [formGroupName]="i">
+              <mat-checkbox
+                [formControl]="getOptionIsAnswerControl(i)"
+              ></mat-checkbox>
+              <mat-form-field class="option-text">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Option {{ i + 1 }}"
+                  [formControl]="getOptionControl(i)"
+                />
+              </mat-form-field>
+              <button
+                mat-icon-button
+                aria-label="Delete option"
+                matTooltip="Delete option"
+                (click)="deleteOption(i)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+        <button mat-stroked-button (click)="addOption()">Add option</button>
+      </div>
+    </form>
+    <div class="btn-bar">
+      <a mat-button [routerLink]="['/quizzes', quizId, 'details']">Back</a>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        form="questionForm"
+        (click)="save()"
+      >
+        Save
+      </button>
+    </div>
   </div>
 </ng-container>

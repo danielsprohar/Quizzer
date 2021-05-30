@@ -16,6 +16,15 @@ export type QuestionType =
   | 'multiple choice'
   | 'dropdown'
 
+
+export enum QuestionAttributeConstraints {
+  TEXT_MAX_LENGTH = 2048,
+  HINT_MAX_LENGTH = 2048,
+  EXPLANATION_MAX_LENGTH = 4096,
+  IMAGE_CAPTION_MAX_LENGTH = 256
+}
+  
+  
 export class Question {
   id: string
   text: string

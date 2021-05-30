@@ -8,6 +8,11 @@ export enum QuizVisibility {
 
 export type Visibility = 'private' | 'public'
 
+export enum QuizAttributeContraints {
+  NAME_MAX_LENGTH = 1024,
+  DESCRIPTION_MAX_LENGTH = 2048
+}
+
 export class Quiz {
   name: string
   subject: string

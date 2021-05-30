@@ -7,9 +7,8 @@
     <!-- ============================= -->
     <!-- Image container-->
     <!-- ============================= -->
-    <ng-container *ngIf="imageURL.value">
+    <!-- <ng-container *ngIf="imageURL.value">
       <div class="image-container">
-        <!-- Image actions menu -->
         <div class="image-actions-container">
           <button
             mat-icon-button
@@ -33,12 +32,8 @@
             </button>
           </mat-menu>
         </div>
-        <!-- =============================== -->
-        <!-- Image -->
-        <!-- =============================== -->
         <img mat-card-image [src]="imageURL.value" />
       </div>
-      <!-- Image caption -->
       <ng-container *ngIf="hasCaption">
         <div class="image-caption-container">
           <mat-form-field class="full-width">
@@ -52,11 +47,11 @@
           </mat-form-field>
         </div>
       </ng-container>
-    </ng-container>
+    </ng-container> -->
 
     <mat-card-content>
       <div class="question-header">
-        <mat-form-field appearance="outline" floatLabel="never">
+        <mat-form-field appearance="outline">
           <mat-label>Question type</mat-label>
           <mat-select
             formControlName="type"
@@ -72,7 +67,8 @@
           </mat-select>
         </mat-form-field>
 
-        <div>
+        <!-- Add image button -->
+        <!-- <div>
           <button
             mat-icon-button
             aria-label="Add image"
@@ -88,11 +84,11 @@
             (change)="addImage(fileInput.files!)"
             hidden
           />
-        </div>
+        </div> -->
       </div>
 
       <div class="form-fields">
-        <mat-form-field appearance="fill" floatLabel="never">
+        <mat-form-field appearance="fill">
           <mat-label>Question</mat-label>
           <input
             type="text"
@@ -103,12 +99,12 @@
           />
         </mat-form-field>
 
-        <mat-form-field floatLabel="never" appearance="fill">
+        <mat-form-field appearance="fill">
           <mat-label>Hint</mat-label>
           <input matInput type="text" formControlName="hint" />
         </mat-form-field>
 
-        <mat-form-field floatLabel="never" appearance="fill">
+        <mat-form-field appearance="fill">
           <mat-label>Explanation</mat-label>
           <input matInput type="text" formControlName="explanation" />
         </mat-form-field>
@@ -124,7 +120,7 @@
               <mat-checkbox
                 [formControl]="getOptionIsAnswerControl(i)"
               ></mat-checkbox>
-              <mat-form-field class="question-option-text" floatLabel="never">
+              <mat-form-field class="question-option-text">
                 <input
                   matInput
                   type="text"

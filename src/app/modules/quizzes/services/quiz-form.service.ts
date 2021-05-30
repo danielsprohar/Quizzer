@@ -6,9 +6,12 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
-import { Question } from 'src/app/models/question'
-import { QuestionOption } from 'src/app/models/question-option'
-import { Quiz } from 'src/app/models/quiz'
+import { Question, QuestionAttributeConstraints } from 'src/app/models/question'
+import {
+  OptionAttributeContraints,
+  QuestionOption,
+} from 'src/app/models/question-option'
+import { Quiz, QuizAttributeContraints } from 'src/app/models/quiz'
 import { multipleChoiceValidator } from '../../assessments/validators/multiple-choice-validator'
 
 @Injectable({
@@ -26,13 +29,23 @@ export class QuizFormService {
       id: this.fb.control(undefined),
       text: this.fb.control('', [
         Validators.required,
-        Validators.maxLength(4096),
+        Validators.maxLength(QuestionAttributeConstraints.TEXT_MAX_LENGTH),
       ]),
       type: this.fb.control('multiple choice', [Validators.required]),
-      hint: this.fb.control('', [Validators.maxLength(4096)]),
-      explanation: this.fb.control('', [Validators.maxLength(4096)]),
+      hint: this.fb.control('', [
+        Validators.maxLength(QuestionAttributeConstraints.HINT_MAX_LENGTH),
+      ]),
+      explanation: this.fb.control('', [
+        Validators.maxLength(
+          QuestionAttributeConstraints.EXPLANATION_MAX_LENGTH
+        ),
+      ]),
       imageURL: this.fb.control('', [Validators.maxLength(4096)]),
-      imageCaption: this.fb.control('', [Validators.maxLength(1024)]),
+      imageCaption: this.fb.control('', [
+        Validators.maxLength(
+          QuestionAttributeConstraints.IMAGE_CAPTION_MAX_LENGTH
+        ),
+      ]),
       options: this.fb.array([this.toOptionFormGroup(new QuestionOption())]),
     })
 
@@ -59,25 +72,19 @@ export class QuizFormService {
   }
 
   toQuestions(questionsFormArray: FormArray): Question[] {
-    const questions: Question[] = []
-    questionsFormArray.controls.forEach((control) =>
-      questions.push(this.toQuestion(control))
+    return questionsFormArray.controls.map((control) =>
+      this.toQuestion(control)
     )
-    return questions
   }
 
   toQuestionOptions(optionsFormArray: FormArray): QuestionOption[] {
-    const options: QuestionOption[] = []
-    optionsFormArray.controls.forEach((control) =>
-      options.push(
+    return optionsFormArray.controls.map(
+      (control) =>
         new QuestionOption({
           text: control.get('text')?.value,
           isAnswer: control.get('isAnswer')?.value,
         })
-      )
     )
-
-    return options
   }
 
   /**
@@ -94,7 +101,7 @@ export class QuizFormService {
       isSelected: this.fb.control(option ? option.isSelected : false),
       text: this.fb.control(option ? option.text : '', [
         Validators.required,
-        Validators.maxLength(2048),
+        Validators.maxLength(OptionAttributeContraints.TEXT_MAX_LENGTH),
       ]),
     })
   }
@@ -107,11 +114,17 @@ export class QuizFormService {
   toQuestionFormGroup(question: Question): FormGroup {
     const form = this.fb.group({
       id: this.fb.control(question.id),
-      text: this.fb.control(question.text, [Validators.maxLength(4096)]),
+      text: this.fb.control(question.text, [
+        Validators.maxLength(QuestionAttributeConstraints.TEXT_MAX_LENGTH),
+      ]),
       type: this.fb.control(question.type),
-      hint: this.fb.control(question.hint, [Validators.maxLength(4096)]),
+      hint: this.fb.control(question.hint, [
+        Validators.maxLength(QuestionAttributeConstraints.HINT_MAX_LENGTH),
+      ]),
       explanation: this.fb.control(question.explanation, [
-        Validators.maxLength(4096),
+        Validators.maxLength(
+          QuestionAttributeConstraints.EXPLANATION_MAX_LENGTH
+        ),
       ]),
       imageURL: this.fb.control(question.imageURL),
       imageCaption: this.fb.control(question.imageCaption),
@@ -129,14 +142,10 @@ export class QuizFormService {
   }
 
   toQuestionFormArray(questions: Question[]): FormArray {
-    const forms: FormGroup[] = []
-    if (questions) {
-      const questionsFormGroups: FormGroup[] = []
-      questions.forEach((question) =>
-        questionsFormGroups.push(this.toQuestionFormGroup(question))
-      )
-    }
-    return this.fb.array([forms])
+    // return this.fb.array([forms])
+    return this.fb.array(
+      questions.map((question) => this.toQuestionFormGroup(question))
+    )
   }
 
   /**
@@ -149,10 +158,10 @@ export class QuizFormService {
       id: this.fb.control(quiz ? quiz.id : ''),
       name: this.fb.control(quiz ? quiz.name : '', [
         Validators.required,
-        Validators.maxLength(2048),
+        Validators.maxLength(QuizAttributeContraints.NAME_MAX_LENGTH),
       ]),
       description: this.fb.control(quiz ? quiz.description : '', [
-        Validators.maxLength(4096),
+        Validators.maxLength(QuizAttributeContraints.DESCRIPTION_MAX_LENGTH),
       ]),
       subject: this.fb.control(quiz ? quiz.subject : '', [Validators.required]),
       visibility: this.fb.control(quiz ? quiz.visibility : 'private', [
