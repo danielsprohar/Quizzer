@@ -1,1 +1,5 @@
-<p>edit-question works!</p>
+<ng-container *ngIf="question$ | async as question">
+  <div>
+    <p>{{ question.text }}</p>
+  </div>
+</ng-container>

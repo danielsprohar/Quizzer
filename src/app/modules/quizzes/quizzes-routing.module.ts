@@ -35,7 +35,7 @@ const routes: Routes = [
     },
   },
   {
-    path: ':quizId/questions/:questionId',
+    path: ':quizId/questions/:questionId/edit',
     component: EditQuestionComponent,
     resolve: {
       question: QuestionDetailsResolver,
