@@ -1,4 +1,4 @@
-<div *ngIf="quiz$ | async as quiz">
+<div *ngIf="quiz">
   <header>
     <h1>{{ quiz.name }}</h1>
   </header>
@@ -6,20 +6,35 @@
 
   <div class="actions-container">
     <!-- TODO: Finish the actions for a Quiz -->
-    <button>Finish this</button>
+    <div class="btn-bar">
+      <button mat-button>Add question</button>
+      <button mat-button>Practice</button>
+      <button mat-button>Take test</button>
+    </div>
   </div>
 
   <mat-divider></mat-divider>
   <section *ngFor="let question of quiz.questions; index as i">
     <div class="question-header">
-      <h2>{{ question.text }}</h2>
-      <a
-        mat-icon-button
-        matTooltip="Edit question"
-        [routerLink]="['/quizzes', quiz.id, 'questions', question.id, 'edit']"
-      >
-        <mat-icon>edit</mat-icon>
-      </a>
+      <h2>{{ i + 1 }}. {{ question.text }}</h2>
+      <div class="btn-bar">
+        <button
+          mat-icon-button
+          aria-label="Delete question"
+          matTooltip="Delete question"
+          (click)="deleteQuestion(question.id, i)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+        <a
+          mat-icon-button
+          aria-label="Edit question"
+          matTooltip="Edit question"
+          [routerLink]="['/quizzes', quiz.id, 'questions', question.id, 'edit']"
+        >
+          <mat-icon>edit</mat-icon>
+        </a>
+      </div>
     </div>
     <ng-container
       *ngIf="
