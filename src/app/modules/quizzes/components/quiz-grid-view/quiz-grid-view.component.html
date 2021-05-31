@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="action-bar">
+    <h1>Quizzes</h1>
+    <div class="btn-bar">
+      <a
+        mat-icon-button
+        aria-label="Create quiz"
+        matTooltip="Create quiz"
+        routerLink="create"
+      >
+        <mat-icon>note_add</mat-icon>
+      </a>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <ng-container *ngIf="quizzes$ | async as quizzes">
+    <div class="card-container">
+      <ng-container *ngFor="let quiz of quizzes">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              {{ quiz.name }}
+            </mat-card-title>
+            <mat-card-subtitle>
+              {{ quiz.subject }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-card-content>
+              <p>Number of Questions: {{ quiz.numberOfQuestions }}</p>
+              <p>
+                Created on:
+                {{ quiz.createdOn?.toDate() | date: 'mediumDate' }}
+              </p>
+              <p>
+                Modified on:
+                {{ quiz.modifiedOn?.toDate() | date: 'mediumDate' }}
+              </p>
+            </mat-card-content>
+            <mat-card-actions>
+              <a mat-button [routerLink]="[quiz.id, 'edit']">Edit</a>
+              <a mat-button [routerLink]="[quiz.id, 'details']">Details</a>
+              <a
+                mat-raised-button
+                color="primary"
+                [routerLink]="['/assessments', quiz.id]"
+              >
+                Take
+              </a>
+            </mat-card-actions>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

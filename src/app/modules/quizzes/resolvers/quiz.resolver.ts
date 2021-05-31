@@ -24,10 +24,12 @@ export class QuizResolver implements Resolve<Quiz> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<Quiz> {
-    const id = route.paramMap.get('quizId')!
+    const quizId =
+      route.paramMap.get('quizId')! || route.parent?.paramMap.get('quizId')!
+
     return this.firestore
       .collection(Collections.QUIZZES)
-      .doc<Quiz>(id)
+      .doc<Quiz>(quizId)
       .get()
       .pipe(
         mergeMap((doc) => {

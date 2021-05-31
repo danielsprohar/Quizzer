@@ -23,7 +23,8 @@ export class QuestionsResolver implements Resolve<Question[]> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<Question[]> {
-    const quizId = route.paramMap.get('quizId')!
+    const quizId =
+      route.paramMap.get('quizId')! || route.parent?.paramMap.get('quizId')!
     return this.firestore
       .collection(Collections.QUIZZES)
       .doc(quizId)
