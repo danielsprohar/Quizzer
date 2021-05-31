@@ -16,8 +16,8 @@ import {
 } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import {
-  multipleOptionsType as MultipleOptionsType,
   questionTypes as QuestionTypes,
+  isMultipleChoiceQuestion as IsMultipleChoiceQuestion
 } from 'src/app/models/question'
 import { QuizFormService } from 'src/app/modules/quizzes/services/quiz-form.service'
 import { AppStateService } from 'src/app/services/app-state.service'
@@ -44,7 +44,7 @@ import { ImageService } from 'src/app/services/image.service'
 export class QuestionFormComponent implements OnInit, OnDestroy {
   private addImageSubscription: Subscription
 
-  readonly multipleOptionsType = MultipleOptionsType
+  readonly isMultipleChoiceQuestion = IsMultipleChoiceQuestion
   readonly questionTypes = QuestionTypes
 
   @Input() questionForm: FormGroup
@@ -131,7 +131,7 @@ export class QuestionFormComponent implements OnInit, OnDestroy {
   // =========================================================================
 
   changeQuestionType(newQuestionType: string) {
-    if (!this.multipleOptionsType.includes(newQuestionType)) {
+    if (!this.isMultipleChoiceQuestion(newQuestionType)) {
       this.options.clear()
     }
   }

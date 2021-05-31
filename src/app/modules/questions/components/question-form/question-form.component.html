@@ -113,7 +113,7 @@
       <!-- ============================= -->
       <!-- Mutliple choice options -->
       <!-- ============================= -->
-      <ng-container *ngIf="multipleOptionsType.includes(type.value)">
+      <ng-container *ngIf="isMultipleChoiceQuestion(type.value)">
         <div [formArrayName]="'options'" class="question-options-container">
           <ng-container *ngFor="let opt of options?.controls; let i = index">
             <div class="question-option" [formGroupName]="i">
