@@ -125,7 +125,7 @@ export class MatchGameService {
    * @see https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
    * @param cards
    */
-  private shuffleCards(cards: CardData[]) {
+  shuffleCards(cards: CardData[]) {
     for (let i = cards.length - 1; i > 0; i--) {
       // j = random integer such that 0 ≤ j ≤ i
       const j = Math.floor(Math.random() * (i + 1))

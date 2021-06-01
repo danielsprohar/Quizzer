@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { ConfirmationDialogService } from 'src/app/services/confirmation-dialog.service'
-import { SnackbarService } from 'src/app/services/snackbar.service'
 import { CardData } from './models/card-data'
 import { MatchGameService } from './services/match-game.service'
 
@@ -12,28 +11,29 @@ import { MatchGameService } from './services/match-game.service'
   styleUrls: ['./match-game.component.scss'],
 })
 export class MatchGameComponent implements OnInit, OnDestroy {
-  private subscription: Subscription
+  private routeSubscription: Subscription
+  private dialogSubscription: Subscription
   cardsData: CardData[]
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly gameService: MatchGameService,
-    private readonly snackbar: SnackbarService,
+    private readonly router: Router,
     private readonly dialog: ConfirmationDialogService
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.route.data.subscribe((data) => {
+    this.routeSubscription = this.route.data.subscribe((data) => {
       this.cardsData = this.gameService.generateGameData(data.questions)
     })
-
-    this.dialog.confirm({ title: 'Game over', message: 'Want to play again?' })
-      .subscribe((result) => console.log(result))
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe()
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe()
+    }
+    if (this.dialogSubscription) {
+      this.dialogSubscription.unsubscribe()
     }
   }
 
@@ -65,9 +65,42 @@ export class MatchGameComponent implements OnInit, OnDestroy {
     this.gameService.clearCards()
   }
 
+  private resetGame(): void {
+    this.cardsData = this.gameService.shuffleCards(this.cardsData)
+    const cards = document.getElementsByClassName('card')
+    const length = cards.length
+    for (let i = 0; i < length; i++) {
+      cards.item(i)?.classList.remove('hidden-card')
+      cards.item(i)?.classList.remove('is-selected')
+      cards.item(i)?.classList.remove('mat-elevation-z10')
+    }
+  }
+
   // =========================================================================
   // Event Handlers
   // =========================================================================
+
+  private async delay(milliseconds: number) {
+    return new Promise((res) => setTimeout(res, milliseconds))
+  }
+
+  private handleGameOver(): void {
+    this.delay(3000).then(() => {
+      this.dialogSubscription = this.dialog
+        .confirm({
+          title: 'Excellent',
+          message: 'Want to play again?',
+        })
+        .subscribe((anotherRound) => {
+          if (anotherRound) {
+            this.resetGame()
+          } else {
+            const quizId = this.route.snapshot.paramMap.get('quizId')
+            this.router.navigate(['/quizzes', quizId, 'details'])
+          }
+        })
+    })
+  }
 
   selectCard(card: CardData): void {
     const newLength = this.gameService.addCard(card)
@@ -75,7 +108,12 @@ export class MatchGameComponent implements OnInit, OnDestroy {
       const el = document.getElementById(card.getID())
       el?.classList.toggle('mat-elevation-z10')
       el?.classList.toggle('is-selected')
-    } else if (newLength >= 2) {
+    } else if (this.gameService.isCorrectCardSelection()) {
+      this.removeCards(this.gameService.getCards())
+      if (this.isGameOver()) {
+        this.handleGameOver()
+      }
+    } else {
       this.gameService.getCards().forEach((card) => {
         const el = document.getElementById(card.getID())
         el?.classList.remove('mat-elevation-z10')
@@ -83,12 +121,6 @@ export class MatchGameComponent implements OnInit, OnDestroy {
       })
 
       this.gameService.clearCards()
-    } else if (this.gameService.isCorrectCardSelection()) {
-      this.removeCards(this.gameService.getCards())
-      if (this.isGameOver()) {
-        this.snackbar.success('Excellent!')
-        // Display the dialog service
-      }
     }
   }
 }
