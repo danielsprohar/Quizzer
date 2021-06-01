@@ -5,21 +5,20 @@ import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AngularFirestoreModule } from '@angular/fire/firestore'
 import { AngularFireStorageModule } from '@angular/fire/storage'
 import { ReactiveFormsModule } from '@angular/forms'
-
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { environment } from 'src/environments/environment'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component'
+import { HomeComponent } from './components/home/home.component'
+import { NewSubjectDialogComponent } from './components/new-subject-dialog/new-subject-dialog.component'
 import { NotFoundComponent } from './components/not-found/not-found.component'
 import { SidenavComponent } from './components/sidenav/sidenav.component'
+import { TopnavComponent } from './components/topnav/topnav.component'
 import { AuthModule } from './modules/auth/auth.module'
 import { MaterialDesignModule } from './theme/material-design/material-design.module'
-import { TopnavComponent } from './components/topnav/topnav.component'
-import { HomeComponent } from './components/home/home.component'
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar'
-import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
-import { NewSubjectDialogComponent } from './components/new-subject-dialog/new-subject-dialog.component'
 
 @NgModule({
   declarations: [

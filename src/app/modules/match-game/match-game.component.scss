@@ -1,7 +1,15 @@
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .game-container {
   display: grid;
   grid-template-columns: auto auto;
   gap: 16px;
+  margin: 16px auto;
 }
 
 .card {
@@ -13,7 +21,7 @@
 .hidden-card {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s 2s, opacity 2s linear;
+  transition: visibility 0s 1s, opacity 1s linear;
 }
 
 .is-selected {
@@ -24,5 +32,6 @@
 @media screen and (min-width: '600px') {
   .game-container {
     grid-template-columns: auto auto auto auto;
+    margin: 24px auto;
   }
 }

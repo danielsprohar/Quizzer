@@ -1,9 +1,12 @@
+<div class="header">
+  <div class="btn-bar">
+    <button mat-stroked-button (click)="quit()">Quit</button>
+  </div>
+  <app-game-timer #timer></app-game-timer>
+</div>
 <div class="game-container">
   <ng-container *ngFor="let card of cardsData">
-    <mat-card 
-      [attr.id]="card.getID()" 
-      class="card" 
-      (click)="selectCard(card)">
+    <mat-card [attr.id]="card.getID()" class="card" (click)="selectCard(card)">
       <span>{{ card.text }}</span>
     </mat-card>
   </ng-container>

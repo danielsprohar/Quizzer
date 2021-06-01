@@ -1,7 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { ConfirmationDialogService } from 'src/app/services/confirmation-dialog.service'
+import { GameTimerComponent } from './components/game-timer/game-timer.component'
 import { CardData } from './models/card-data'
 import { MatchGameService } from './services/match-game.service'
 
@@ -10,9 +17,12 @@ import { MatchGameService } from './services/match-game.service'
   templateUrl: './match-game.component.html',
   styleUrls: ['./match-game.component.scss'],
 })
-export class MatchGameComponent implements OnInit, OnDestroy {
+export class MatchGameComponent implements OnInit, OnDestroy, AfterViewInit {
   private routeSubscription: Subscription
   private dialogSubscription: Subscription
+  private quizId: string
+
+  @ViewChild(GameTimerComponent) timer: GameTimerComponent
   cardsData: CardData[]
 
   constructor(
@@ -23,6 +33,7 @@ export class MatchGameComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.quizId = this.route.snapshot.paramMap.get('quizId')!
     this.routeSubscription = this.route.data.subscribe((data) => {
       this.cardsData = this.gameService.generateGameData(data.questions)
     })
@@ -35,6 +46,11 @@ export class MatchGameComponent implements OnInit, OnDestroy {
     if (this.dialogSubscription) {
       this.dialogSubscription.unsubscribe()
     }
+    this.timer.stop()
+  }
+
+  ngAfterViewInit(): void {
+    this.timer.start()
   }
 
   // =========================================================================
@@ -74,6 +90,9 @@ export class MatchGameComponent implements OnInit, OnDestroy {
       cards.item(i)?.classList.remove('is-selected')
       cards.item(i)?.classList.remove('mat-elevation-z10')
     }
+
+    this.timer.reset()
+    this.timer.start()
   }
 
   // =========================================================================
@@ -95,8 +114,7 @@ export class MatchGameComponent implements OnInit, OnDestroy {
           if (anotherRound) {
             this.resetGame()
           } else {
-            const quizId = this.route.snapshot.paramMap.get('quizId')
-            this.router.navigate(['/quizzes', quizId, 'details'])
+            this.router.navigate(['/quizzes', this.quizId, 'details'])
           }
         })
     })
@@ -111,6 +129,7 @@ export class MatchGameComponent implements OnInit, OnDestroy {
     } else if (this.gameService.isCorrectCardSelection()) {
       this.removeCards(this.gameService.getCards())
       if (this.isGameOver()) {
+        this.timer.stop()
         this.handleGameOver()
       }
     } else {
@@ -122,5 +141,14 @@ export class MatchGameComponent implements OnInit, OnDestroy {
 
       this.gameService.clearCards()
     }
+  }
+
+  quit(): void {
+    this.timer.stop()
+    this.router.navigate(['/quizzes', this.quizId, 'details'])
+  }
+
+  pause(): void {
+    this.timer.stop()
   }
 }
