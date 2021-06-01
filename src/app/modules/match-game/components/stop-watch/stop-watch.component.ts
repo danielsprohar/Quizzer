@@ -7,9 +7,9 @@ import { Component, OnInit } from '@angular/core'
       <span class="timer">{{ time }}</span>
     </div>
   `,
-  styleUrls: ['./game-timer.component.scss'],
+  styleUrls: ['./stop-watch.component.scss'],
 })
-export class GameTimerComponent implements OnInit {
+export class StopWatchComponent implements OnInit {
   private startTime = Date.now()
   private timeInterval: any = null
   private readonly defaultTime = '00:00:00'

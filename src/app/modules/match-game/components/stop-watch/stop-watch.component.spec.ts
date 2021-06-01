@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GameTimerComponent } from './game-timer.component';
+import { StopWatchComponent } from './stop-watch.component';
 
-describe('GameTimerComponent', () => {
-  let component: GameTimerComponent;
-  let fixture: ComponentFixture<GameTimerComponent>;
+describe('StopWatchComponent', () => {
+  let component: StopWatchComponent;
+  let fixture: ComponentFixture<StopWatchComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GameTimerComponent ]
+      declarations: [ StopWatchComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GameTimerComponent);
+    fixture = TestBed.createComponent(StopWatchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
