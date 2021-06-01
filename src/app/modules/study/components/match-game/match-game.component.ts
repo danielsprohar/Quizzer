@@ -38,7 +38,7 @@ export class MatchGameComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.quizId = this.route.snapshot.paramMap.get('quizId')!
     this.routeSubscription = this.route.data.subscribe((data) => {
-      this.cardsData = this.gameService.generateGameData(data.questions)
+      this.cardsData = this.gameService.generateGameCards(data.questions)
     })
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { isMultipleChoiceQuestion, Question } from 'src/app/models/question'
+import { Question, isMultipleChoiceQuestion } from 'src/app/models/question'
 import { CardData } from '../models/card-data'
 
 @Injectable({
@@ -9,45 +9,6 @@ export class MatchGameService {
   private readonly userCards: CardData[] = []
 
   constructor() {}
-
-  // =========================================================================
-  // Game facilitators
-  // =========================================================================
-
-  /**
-   * Appends a new card to the end of the underlying array, 
-   * and returns the new length of the array.
-   * @param card The user selected card.
-   * @returns The new length of the array.
-   */
-  addCard(card: CardData): number {
-    return this.userCards.push(card)
-  }
-
-  clearCards(): void {
-    while (this.userCards.length > 0) {
-      this.userCards.pop()
-    }
-  }
-
-  private checkCards(cardOne: CardData, cardTwo: CardData): boolean {
-    return cardOne.index == cardTwo.index && cardOne.type !== cardTwo.type
-  }
-
-  isCorrectCardSelection() {
-    if (this.userCards.length != 2) {
-      return false
-    }
-    return this.checkCards(this.userCards[0], this.userCards[1])
-  }
-
-  getCards(): CardData[] {
-    return this.userCards
-  }
-
-  getCardCount(): number {
-    return this.userCards.length
-  }
 
   // =========================================================================
   // Generators
@@ -96,7 +57,7 @@ export class MatchGameService {
     return Array.of(answerTextCard, questionTextCard)
   }
 
-  generateGameData(questions: Question[]): CardData[] {
+  generateGameCards(questions: Question[]): CardData[] {
     if (!questions) {
       throw new Error(
         '[MatcherService::generateMappings]: questions are undefined'
@@ -117,7 +78,46 @@ export class MatchGameService {
   }
 
   // =========================================================================
-  // Dealer (the house always wins)
+  // Facilitators
+  // =========================================================================
+
+  /**
+   * Appends a new card to the end of the underlying array,
+   * and returns the new length of the array.
+   * @param card The user selected card.
+   * @returns The new length of the array.
+   */
+  addCard(card: CardData): number {
+    return this.userCards.push(card)
+  }
+
+  clearCards(): void {
+    while (this.userCards.length > 0) {
+      this.userCards.pop()
+    }
+  }
+
+  private checkCards(cardOne: CardData, cardTwo: CardData): boolean {
+    return cardOne.index == cardTwo.index && cardOne.type !== cardTwo.type
+  }
+
+  isCorrectCardSelection() {
+    if (this.userCards.length != 2) {
+      return false
+    }
+    return this.checkCards(this.userCards[0], this.userCards[1])
+  }
+
+  getCards(): CardData[] {
+    return this.userCards
+  }
+
+  getCardCount(): number {
+    return this.userCards.length
+  }
+
+  // =========================================================================
+  // Dealer - the house always wins ;)
   // =========================================================================
 
   /**

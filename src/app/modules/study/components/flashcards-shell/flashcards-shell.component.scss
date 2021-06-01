@@ -1,0 +1,37 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  width: 100%;
+}
+
+.flashcard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.actions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media only screen and (min-width: 600px) {
+  .shell {
+    flex-flow: row nowrap;
+  }
+
+  .flashcard-container {
+    order: 2;
+  }
+
+  .actions-container {
+    order: 1;
+  }
+}

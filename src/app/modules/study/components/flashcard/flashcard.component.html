@@ -1,0 +1,12 @@
+<ng-container *ngIf="flashcard">
+  <div class="flip-card-container">
+    <div #flipCard (click)="flip()" class="flip-card mat-card">
+      <div class="flip-card-front">
+        <p>{{ flashcard.term }}</p>
+      </div>
+      <div class="flip-card-back">
+        <p>{{ flashcard.definition }}</p>
+      </div>
+    </div>
+  </div>
+</ng-container>

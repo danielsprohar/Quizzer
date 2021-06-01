@@ -39,7 +39,7 @@
               </button>
               <mat-menu #menu="matMenu" xPosition="before">
                 <button mat-menu-item class="card-menu-options-header" disabled>
-                  Work
+                  Actions
                 </button>
                 <a mat-menu-item [routerLink]="[quiz.id, 'details']">
                   Details
@@ -49,7 +49,7 @@
                 </button>
                 <mat-divider></mat-divider>
                 <button mat-menu-item class="card-menu-options-header" disabled>
-                  Play
+                  Study
                 </button>
                 <a mat-menu-item [routerLink]="['/study', quiz.id, 'match']">
                   Match
@@ -58,7 +58,7 @@
                   mat-menu-item
                   [routerLink]="['/study', quiz.id, 'flashcards']"
                 >
-                  Study
+                  Flashcards
                 </a>
               </mat-menu>
             </div>
