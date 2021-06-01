@@ -1,7 +1,12 @@
-import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
+import { Injectable } from '@angular/core'
+import { MatDialog } from '@angular/material/dialog'
+import { Observable } from 'rxjs'
+import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component'
+
+export interface ConfirmationDialogData {
+  title?: string
+  message: string
+}
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +14,12 @@ import { ConfirmationDialogComponent } from '../components/confirmation-dialog/c
 export class ConfirmationDialogService {
   constructor(private readonly dialog: MatDialog) {}
 
-  public confirm(message?: string): Observable<boolean> {
+  public confirm(props: ConfirmationDialogData): Observable<boolean> {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '300px',
-      data: message,
-    });
+      data: props,
+    })
 
-    return dialogRef.afterClosed();
+    return dialogRef.afterClosed()
   }
 }

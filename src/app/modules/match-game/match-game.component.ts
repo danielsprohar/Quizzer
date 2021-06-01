@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
+import { ConfirmationDialogService } from 'src/app/services/confirmation-dialog.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 import { CardData } from './models/card-data'
 import { MatchGameService } from './services/match-game.service'
@@ -17,13 +18,17 @@ export class MatchGameComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly gameService: MatchGameService,
-    private readonly snackbar: SnackbarService
+    private readonly snackbar: SnackbarService,
+    private readonly dialog: ConfirmationDialogService
   ) {}
 
   ngOnInit(): void {
     this.subscription = this.route.data.subscribe((data) => {
       this.cardsData = this.gameService.generateGameData(data.questions)
     })
+
+    this.dialog.confirm({ title: 'Game over', message: 'Want to play again?' })
+      .subscribe((result) => console.log(result))
   }
 
   ngOnDestroy(): void {

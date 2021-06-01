@@ -45,7 +45,7 @@ export class QuizDetailsComponent implements OnInit, OnDestroy {
 
   async deleteQuestion(questionId: string, index: number): Promise<void> {
     const isConfirmed = await this.confirmationDialog
-      .confirm('Are you sure? This action can not be undone.')
+      .confirm({ message: 'Are you sure? This action can not be undone.' })
       .toPromise()
 
     if (isConfirmed) {
