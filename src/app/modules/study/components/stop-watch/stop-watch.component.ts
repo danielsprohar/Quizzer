@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 
 @Component({
-  selector: 'app-game-timer',
+  selector: 'app-stop-watch',
   template: `
     <div class="timer-container">
       <span class="timer">{{ time }}</span>

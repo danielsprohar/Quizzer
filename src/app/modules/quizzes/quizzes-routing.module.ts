@@ -15,6 +15,10 @@ const routes: Routes = [
     component: QuizGridViewComponent,
   },
   {
+    path: 'create',
+    component: QuizFormComponent,
+  },
+  {
     path: ':quizId',
     component: QuizShellComponent,
     children: [
@@ -41,18 +45,7 @@ const routes: Routes = [
           question: QuestionDetailsResolver,
         },
       },
-      {
-        path: 'match',
-        loadChildren: () =>
-          import('../match-game/match-game.module').then(
-            (m) => m.MatchGameModule
-          ),
-      },
     ],
-  },
-  {
-    path: 'create',
-    component: QuizFormComponent,
   },
 ]
 

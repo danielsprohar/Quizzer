@@ -8,9 +8,9 @@ import {
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { ConfirmationDialogService } from 'src/app/services/confirmation-dialog.service'
-import { GameTimerComponent } from './components/game-timer/game-timer.component'
-import { CardData } from './models/card-data'
-import { MatchGameService } from './services/match-game.service'
+import { CardData } from '../../models/card-data'
+import { MatchGameService } from '../../services/match-game.service'
+import { StopWatchComponent } from '../stop-watch/stop-watch.component'
 
 @Component({
   selector: 'app-match-game',
@@ -22,7 +22,7 @@ export class MatchGameComponent implements OnInit, OnDestroy, AfterViewInit {
   private dialogSubscription: Subscription
   private quizId: string
 
-  @ViewChild(GameTimerComponent) timer: GameTimerComponent
+  @ViewChild(StopWatchComponent) timer: StopWatchComponent
   cardsData: CardData[]
 
   constructor(

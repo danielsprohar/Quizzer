@@ -19,38 +19,72 @@
     <div class="card-container">
       <ng-container *ngFor="let quiz of quizzes">
         <mat-card>
-          <mat-card-header>
+          <mat-card-header class="card-header">
             <mat-card-title>
               {{ quiz.name }}
             </mat-card-title>
             <mat-card-subtitle>
               {{ quiz.subject }}
             </mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <mat-card-content>
-              <p>Number of Questions: {{ quiz.numberOfQuestions }}</p>
-              <p>
-                Created on:
-                {{ quiz.createdOn?.toDate() | date: 'mediumDate' }}
-              </p>
-              <p>
-                Modified on:
-                {{ quiz.modifiedOn?.toDate() | date: 'mediumDate' }}
-              </p>
-            </mat-card-content>
-            <mat-card-actions>
-              <a mat-button [routerLink]="[quiz.id, 'edit']">Edit</a>
-              <a mat-button [routerLink]="[quiz.id, 'details']">Details</a>
-              <a
-                mat-raised-button
-                color="primary"
-                [routerLink]="['/assessments', quiz.id]"
+            <!-- ========================= -->
+            <!-- Menu -->
+            <!-- ========================= -->
+            <div>
+              <button
+                mat-icon-button
+                aria-label="Quiz menu options"
+                [matMenuTriggerFor]="menu"
               >
-                Take
-              </a>
-            </mat-card-actions>
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item class="card-menu-options-header" disabled>
+                  Work
+                </button>
+                <a mat-menu-item [routerLink]="[quiz.id, 'details']">
+                  Details
+                </a>
+                <button mat-menu-item [routerLink]="[quiz.id, 'edit']">
+                  Edit
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-menu-item class="card-menu-options-header" disabled>
+                  Play
+                </button>
+                <a mat-menu-item [routerLink]="['/study', quiz.id, 'match']">
+                  Match
+                </a>
+                <a
+                  mat-menu-item
+                  [routerLink]="['/study', quiz.id, 'flashcards']"
+                >
+                  Study
+                </a>
+              </mat-menu>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p>Number of Questions: {{ quiz.numberOfQuestions }}</p>
+            <p>
+              Created on:
+              {{ quiz.createdOn?.toDate() | date: 'mediumDate' }}
+            </p>
+            <p>
+              Modified on:
+              {{ quiz.modifiedOn?.toDate() | date: 'mediumDate' }}
+            </p>
           </mat-card-content>
+
+          <mat-card-actions>
+            <a
+              mat-raised-button
+              color="primary"
+              [routerLink]="['/assessments', quiz.id]"
+            >
+              Take
+            </a>
+          </mat-card-actions>
         </mat-card>
       </ng-container>
     </div>
