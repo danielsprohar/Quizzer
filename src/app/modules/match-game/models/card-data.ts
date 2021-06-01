@@ -11,7 +11,7 @@ export class CardData {
     this.text = props.text
   }
 
-  getCardId(): string {
+  getID(): string {
     return `${this.index}:${this.type}`
   }
 }

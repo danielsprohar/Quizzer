@@ -1,6 +1,9 @@
 <div class="game-container">
   <ng-container *ngFor="let card of cardsData">
-    <mat-card [attr.id]="card.getCardId()" class="card" (click)="selectCard(card)">
+    <mat-card 
+      [attr.id]="card.getID()" 
+      class="card" 
+      (click)="selectCard(card)">
       <span>{{ card.text }}</span>
     </mat-card>
   </ng-container>

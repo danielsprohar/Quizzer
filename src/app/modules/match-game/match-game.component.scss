@@ -10,6 +10,16 @@
   cursor: pointer;
 }
 
+.hidden-card {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+.is-selected {
+  border: 1px solid #ff6d00;
+}
+
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media screen and (min-width: '600px') {
   .game-container {

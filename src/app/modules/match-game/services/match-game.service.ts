@@ -6,7 +6,52 @@ import { CardData } from '../models/card-data'
   providedIn: 'root',
 })
 export class MatchGameService {
+  private readonly userCards: CardData[] = []
+
   constructor() {}
+
+  // =========================================================================
+  // Game facilitators
+  // =========================================================================
+
+  /**
+   * Appends a new card to the end of the underlying array, 
+   * and returns the new length of the array.
+   * @param card The user selected card.
+   * @returns The new length of the array.
+   */
+  addCard(card: CardData): number {
+    return this.userCards.push(card)
+  }
+
+  clearCards(): void {
+    while (this.userCards.length > 0) {
+      this.userCards.pop()
+    }
+  }
+
+  private checkCards(cardOne: CardData, cardTwo: CardData): boolean {
+    return cardOne.index == cardTwo.index && cardOne.type !== cardTwo.type
+  }
+
+  isCorrectCardSelection() {
+    if (this.userCards.length != 2) {
+      return false
+    }
+    return this.checkCards(this.userCards[0], this.userCards[1])
+  }
+
+  getCards(): CardData[] {
+    return this.userCards
+  }
+
+  getCardCount(): number {
+    return this.userCards.length
+  }
+
+  // =========================================================================
+  // Generators
+  // =========================================================================
 
   private generateWrittenResponseCardData(
     question: Question,
@@ -70,6 +115,10 @@ export class MatchGameService {
 
     return this.shuffleCards(cards)
   }
+
+  // =========================================================================
+  // Dealer (the house always wins)
+  // =========================================================================
 
   /**
    * Shuffle the cards in place using the Fisher-Yates algorithm.
