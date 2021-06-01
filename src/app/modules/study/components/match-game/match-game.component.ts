@@ -1,3 +1,4 @@
+import { Location } from '@angular/common'
 import {
   AfterViewInit,
   Component,
@@ -19,6 +20,7 @@ import { StopWatchComponent } from '../stop-watch/stop-watch.component'
 })
 export class MatchGameComponent implements OnInit, OnDestroy, AfterViewInit {
   private routeSubscription: Subscription
+  private initialDialogSubsription: Subscription
   private dialogSubscription: Subscription
   private quizId: string
 
@@ -29,7 +31,8 @@ export class MatchGameComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly gameService: MatchGameService,
     private readonly router: Router,
-    private readonly dialog: ConfirmationDialogService
+    private readonly dialog: ConfirmationDialogService,
+    private readonly location: Location
   ) {}
 
   ngOnInit(): void {
@@ -43,6 +46,9 @@ export class MatchGameComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.routeSubscription) {
       this.routeSubscription.unsubscribe()
     }
+    if (this.initialDialogSubsription) {
+      this.initialDialogSubsription.unsubscribe()
+    }
     if (this.dialogSubscription) {
       this.dialogSubscription.unsubscribe()
     }
@@ -50,7 +56,18 @@ export class MatchGameComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.timer.start()
+    this.initialDialogSubsription = this.dialog
+      .confirm({
+        title: 'Matching Game',
+        message: 'Match the correct terms to complete the game. Ready to play?',
+      })
+      .subscribe((result) => {
+        if (result) {
+          this.timer.start()
+        } else {
+          this.location.back()
+        }
+      })
   }
 
   // =========================================================================
