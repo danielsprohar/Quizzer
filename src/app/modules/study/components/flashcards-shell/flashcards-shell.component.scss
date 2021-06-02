@@ -25,6 +25,7 @@
 @media only screen and (min-width: 600px) {
   .shell {
     flex-flow: row nowrap;
+    gap: 24px;
   }
 
   .flashcard-container {

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Observable, Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { Subscription } from 'rxjs'
 import { Flashcard } from '../../models/flashcard'
 import { FlashcardService } from '../../services/flashcard.service'
 

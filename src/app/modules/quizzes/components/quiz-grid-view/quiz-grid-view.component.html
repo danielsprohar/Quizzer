@@ -19,7 +19,7 @@
     <div class="card-container">
       <ng-container *ngFor="let quiz of quizzes">
         <mat-card>
-          <mat-card-header class="card-header">
+          <mat-card-title-group>
             <mat-card-title>
               {{ quiz.name }}
             </mat-card-title>
@@ -29,7 +29,7 @@
             <!-- ========================= -->
             <!-- Menu -->
             <!-- ========================= -->
-            <div>
+            <div class="actions-menu-container">
               <button
                 mat-icon-button
                 aria-label="Quiz menu options"
@@ -62,7 +62,7 @@
                 </a>
               </mat-menu>
             </div>
-          </mat-card-header>
+          </mat-card-title-group>
 
           <mat-card-content>
             <p>Number of Questions: {{ quiz.numberOfQuestions }}</p>
