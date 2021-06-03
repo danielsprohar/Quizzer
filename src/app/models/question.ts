@@ -42,7 +42,7 @@ export class Question {
   modifiedOn: firebase.firestore.Timestamp
 
   constructor(fields?: {
-    id?: number
+    id?: string
     text?: string
     type?: QuestionType
     hint?: string

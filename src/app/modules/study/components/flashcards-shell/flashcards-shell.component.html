@@ -1,33 +1,44 @@
-<ng-container *ngIf="currentFlashcard">
-  <div class="shell">
-    <div class="flashcard-container">
-      <app-flashcard [flashcard]="currentFlashcard"></app-flashcard>
-      <div class="btn-bar">
-        <button
-          mat-icon-button
-          aria-label="Previous flashcard"
-          [disabled]="!hasPrevious()"
-          (click)="previous()"
-        >
-          <mat-icon>chevron_left</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          aria-label="Next flashcard"
-          [disabled]="!hasNext()"
-          (click)="next()"
-        >
-          <mat-icon>chevron_right</mat-icon>
-        </button>
+<div class="shell">
+  <div class="flashcard-container">
+    <app-flashcard [flashcard]="currentFlashcard"></app-flashcard>
+    <div class="btn-bar">
+      <button
+        mat-icon-button
+        aria-label="Previous flashcard"
+        [disabled]="!hasPrevious()"
+        (click)="previous()"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <div>
+        <!-- <span>{{ currentIndex + 1 }}</span> -->
+        <input
+          #indexInput
+          type="text"
+          name="index"
+          class="index-input"
+          min="1"
+          max="2"
+          (change)="handleInputValueChange(indexInput.value)"
+          (keyup)="isEnterKey($event, indexInput.value)"
+        />
+        <span class="separator">/</span>
+        <span>{{ flashcards.length }}</span>
       </div>
-    </div>
-
-    <div class="actions-container">
-      <mat-action-list>
-        <button mat-list-item>Create</button>
-        <button mat-list-item>Delete</button>
-        <button mat-list-item>Edit</button>
-      </mat-action-list>
+      <button
+        mat-icon-button
+        aria-label="Next flashcard"
+        [disabled]="!hasNext()"
+        (click)="next()"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
     </div>
   </div>
-</ng-container>
+
+  <div class="actions-container" role="list">
+    <button role="listitem" mat-button (click)="create()">Create</button>
+    <button role="listitem" mat-button (click)="delete()">Delete</button>
+    <button role="listitem" mat-button (click)="edit()">Edit</button>
+  </div>
+</div>

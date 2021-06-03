@@ -1,9 +1,17 @@
 export class Flashcard {
   term: string
-  definition: string
+    definition: string
+    questionId?: string
+    quizId?: string
 
-  constructor(term: string, definition: string) {
-    this.term = term
-    this.definition = definition
+  constructor(props?: {
+    term: string
+    definition: string
+    questionId?: string
+    quizId?: string
+  }) {
+    if (props) {
+      Object.assign(this, props)
+    }
   }
 }

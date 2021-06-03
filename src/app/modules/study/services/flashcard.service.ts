@@ -22,7 +22,11 @@ export class FlashcardService {
     const randomIndex = Math.floor(Math.random() * max)
     const optionText = answers[randomIndex]
 
-    return new Flashcard(question.text, optionText)
+    return new Flashcard({
+      questionId: question.id,
+      term: question.text,
+      definition: optionText,
+    })
   }
 
   generateFlashcards(questions: Question[]): Flashcard[] {
@@ -30,7 +34,11 @@ export class FlashcardService {
       if (isMultipleChoiceQuestion(question.type)) {
         return this.flashcardFromMultipleChoice(question)
       }
-      return new Flashcard(question.text, question.explanation!)
+      return new Flashcard({
+        questionId: question.id,
+        term: question.text,
+        definition: question.explanation!,
+      })
     })
   }
 }

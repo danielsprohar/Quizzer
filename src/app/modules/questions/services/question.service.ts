@@ -31,6 +31,7 @@ export class QuestionService {
   }
 
   update(quizId: string, question: Question): Promise<void> {
+    question.modifiedOn = firebase.firestore.Timestamp.now()
     return this.firestore
       .collection(Collections.QUIZZES)
       .doc(quizId)

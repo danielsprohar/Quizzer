@@ -14,11 +14,29 @@
   gap: 16px;
   justify-content: center;
   align-items: center;
+
+  .btn-bar {
+    align-items: center;
+  }
+}
+
+input[type='text'].index-input {
+  width: 1.75em;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  background-color: inherit;
+  color: inherit;
+}
+
+.separator {
+  margin-right: 6px;
 }
 
 .actions-container {
   display: flex;
-  flex-direction: column;
+  flex-flow: row nowrap;
   gap: 16px;
 }
 
@@ -34,5 +52,7 @@
 
   .actions-container {
     order: 1;
+    flex-flow: column nowrap;
+    gap: 24px;
   }
 }

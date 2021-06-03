@@ -1,0 +1,37 @@
+<div class="modal">
+  <button
+    mat-icon-button
+    class="close-btn"
+    aria-label="Close modal"
+    (click)="close()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <div class="form-container">
+    <h2 mat-dialog-title>Flashcard</h2>
+    <form id="flashcardForm" [formGroup]="form" (ngSubmit)="save()">
+      <mat-form-field class="full-width">
+        <mat-label>Term</mat-label>
+        <input matInput formControlName="term" type="text" required />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Definition</mat-label>
+        <input matInput formControlName="definition" type="text" required />
+      </mat-form-field>
+
+      <div class="btn-bar">
+        <button mat-button (click)="close()">Back</button>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="form.pristine || form.invalid"
+          (click)="save()"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

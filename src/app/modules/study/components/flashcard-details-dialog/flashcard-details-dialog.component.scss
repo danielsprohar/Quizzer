@@ -1,0 +1,29 @@
+.modal {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .form-container {
+    padding: 16px;
+
+    .btn-bar {
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .modal {
+    height: 500px;
+    width: 500px
+  }
+}

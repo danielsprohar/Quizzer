@@ -8,6 +8,8 @@ import { MaterialDesignModule } from 'src/app/theme/material-design/material-des
 import { StopWatchComponent } from './components/stop-watch/stop-watch.component'
 import { FlashcardsShellComponent } from './components/flashcards-shell/flashcards-shell.component'
 import { FlashcardComponent } from './components/flashcard/flashcard.component'
+import { FlashcardDetailsDialogComponent } from './components/flashcard-details-dialog/flashcard-details-dialog.component'
+import { ReactiveFormsModule } from '@angular/forms'
 
 @NgModule({
   declarations: [
@@ -16,7 +18,13 @@ import { FlashcardComponent } from './components/flashcard/flashcard.component'
     StopWatchComponent,
     FlashcardsShellComponent,
     FlashcardComponent,
+    FlashcardDetailsDialogComponent,
   ],
-  imports: [CommonModule, StudyRoutingModule, MaterialDesignModule],
+  imports: [
+    CommonModule,
+    StudyRoutingModule,
+    MaterialDesignModule,
+    ReactiveFormsModule,
+  ],
 })
 export class StudyModule {}
